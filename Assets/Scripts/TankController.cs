@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
+using UnityEngine.Networking;
 
-public class TankController : MonoBehaviour
+public class TankController : NetworkBehaviour
 {
     public float Power;
     public float Friction;
@@ -24,14 +24,20 @@ public class TankController : MonoBehaviour
     private const string AxisVertical = "Vertical";
 
     // Use this for initialization
-    void Start()
+    protected virtual void Start()
     {
+        if (!isLocalPlayer)
+            return;
+
         _rb2d = GetComponent<Rigidbody2D>();
     }
 
     //FixedUpdate is called at a fixed interval and is independent of frame rate. Put physics code here.
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
+        if (!isLocalPlayer)
+            return;
+
         var moveHorizontal = Input.GetAxis(AxisHorizontal);
         var moveVertical = Input.GetAxis(AxisVertical);
         var newDirection = GetDirection(moveHorizontal, moveVertical);
@@ -98,12 +104,12 @@ public class TankController : MonoBehaviour
             case Direction.XPlus:
                 newVelocityX = currentVelocity.magnitude;
                 newY = Mathf.Round(newY / Constants.GirdSize) * Constants.GirdSize;
-                angle = -90;
+                angle = 90;
                 break;
             case Direction.XMinus:
                 newVelocityX = -currentVelocity.magnitude;
                 newY = Mathf.Round(newY / Constants.GirdSize) * Constants.GirdSize;
-                angle = 90;
+                angle = -90;
                 break;
             case Direction.YPlus:
                 newVelocityY = currentVelocity.magnitude;
@@ -122,7 +128,7 @@ public class TankController : MonoBehaviour
         }
 
         _currentDirection = newDirection;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
         transform.position = new Vector3(newX, newY);
         _rb2d.velocity = new Vector2(newVelocityX, newVelocityY);
     }
