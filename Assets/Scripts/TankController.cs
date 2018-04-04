@@ -4,7 +4,8 @@ using System.Collections;
 
 public class TankController : MonoBehaviour
 {
-    public float Acceleration;
+    public float Power;
+    public float Friction;
 
     private Rigidbody2D _rb2d;
     private Direction _currentDirection;
@@ -36,6 +37,7 @@ public class TankController : MonoBehaviour
         var newDirection = GetDirection(moveHorizontal, moveVertical);
 
         RotateToNewDirectionIfNeeded(newDirection);
+        ApplyFriction();
 
         Vector2 movement;
         switch (_currentDirection)
@@ -58,7 +60,24 @@ public class TankController : MonoBehaviour
                 throw new ArgumentOutOfRangeException();
         }
 
-        _rb2d.AddForce(movement * Acceleration);
+        _rb2d.AddForce(movement * Power);
+    }
+
+    private void ApplyFriction()
+    {
+        var velocity = _rb2d.velocity;
+        var frictionNormalized = -velocity.normalized;
+        var friction = frictionNormalized * _rb2d.mass * Friction;
+
+        var velocityMagnitude = velocity.magnitude;
+        if (friction.magnitude > velocityMagnitude)
+        {
+            _rb2d.AddForce(frictionNormalized * velocityMagnitude);
+        }
+        else
+        {
+            _rb2d.AddForce(friction);
+        }
     }
 
     private void RotateToNewDirectionIfNeeded(Direction newDirection)
