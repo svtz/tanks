@@ -68,26 +68,32 @@ public class TankController : MonoBehaviour
             return;
         }
 
-        var newX = 0.0f;
-        var newY = 0.0f;
+        var newVelocityX = 0.0f;
+        var newVelocityY = 0.0f;
+        var newX = transform.position.x;
+        var newY = transform.position.y;
         float angle;
         var currentVelocity = _rb2d.velocity;
         switch (newDirection)
         {
             case Direction.XPlus:
-                newX = currentVelocity.magnitude;
+                newVelocityX = currentVelocity.magnitude;
+                newY = Mathf.Round(newY / Constants.GirdSize) * Constants.GirdSize;
                 angle = -90;
                 break;
             case Direction.XMinus:
-                newX = -currentVelocity.magnitude;
+                newVelocityX = -currentVelocity.magnitude;
+                newY = Mathf.Round(newY / Constants.GirdSize) * Constants.GirdSize;
                 angle = 90;
                 break;
             case Direction.YPlus:
-                newY = currentVelocity.magnitude;
+                newVelocityY = currentVelocity.magnitude;
+                newX = Mathf.Round(newX / Constants.GirdSize) * Constants.GirdSize;
                 angle = 0;
                 break;
             case Direction.YMinus:
-                newY = -currentVelocity.magnitude;
+                newVelocityY = -currentVelocity.magnitude;
+                newX = Mathf.Round(newX / Constants.GirdSize) * Constants.GirdSize;
                 angle = 180;
                 break;
 
@@ -97,8 +103,9 @@ public class TankController : MonoBehaviour
         }
 
         _currentDirection = newDirection;
-        gameObject.transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
-        _rb2d.velocity = new Vector2(newX, newY);
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        transform.position = new Vector3(newX, newY);
+        _rb2d.velocity = new Vector2(newVelocityX, newVelocityY);
     }
 
     private Direction GetDirection(float x, float y)
