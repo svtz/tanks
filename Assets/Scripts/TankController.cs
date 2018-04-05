@@ -1,19 +1,43 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class TankController : NetworkBehaviour
 {
-    public float Power;
-    public float Friction;
+    public float Speed;
 
-    private Rigidbody2D _rb2d;
+    private Rigidbody2D _rb2D;
+
+    [SyncVar]
     private Direction _currentDirection;
-    private const float _epsilon = 0.1f;
+
+    private Vector2? _targetPosition;
+
+
+    private const float Epsilon = 0.01f;
+
+    private static readonly Dictionary<Direction, Vector2> _directions =
+        new Dictionary<Direction, Vector2>
+        {
+            {Direction.XPlus, Vector2.right},
+            {Direction.XMinus, Vector2.left},
+            {Direction.YPlus, Vector2.up},
+            {Direction.YMinus, Vector2.down}
+        };
+
+    private static readonly Dictionary<Direction, float> _rotations =
+        new Dictionary<Direction, float>
+        {
+            {Direction.XPlus, -90},
+            {Direction.XMinus, 90},
+            {Direction.YPlus, 0},
+            {Direction.YMinus, 180}
+        };
 
     private enum Direction
     {
-        None,
         XPlus,
         XMinus,
         YPlus,
@@ -23,121 +47,165 @@ public class TankController : NetworkBehaviour
     private const string AxisHorizontal = "Horizontal";
     private const string AxisVertical = "Vertical";
 
+
     // Use this for initialization
-    protected virtual void Start()
+    public void Start()
     {
+        _rb2D = GetComponent<Rigidbody2D>();
+
+        if (Speed > Constants.GridSize)
+            throw new NotSupportedException("Слишком большая скорость");
+
+        if (Speed <= 0)
+            throw new NotSupportedException("Слишком маленькая скорость");
+
         if (!isLocalPlayer)
             return;
-
-        _rb2d = GetComponent<Rigidbody2D>();
     }
+
+
+    #region это что-то кривое, но, может, будет работать?
+    private readonly HashSet<int> _collisions = new HashSet<int>();
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        _collisions.Add(collision.collider.GetInstanceID());
+    }
+
+    public void OnCollisionExit2D(Collision2D collision)
+    {
+        var result = _collisions.Remove(collision.collider.GetInstanceID());
+        if (!result)
+            throw new InvalidOperationException("Выход из коллизии, в которую не входили.");
+    }
+    #endregion
+
 
     //FixedUpdate is called at a fixed interval and is independent of frame rate. Put physics code here.
-    protected virtual void FixedUpdate()
+    public void FixedUpdate()
     {
-        if (!isLocalPlayer)
-            return;
+        AlignToGrid();
 
-        var moveHorizontal = Input.GetAxis(AxisHorizontal);
-        var moveVertical = Input.GetAxis(AxisVertical);
-        var newDirection = GetDirection(moveHorizontal, moveVertical);
-
-        RotateToNewDirectionIfNeeded(newDirection);
-        ApplyFriction();
-
-        Vector2 movement;
-        switch (_currentDirection)
+        if (isLocalPlayer)
         {
-            case Direction.None:
-                movement = Vector2.zero;
-                break;
+            // куда-то едем
+            if (_targetPosition.HasValue)
+            {
+                Debug.DrawLine(_rb2D.position, _targetPosition.Value, Color.red, Time.deltaTime, false);
 
-            case Direction.XPlus:
-            case Direction.XMinus:
-                movement = new Vector2(moveHorizontal, 0);
-                break;
+                // достигли ли узла сетки?
+                var distanceToTarget = (_targetPosition.Value - _rb2D.position).magnitude;
+                if (distanceToTarget < Epsilon)
+                {
+                    // достигли, стоп машина
+                    Debug.Log("Доехали до цели");
+                    _targetPosition = null;
+                    _rb2D.velocity = Vector2.zero;
+                }
+            }
 
-            case Direction.YPlus:
-            case Direction.YMinus:
-                movement = new Vector2(0, moveVertical);
-                break;
+            var moveHorizontal = Input.GetAxis(AxisHorizontal);
+            var moveVertical = Input.GetAxis(AxisVertical);
+            var requestedDirection = GetDirection(moveHorizontal, moveVertical);
 
-            default:
-                throw new ArgumentOutOfRangeException();
+            // позволяем менять направление, если находимся в узле сетки,
+            // или если есть коллизии
+            if (!_targetPosition.HasValue || _collisions.Any())
+            {
+                // если игрок жмёт в какую-либо сторону - пытаемся ехать туда
+                if (requestedDirection.HasValue)
+                {
+                    _currentDirection = requestedDirection.Value;
+
+                    //задаём цель
+                    // тут ошибка: можно задать следующую клетку, когда не доехали предыдущую, и проехать остановку, если игрок внезапно отпускает клавишу.
+                    // надо как-то по-умоному обновлять _targetPosition
+                    _targetPosition = SnapToGrid(_rb2D.position + _directions[_currentDirection] * Constants.GridSize);
+
+                    //едем
+                    _rb2D.MovePosition(_rb2D.position + _directions[_currentDirection] * Speed * Constants.GridSize);
+                }
+                else
+                {
+                    // стоим на месте
+                    //var linearAlign = GetAlignToGrid();
+                    //_rb2D.MovePosition(_rb2D.position + linearAlign);
+                }
+            }
+            //иначе просто едем
+            else
+            {
+                var requiredMove = _targetPosition.Value - _rb2D.position;
+                var availableMagnitude = Speed * Constants.GridSize;
+
+                var magnitudeDiff = availableMagnitude - requiredMove.magnitude;
+                // если за следующий тик мы доедем куда нужно - можно послушать, чего же хочет игрок
+                if (magnitudeDiff > 0)
+                {
+                    // если игрок жмёт в какую-либо сторону - пытаемся ехать туда
+                    if (requestedDirection.HasValue)
+                    {
+                        _currentDirection = requestedDirection.Value;
+
+                        //едем
+                        _rb2D.MovePosition(_targetPosition.Value + _directions[_currentDirection] * magnitudeDiff);
+
+                        //задаём цель
+                        _targetPosition = SnapToGrid(_targetPosition.Value +
+                                                     _directions[_currentDirection] * Constants.GridSize);
+                    }
+                    else
+                    {
+                        _rb2D.MovePosition(_rb2D.position + requiredMove);
+                    }
+                }
+                else
+                {
+                    _rb2D.MovePosition(_rb2D.position + requiredMove.normalized * availableMagnitude);
+                }
+            }
         }
 
-        _rb2d.AddForce(movement * Power);
+        _rb2D.MoveRotation(_rotations[_currentDirection]);
     }
 
-    private void ApplyFriction()
+    private void AlignToGrid()
     {
-        var velocity = _rb2d.velocity;
-        var frictionNormalized = -velocity.normalized;
-        var friction = frictionNormalized * _rb2d.mass * Friction;
+        //switch (_currentDirection)
+        //{
+        //    case Direction.XPlus:
+        //    case Direction.XMinus:
+        //        var distanceToGridY = (float)Math.IEEERemainder(_rb2D.position.y, Constants.GridSize);
+        //        gameObject.transform.Translate(Vector2.up * distanceToGridY);
+        //        _rb2D.constraints = RigidbodyConstraints2D.FreezePositionY;
+        //        break;
 
-        var velocityMagnitude = velocity.magnitude;
-        if (friction.magnitude > velocityMagnitude)
-        {
-            _rb2d.AddForce(frictionNormalized * velocityMagnitude);
-        }
-        else
-        {
-            _rb2d.AddForce(friction);
-        }
+        //    case Direction.YPlus:
+        //    case Direction.YMinus:
+        //        var distanceToGridX = (float)Math.IEEERemainder(_rb2D.position.x, Constants.GridSize);
+        //        gameObject.transform.Translate(Vector2.right * distanceToGridX);
+        //        _rb2D.constraints = RigidbodyConstraints2D.FreezePositionX;
+        //        break;
+
+        //    default:
+        //        throw new ArgumentOutOfRangeException();
+        //}
     }
 
-    private void RotateToNewDirectionIfNeeded(Direction newDirection)
+    private static Vector2 SnapToGrid(Vector2 v)
     {
-        if (newDirection == _currentDirection || newDirection == Direction.None)
-        {
-            return;
-        }
+        var reminderX = (float)Math.IEEERemainder(v.x, Constants.GridSize);
+        var reminderY = (float)Math.IEEERemainder(v.y, Constants.GridSize);
+        var reminder = new Vector2(reminderX, reminderY);
 
-        var newVelocityX = 0.0f;
-        var newVelocityY = 0.0f;
-        var newX = transform.position.x;
-        var newY = transform.position.y;
-        float angle;
-        var currentVelocity = _rb2d.velocity;
-        switch (newDirection)
-        {
-            case Direction.XPlus:
-                newVelocityX = currentVelocity.magnitude;
-                newY = Mathf.Round(newY / Constants.GirdSize) * Constants.GirdSize;
-                angle = 90;
-                break;
-            case Direction.XMinus:
-                newVelocityX = -currentVelocity.magnitude;
-                newY = Mathf.Round(newY / Constants.GirdSize) * Constants.GirdSize;
-                angle = -90;
-                break;
-            case Direction.YPlus:
-                newVelocityY = currentVelocity.magnitude;
-                newX = Mathf.Round(newX / Constants.GirdSize) * Constants.GirdSize;
-                angle = 0;
-                break;
-            case Direction.YMinus:
-                newVelocityY = -currentVelocity.magnitude;
-                newX = Mathf.Round(newX / Constants.GirdSize) * Constants.GirdSize;
-                angle = 180;
-                break;
-
-            case Direction.None:
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-
-        _currentDirection = newDirection;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, -angle));
-        transform.position = new Vector3(newX, newY);
-        _rb2d.velocity = new Vector2(newVelocityX, newVelocityY);
+        return v-reminder;
     }
 
-    private Direction GetDirection(float x, float y)
+    private static Direction? GetDirection(float x, float y)
     {
-        if (Math.Abs(x - y) < _epsilon)
+        if (Math.Abs(x - y) < Epsilon)
         {
-            return Direction.None;
+            return null;
         }
 
         if (Math.Abs(x) > Math.Abs(y))

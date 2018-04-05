@@ -4,5 +4,5 @@ using UnityEngine;
 
 public static class Constants
 {
-    public static float GirdSize = 0.5f;
+    public static float GridSize = 1.0f;
 }
