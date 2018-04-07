@@ -25,7 +25,6 @@ GameObject:
   - component: {fileID: 114469856515668550}
   - component: {fileID: 114188073941096146}
   - component: {fileID: 114182911096739392}
-  - component: {fileID: 114173408009427136}
   - component: {fileID: 114004115923880864}
   m_Layer: 0
   m_Name: Tank
@@ -122,20 +121,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07e8e1ee37ad66f49be395fa57ea60d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Speed: 7
+  TTL: 2
   BulletPrefab: {fileID: 1815654817061048, guid: e8a3fd7c90864644ba7a8ed6ee6d3d97,
     type: 2}
   BulletSpawn: {fileID: 4912365734415398}
---- !u!114 &114173408009427136
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1468370762080052}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114182911096739392
 MonoBehaviour:
   m_ObjectHideFlags: 1

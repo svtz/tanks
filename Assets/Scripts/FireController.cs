@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class FireController : MonoBehaviour {
+public class FireController : NetworkBehaviour
+{
 
+    public float Speed;
+    public float TTL;
     public GameObject BulletPrefab;
     public Transform BulletSpawn;
 
@@ -15,24 +19,30 @@ public class FireController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        if (!isLocalPlayer)
+            return;
+
 	    if (Input.GetKeyDown(KeyCode.Space))
 	    {
-	        Fire();
+	        CmdFire();
 	    }
     }
 
-    void Fire()
+    [Command]
+    public void CmdFire()
     {
-        // Create the Bullet from the Bullet Prefab
-        var bullet = (GameObject)Instantiate(
+        var projectile = (GameObject)Instantiate(
             BulletPrefab,
             BulletSpawn.position,
             BulletSpawn.rotation);
 
-        // Add velocity to the bullet
-        bullet.GetComponent<Rigidbody2D>().velocity = bullet.transform.up * 6;
+        // Add velocity
+        projectile.GetComponent<Rigidbody2D>().velocity = projectile.transform.up * Speed;
 
-        // Destroy the bullet after 2 seconds
-        Destroy(bullet, 2.0f);
+        // Spawn on the Clients
+        NetworkServer.Spawn(projectile);
+
+        // Destroy after 2 seconds
+        Destroy(projectile, TTL);
     }
 }
