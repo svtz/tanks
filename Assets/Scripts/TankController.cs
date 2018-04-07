@@ -129,6 +129,10 @@ public class TankController : NetworkBehaviour
                     _rb2D.velocity = Vector2.zero;
                 }
             }
+            else
+            {
+                _rb2D.velocity = Vector2.zero;
+            }
 
             var moveHorizontal = Input.GetAxis(AxisHorizontal);
             var moveVertical = Input.GetAxis(AxisVertical);
