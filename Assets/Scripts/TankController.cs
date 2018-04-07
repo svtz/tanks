@@ -10,8 +10,34 @@ public class TankController : NetworkBehaviour
 
     private Rigidbody2D _rb2D;
 
-    [SyncVar]
     private Direction _currentDirection;
+    private Direction CurrentDirection 
+    {
+        get { return _currentDirection; }
+        set
+        {
+            if (value == _currentDirection) return;
+
+            _currentDirection = value;
+            if (isLocalPlayer)
+                CmdSendDirectionToServer(value);
+        }
+    }
+
+
+    [Command]
+    private void CmdSendDirectionToServer(Direction direction)
+    {
+        RpcSendDirectionToClients(direction);
+    }
+    [ClientRpc]
+    private void RpcSendDirectionToClients(Direction newDirection)
+    {
+        if (isLocalPlayer)
+            return;
+
+        CurrentDirection = newDirection;
+    }
 
     private Vector2? _targetPosition;
 
@@ -115,15 +141,15 @@ public class TankController : NetworkBehaviour
                 // если игрок жмёт в какую-либо сторону - пытаемся ехать туда
                 if (requestedDirection.HasValue)
                 {
-                    _currentDirection = requestedDirection.Value;
+                    CurrentDirection = requestedDirection.Value;
 
                     //задаём цель
                     // тут ошибка: можно задать следующую клетку, когда не доехали предыдущую, и проехать остановку, если игрок внезапно отпускает клавишу.
                     // надо как-то по-умоному обновлять _targetPosition
-                    _targetPosition = SnapToGrid(_rb2D.position + _directions[_currentDirection] * Constants.GridSize);
+                    _targetPosition = SnapToGrid(_rb2D.position + _directions[CurrentDirection] * Constants.GridSize);
 
                     //едем
-                    _rb2D.MovePosition(_rb2D.position + _directions[_currentDirection] * Speed * Constants.GridSize);
+                    _rb2D.MovePosition(_rb2D.position + _directions[CurrentDirection] * Speed * Constants.GridSize);
                 }
                 else
                 {
@@ -145,14 +171,14 @@ public class TankController : NetworkBehaviour
                     // если игрок жмёт в какую-либо сторону - пытаемся ехать туда
                     if (requestedDirection.HasValue)
                     {
-                        _currentDirection = requestedDirection.Value;
+                        CurrentDirection = requestedDirection.Value;
 
                         //едем
-                        _rb2D.MovePosition(_targetPosition.Value + _directions[_currentDirection] * magnitudeDiff);
+                        _rb2D.MovePosition(_targetPosition.Value + _directions[CurrentDirection] * magnitudeDiff);
 
                         //задаём цель
                         _targetPosition = SnapToGrid(_targetPosition.Value +
-                                                     _directions[_currentDirection] * Constants.GridSize);
+                                                     _directions[CurrentDirection] * Constants.GridSize);
                     }
                     else
                     {
@@ -166,18 +192,17 @@ public class TankController : NetworkBehaviour
             }
         }
 
-        _rb2D.MoveRotation(_rotations[_currentDirection]);
+        _rb2D.MoveRotation(_rotations[CurrentDirection]);
     }
 
     private void AlignToGrid()
     {
-        switch (_currentDirection)
+        switch (CurrentDirection)
         {
             case Direction.XPlus:
             case Direction.XMinus:
                 if ((_rb2D.constraints & RigidbodyConstraints2D.FreezePositionY) != RigidbodyConstraints2D.FreezePositionY)
                 {
-                    _rb2D.constraints = RigidbodyConstraints2D.None;
                     var distanceToGridY = (float)Math.IEEERemainder(_rb2D.position.y, Constants.GridSize);
                     transform.Translate(new Vector2(0, -distanceToGridY), Space.World);
                     _rb2D.constraints = RigidbodyConstraints2D.FreezePositionY;
@@ -188,7 +213,6 @@ public class TankController : NetworkBehaviour
             case Direction.YMinus:
                 if ((_rb2D.constraints & RigidbodyConstraints2D.FreezePositionX) != RigidbodyConstraints2D.FreezePositionX)
                 {
-                    _rb2D.constraints = RigidbodyConstraints2D.None;
                     var distanceToGridX = (float)Math.IEEERemainder(_rb2D.position.x, Constants.GridSize);
                     transform.Translate(new Vector2(-distanceToGridX, 0), Space.World);
                     _rb2D.constraints = RigidbodyConstraints2D.FreezePositionX;
