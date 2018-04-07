@@ -171,25 +171,33 @@ public class TankController : NetworkBehaviour
 
     private void AlignToGrid()
     {
-        //switch (_currentDirection)
-        //{
-        //    case Direction.XPlus:
-        //    case Direction.XMinus:
-        //        var distanceToGridY = (float)Math.IEEERemainder(_rb2D.position.y, Constants.GridSize);
-        //        gameObject.transform.Translate(Vector2.up * distanceToGridY);
-        //        _rb2D.constraints = RigidbodyConstraints2D.FreezePositionY;
-        //        break;
+        switch (_currentDirection)
+        {
+            case Direction.XPlus:
+            case Direction.XMinus:
+                if ((_rb2D.constraints & RigidbodyConstraints2D.FreezePositionY) != RigidbodyConstraints2D.FreezePositionY)
+                {
+                    _rb2D.constraints = RigidbodyConstraints2D.None;
+                    var distanceToGridY = (float)Math.IEEERemainder(_rb2D.position.y, Constants.GridSize);
+                    transform.Translate(new Vector2(0, -distanceToGridY), Space.World);
+                    _rb2D.constraints = RigidbodyConstraints2D.FreezePositionY;
+                }
+                break;
 
-        //    case Direction.YPlus:
-        //    case Direction.YMinus:
-        //        var distanceToGridX = (float)Math.IEEERemainder(_rb2D.position.x, Constants.GridSize);
-        //        gameObject.transform.Translate(Vector2.right * distanceToGridX);
-        //        _rb2D.constraints = RigidbodyConstraints2D.FreezePositionX;
-        //        break;
+            case Direction.YPlus:
+            case Direction.YMinus:
+                if ((_rb2D.constraints & RigidbodyConstraints2D.FreezePositionX) != RigidbodyConstraints2D.FreezePositionX)
+                {
+                    _rb2D.constraints = RigidbodyConstraints2D.None;
+                    var distanceToGridX = (float)Math.IEEERemainder(_rb2D.position.x, Constants.GridSize);
+                    transform.Translate(new Vector2(-distanceToGridX, 0), Space.World);
+                    _rb2D.constraints = RigidbodyConstraints2D.FreezePositionX;
+                }
+                break;
 
-        //    default:
-        //        throw new ArgumentOutOfRangeException();
-        //}
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 
     private static Vector2 SnapToGrid(Vector2 v)
