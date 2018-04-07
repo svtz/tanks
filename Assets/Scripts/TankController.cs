@@ -158,8 +158,7 @@ public class TankController : NetworkBehaviour
                 else
                 {
                     // стоим на месте
-                    //var linearAlign = GetAlignToGrid();
-                    //_rb2D.MovePosition(_rb2D.position + linearAlign);
+                    _targetPosition = null;
                 }
             }
             //иначе просто едем
