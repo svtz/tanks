@@ -94,12 +94,12 @@ MonoBehaviour:
   m_TransformSyncMode: 2
   m_SendInterval: 0.1
   m_SyncRotationAxis: 3
-  m_RotationSyncCompression: 0
+  m_RotationSyncCompression: 2
   m_SyncSpin: 0
   m_MovementTheshold: 0.001
   m_VelocityThreshold: 0.0001
   m_SnapThreshold: 5
-  m_InterpolateRotation: 1
+  m_InterpolateRotation: 10
   m_InterpolateMovement: 1
 --- !u!114 &114188073941096146
 MonoBehaviour:
