@@ -110,10 +110,10 @@ public class TankController : NetworkBehaviour
     //FixedUpdate is called at a fixed interval and is independent of frame rate. Put physics code here.
     public void FixedUpdate()
     {
-        AlignToGrid();
-
         if (isLocalPlayer)
         {
+            AlignToGrid();
+
             // куда-то едем
             if (_targetPosition.HasValue)
             {
