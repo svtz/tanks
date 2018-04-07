@@ -47,3 +47,6 @@ TagManager:
   - name: Tanks
     uniqueID: 484551615
     locked: 0
+  - name: Projectiles
+    uniqueID: 1695110533
+    locked: 0
