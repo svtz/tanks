@@ -23,8 +23,9 @@ public class Health : NetworkBehaviour {
         _currentHealth -= amount;
         if (_currentHealth <= 0)
         {
-            _currentHealth = 0;
+            _currentHealth = MaxHealth;
             Debug.Log("Dead!");
+            RpcRespawn();
         }
     }
 
@@ -33,5 +34,15 @@ public class Health : NetworkBehaviour {
         healthBar.sizeDelta = new Vector2(
             health,
             healthBar.sizeDelta.y);
+    }
+
+    [ClientRpc]
+    private void RpcRespawn()
+    {
+        if (isLocalPlayer)
+        {
+            // move back to zero location
+            transform.position = Vector3.zero;
+        }
     }
 }
