@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    public int Damage;
+
     private TeamId _id;
 
     public void Start()
@@ -13,9 +15,18 @@ public class Projectile : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        var teamId = collision.gameObject.GetComponent<TeamId>();
+        var hit = collision.gameObject;
+        var teamId = hit.GetComponent<TeamId>();
 
         if (teamId == null || teamId.Id != _id.Id)
+        {
+            var health = hit.GetComponent<Health>();
+            if (health != null)
+            {
+                health.TakeDamage(Damage);
+            }
+
             Destroy(gameObject);
+        }
     }
 }
