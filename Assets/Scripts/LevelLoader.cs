@@ -27,7 +27,7 @@ public class LevelLoader : NetworkBehaviour
             Name = textAsset.name
         };
 
-        var lines = textAsset.text.Split('\n').Select(s => s.Trim()).ToArray();
+        var lines = textAsset.text.Split('\n').Select(s => s.Trim('\r')).ToArray();
         var firstLine = lines[0].Split(new[] {' ', '\t'}, StringSplitOptions.RemoveEmptyEntries).ToArray();
         data.Width = int.Parse(firstLine[0]);
         data.Height = int.Parse(firstLine[1]);
@@ -50,11 +50,11 @@ public class LevelLoader : NetworkBehaviour
     {
         switch (lines[lineIdx][colIdx])
         {
-            case '0':
+            case ' ':
                 return LevelObject.None;
             case '1':
                 return LevelObject.RegularWall;
-            case '2':
+            case 'X':
                 return LevelObject.UnbreakableWall;
 
             default:
@@ -81,6 +81,24 @@ public class LevelLoader : NetworkBehaviour
             NetworkServer.Spawn(wall3);
             var wall4 = Instantiate(UnbreakableWallPrefab, new Vector3(-level.Width - 1, j), Quaternion.identity);
             NetworkServer.Spawn(wall4);
+        }
+
+        for (var i = 0; i < level.Height; i++)
+        for (var j = 0; j < level.Width; j++)
+        {
+            switch (level.Map[i][j])
+            {
+                case LevelObject.None:
+                    break;
+                case LevelObject.RegularWall:
+                    break;
+                case LevelObject.UnbreakableWall:
+                    var wall = Instantiate(UnbreakableWallPrefab, new Vector3(-level.Width+j*2+1, -level.Height+i*2+1), Quaternion.identity);
+                    NetworkServer.Spawn(wall);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 

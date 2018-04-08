@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4561744782030622}
   - component: {fileID: 212854427743577154}
   - component: {fileID: 61482383448228664}
+  - component: {fileID: 114087992924943728}
   m_Layer: 0
   m_Name: Unbreakable Wall
   m_TagString: Untagged
@@ -35,7 +36,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1998760418760660}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.71, y: 1.32, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
@@ -66,6 +67,38 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
+--- !u!114 &114087992924943728
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1998760418760660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 41
+    i1: 30
+    i2: 152
+    i3: 178
+    i4: 195
+    i5: 178
+    i6: 96
+    i7: 164
+    i8: 233
+    i9: 105
+    i10: 80
+    i11: 149
+    i12: 185
+    i13: 161
+    i14: 234
+    i15: 119
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!212 &212854427743577154
 SpriteRenderer:
   m_ObjectHideFlags: 1
