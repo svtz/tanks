@@ -44,6 +44,9 @@ TagManager:
   - name: Background
     uniqueID: 387149867
     locked: 0
+  - name: Walls
+    uniqueID: 3780516399
+    locked: 0
   - name: Tanks
     uniqueID: 484551615
     locked: 0
