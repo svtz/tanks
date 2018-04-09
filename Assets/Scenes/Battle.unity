@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 134477167}
   - component: {fileID: 134477168}
   m_Layer: 0
-  m_Name: Level Loader
+  m_Name: Map Loader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,10 +151,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 134477165}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8449e6e470acf4d428116fe99e8c7663, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f5c9f3b2748d9c4eaea80ffc3823160, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Levels:
+  AvailableMaps:
   - {fileID: 4900000, guid: 33fd1b2ee8710d24b88d4c16584c63f5, type: 3}
   Background: {fileID: 2123625913}
   UnbreakableWallPrefab: {fileID: 1998760418760660, guid: 291e98b2c3b260a4e9695095b9a1ea77,

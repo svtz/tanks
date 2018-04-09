@@ -1,4 +1,4 @@
-public enum LevelObject
+public enum MapObjectKind
 {
     None,
     RegularWall,

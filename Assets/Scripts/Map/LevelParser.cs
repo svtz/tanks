@@ -4,9 +4,9 @@ using UnityEngine;
 
 internal sealed class LevelParser
 {
-    public static LevelData Parse(TextAsset textAsset)
+    public static MapInfo Parse(TextAsset textAsset)
     {
-        var data = new LevelData
+        var data = new MapInfo
         {
             Name = textAsset.name
         };
@@ -15,11 +15,11 @@ internal sealed class LevelParser
         var firstLine = lines[0].Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
         data.Width = int.Parse(firstLine[0]);
         data.Height = int.Parse(firstLine[1]);
-        data.Map = new LevelObject[data.Height][];
+        data.Map = new MapObjectKind[data.Height][];
 
         for (var lineIdx = 1; lineIdx <= data.Height; lineIdx++)
         {
-            var currentLineMap = new LevelObject[data.Width];
+            var currentLineMap = new MapObjectKind[data.Width];
 
             for (var colIdx = 0; colIdx < data.Width; colIdx++)
                 currentLineMap[colIdx] = ParseCell(lines, lineIdx, colIdx);
@@ -30,16 +30,16 @@ internal sealed class LevelParser
         return data;
     }
 
-    private static LevelObject ParseCell(string[] lines, int lineIdx, int colIdx)
+    private static MapObjectKind ParseCell(string[] lines, int lineIdx, int colIdx)
     {
         switch (lines[lineIdx][colIdx])
         {
             case ' ':
-                return LevelObject.None;
+                return MapObjectKind.None;
             case '1':
-                return LevelObject.RegularWall;
+                return MapObjectKind.RegularWall;
             case 'X':
-                return LevelObject.UnbreakableWall;
+                return MapObjectKind.UnbreakableWall;
 
             default:
                 throw new ArgumentException("Неверный формат уровня");
