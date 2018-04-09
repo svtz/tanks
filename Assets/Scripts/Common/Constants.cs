@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public static class Constants
+﻿namespace svtz.Tanks.Assets.Scripts.Common
 {
-    public static float GridSize = 1.0f;
+    public static class Constants
+    {
+        public static float GridSize = 1.0f;
+    }
 }

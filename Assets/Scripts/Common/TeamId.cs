@@ -1,27 +1,29 @@
 ﻿using System;
-using UnityEngine;
 using UnityEngine.Networking;
 
-public class TeamId : NetworkBehaviour
+namespace svtz.Tanks.Assets.Scripts.Common
 {
-    [SyncVar]
-    private string _id;
-
-    public string Id
+    public class TeamId : NetworkBehaviour
     {
-        get { return _id; }
-        set { _id = value; }
-    }
+        [SyncVar]
+        private string _id;
 
-    // Use this for initialization
-	void Start ()
-	{
-        if (string.IsNullOrEmpty(_id))
-            _id = Guid.NewGuid().ToString();
-    }
+        public string Id
+        {
+            get { return _id; }
+            set { _id = value; }
+        }
+
+        // Use this for initialization
+        void Start ()
+        {
+            if (string.IsNullOrEmpty(_id))
+                _id = Guid.NewGuid().ToString();
+        }
 	
-	// Update is called once per frame
-	void Update () {
+        // Update is called once per frame
+        void Update () {
 		
-	}
+        }
+    }
 }

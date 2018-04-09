@@ -1,18 +1,20 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class CameraController : MonoBehaviour
+namespace svtz.Tanks.Assets.Scripts
 {
-    public GameObject Player;
-    private Vector3 _offset;
-
-    void Start()
+    public class CameraController : MonoBehaviour
     {
-        //_offset = transform.position - Player.transform.position;
-    }
+        public GameObject Player;
+        private Vector3 _offset;
 
-    void LateUpdate()
-    {
-        //transform.position = Player.transform.position + _offset;
+        void Start()
+        {
+            //_offset = transform.position - Player.transform.position;
+        }
+
+        void LateUpdate()
+        {
+            //transform.position = Player.transform.position + _offset;
+        }
     }
 }

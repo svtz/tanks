@@ -1,6 +1,9 @@
-public enum MapObjectKind
+namespace svtz.Tanks.Assets.Scripts.Map
 {
-    None,
-    RegularWall,
-    UnbreakableWall
+    public enum MapObjectKind
+    {
+        None,
+        RegularWall,
+        UnbreakableWall
+    }
 }
