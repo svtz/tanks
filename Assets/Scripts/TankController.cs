@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 namespace svtz.Tanks.Assets.Scripts
 {
-    public class TankController : NetworkBehaviour
+    internal sealed class TankController : NetworkBehaviour
     {
         public float Speed;
 
@@ -78,7 +78,7 @@ namespace svtz.Tanks.Assets.Scripts
 
 
         // Use this for initialization
-        public void Start()
+        private void Start()
         {
             _rb2D = GetComponent<Rigidbody2D>();
 
@@ -96,12 +96,12 @@ namespace svtz.Tanks.Assets.Scripts
         #region это что-то кривое, но, может, будет работать?
         private readonly HashSet<int> _collisions = new HashSet<int>();
 
-        public void OnCollisionEnter2D(Collision2D collision)
+        private void OnCollisionEnter2D(Collision2D collision)
         {
             _collisions.Add(collision.collider.GetInstanceID());
         }
 
-        public void OnCollisionExit2D(Collision2D collision)
+        private void OnCollisionExit2D(Collision2D collision)
         {
             var result = _collisions.Remove(collision.collider.GetInstanceID());
             if (!result)
@@ -111,7 +111,7 @@ namespace svtz.Tanks.Assets.Scripts
 
 
         //FixedUpdate is called at a fixed interval and is independent of frame rate. Put physics code here.
-        public void FixedUpdate()
+        private void FixedUpdate()
         {
             if (isLocalPlayer)
             {

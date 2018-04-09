@@ -3,18 +3,18 @@ using UnityEngine;
 
 namespace svtz.Tanks.Assets.Scripts
 {
-    public class Projectile : MonoBehaviour
+    internal sealed class Projectile : MonoBehaviour
     {
         public int Damage;
 
         private TeamId _id;
 
-        public void Start()
+        private void Start()
         {
             _id = GetComponent<TeamId>();
         }
 
-        void OnCollisionEnter2D(Collision2D collision)
+        private void OnCollisionEnter2D(Collision2D collision)
         {
             var hit = collision.gameObject;
             var teamId = hit.GetComponent<TeamId>();

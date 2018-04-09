@@ -4,9 +4,8 @@ using UnityEngine.Networking;
 
 namespace svtz.Tanks.Assets.Scripts
 {
-    public class FireController : NetworkBehaviour
+    internal sealed class FireController : NetworkBehaviour
     {
-
         public float Speed;
         public float TTL;
         public GameObject BulletPrefab;
@@ -15,14 +14,14 @@ namespace svtz.Tanks.Assets.Scripts
         private TeamId _id;
 
         // Use this for initialization
-        public void Start()
+        private void Start()
         {
             _id = GetComponent<TeamId>();
 
         }
 
         // Update is called once per frame
-        public void Update()
+        private void Update()
         {
             if (!isLocalPlayer)
                 return;
@@ -35,7 +34,7 @@ namespace svtz.Tanks.Assets.Scripts
         }
 
         [Command]
-        public void CmdFire(string teamId)
+        private void CmdFire(string teamId)
         {
             var projectile = (GameObject)Instantiate(
                 BulletPrefab,

@@ -1,6 +1,6 @@
 namespace svtz.Tanks.Assets.Scripts.Map
 {
-    public class MapInfo
+    internal sealed class MapInfo
     {
         public string Name { get; set; }
         public int Width { get; set; }

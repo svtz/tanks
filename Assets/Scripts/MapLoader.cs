@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 
 namespace svtz.Tanks.Assets.Scripts
 {
-    public class MapLoader : NetworkBehaviour
+    internal sealed class MapLoader : NetworkBehaviour
     {
         public TextAsset[] AvailableMaps;
         public GameObject Background;

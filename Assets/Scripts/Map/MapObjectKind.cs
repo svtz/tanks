@@ -1,6 +1,6 @@
 namespace svtz.Tanks.Assets.Scripts.Map
 {
-    public enum MapObjectKind
+    internal enum MapObjectKind
     {
         None,
         RegularWall,

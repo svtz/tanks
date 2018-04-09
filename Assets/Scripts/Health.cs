@@ -3,16 +3,16 @@ using UnityEngine.Networking;
 
 namespace svtz.Tanks.Assets.Scripts
 {
-    public class Health : NetworkBehaviour {
-
+    internal sealed class Health : NetworkBehaviour
+    {
         public int MaxHealth = 100;
 
-        public RectTransform healthBar;
+        public RectTransform HealthBar;
 
         [SyncVar(hook = "OnChangeHealth")]
         private int _currentHealth;
 
-        public void Start()
+        private void Start()
         {
             _currentHealth = MaxHealth;
         }
@@ -33,9 +33,9 @@ namespace svtz.Tanks.Assets.Scripts
 
         private void OnChangeHealth(int health)
         {
-            healthBar.sizeDelta = new Vector2(
+            HealthBar.sizeDelta = new Vector2(
                 health,
-                healthBar.sizeDelta.y);
+                HealthBar.sizeDelta.y);
         }
 
         [ClientRpc]

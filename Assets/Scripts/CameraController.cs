@@ -2,17 +2,17 @@
 
 namespace svtz.Tanks.Assets.Scripts
 {
-    public class CameraController : MonoBehaviour
+    internal sealed class CameraController : MonoBehaviour
     {
         public GameObject Player;
         private Vector3 _offset;
 
-        void Start()
+        private void Start()
         {
             //_offset = transform.position - Player.transform.position;
         }
 
-        void LateUpdate()
+        private void LateUpdate()
         {
             //transform.position = Player.transform.position + _offset;
         }
