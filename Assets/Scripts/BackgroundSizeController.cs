@@ -18,7 +18,7 @@ namespace svtz.Tanks.Assets.Scripts
 
         private void InitBackground()
         {
-            GetComponent<SpriteRenderer>().size = new Vector2(_width * 2, _height * 2);
+            GetComponent<SpriteRenderer>().size = new Vector2(_width, _height);
         }
 
         public void SetSize(int width, int height)

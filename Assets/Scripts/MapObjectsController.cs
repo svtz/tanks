@@ -57,7 +57,7 @@ namespace svtz.Tanks.Assets.Scripts
 
     internal static class MapObjectsControllerExtensions
     {
-        public static void Add(this MapObjectsController mapObjects, int x, int y, MapObjectKind objectKind)
+        public static void Add(this MapObjectsController mapObjects, float x, float y, MapObjectKind objectKind)
         {
             mapObjects.Add(new Vector2(x, y), objectKind);
         }

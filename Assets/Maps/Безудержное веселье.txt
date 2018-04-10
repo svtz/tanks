@@ -1,8 +1,15 @@
-10 7
-          
-   XXXX   
-          
-X*XX  XX*X
-          
-   XXXX   
-          
+20 14
+XX                XX
+X                  X
+        XXXX        
+                    
+  ***          ***  
+    *  XX**XX  *    
+    X  X    X  X    
+    X  X    X  X    
+    *  XX**XX  *    
+  ***          ***  
+                    
+        XXXX        
+X                  X
+XX                XX

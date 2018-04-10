@@ -27,24 +27,24 @@ namespace svtz.Tanks.Assets.Scripts
             var controller = FindObjectOfType<MapObjectsController>();
 
             // строим периметр
-            for (var i = -map.Width-1; i <= map.Width+1; i++)
+            for (var i = -map.Width / 2 - 1; i <= map.Width / 2; i++)
             {
-                controller.Add(i, map.Height + 1, MapObjectKind.UnbreakableWall);
-                controller.Add(i, -map.Height - 1, MapObjectKind.UnbreakableWall);
+                controller.Add(i + 0.5f, map.Height / 2.0f + 0.5f, MapObjectKind.UnbreakableWall);
+                controller.Add(i + 0.5f, -map.Height / 2.0f - 0.5f, MapObjectKind.UnbreakableWall);
             }
 
-            for (var j = -map.Height; j <= map.Height; j++)
+            for (var j = -map.Height / 2; j <= map.Height / 2 - 1; j++)
             {
-                controller.Add(map.Width + 1, j, MapObjectKind.UnbreakableWall);
-                controller.Add(-map.Width - 1, j, MapObjectKind.UnbreakableWall);
+                controller.Add(map.Width / 2.0f + 0.5f, j + 0.5f, MapObjectKind.UnbreakableWall);
+                controller.Add(-map.Width / 2.0f - 0.5f, j + 0.5f, MapObjectKind.UnbreakableWall);
             }
 
             // спавним остальное
             for (var i = 0; i < map.Height; i++)
             for (var j = 0; j < map.Width; j++)
             {
-                var x = -map.Width + j * 2 + 1;
-                var y = -map.Height + i * 2 + 1;
+                var x = -map.Width / 2 + j + 0.5f;
+                var y = -map.Height / 2 + i + 0.5f;
 
                 switch (map.Map[i][j])
                 {
