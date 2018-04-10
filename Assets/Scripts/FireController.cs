@@ -6,10 +6,12 @@ namespace svtz.Tanks.Assets.Scripts
 {
     internal sealed class FireController : NetworkBehaviour
     {
+#pragma warning disable 0649
         public float Speed;
         public float TTL;
         public GameObject BulletPrefab;
         public Transform BulletSpawn;
+#pragma warning restore 0649
 
         private TeamId _id;
 

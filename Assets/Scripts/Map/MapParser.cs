@@ -38,7 +38,7 @@ namespace svtz.Tanks.Assets.Scripts.Map
             {
                 case ' ':
                     return MapObjectKind.None;
-                case '1':
+                case '*':
                     return MapObjectKind.RegularWall;
                 case 'X':
                     return MapObjectKind.UnbreakableWall;

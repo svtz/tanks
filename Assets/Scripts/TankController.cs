@@ -9,7 +9,9 @@ namespace svtz.Tanks.Assets.Scripts
 {
     internal sealed class TankController : NetworkBehaviour
     {
+#pragma warning disable 0649
         public float Speed;
+#pragma warning restore 0649
 
         private Rigidbody2D _rb2D;
 

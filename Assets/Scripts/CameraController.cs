@@ -1,10 +1,14 @@
-﻿using UnityEngine;
+﻿using JetBrains.Annotations;
+using UnityEngine;
 
 namespace svtz.Tanks.Assets.Scripts
 {
     internal sealed class CameraController : MonoBehaviour
     {
+#pragma warning disable 0649
         public GameObject Player;
+#pragma warning restore 0649
+
         private Vector3 _offset;
 
         private void Start()
