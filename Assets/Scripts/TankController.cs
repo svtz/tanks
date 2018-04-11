@@ -112,6 +112,30 @@ namespace svtz.Tanks.Assets.Scripts
         #endregion
 
 
+        private float _inputX = 0.0f;
+        private float _inputY = 0.0f;
+
+        private void Update()
+        {
+            // пропишем текущий вход управления
+            _inputX = 0.0f;
+            _inputY = 0.0f;
+
+            var up = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
+            var down = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
+            if (up && !down)
+                _inputY = 1.0f;
+            else if (down && !up)
+                _inputY = -1.0f;
+
+            var right = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
+            var left = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
+            if (right && !left)
+                _inputX = 1.0f;
+            else if (left && !right)
+                _inputX = -1.0f;
+        }
+
         //FixedUpdate is called at a fixed interval and is independent of frame rate. Put physics code here.
         private void FixedUpdate()
         {
@@ -129,7 +153,7 @@ namespace svtz.Tanks.Assets.Scripts
                     if (distanceToTarget < Epsilon)
                     {
                         // достигли, стоп машина
-                        Debug.Log("Доехали до цели");
+                        Debug.Log(string.Format("Доехали до цели. InputX={0} InputY={1}", _inputX, _inputY));
                         _targetPosition = null;
                         _rb2D.velocity = Vector2.zero;
                     }
@@ -139,9 +163,7 @@ namespace svtz.Tanks.Assets.Scripts
                     _rb2D.velocity = Vector2.zero;
                 }
 
-                var moveHorizontal = Input.GetAxis(AxisHorizontal);
-                var moveVertical = Input.GetAxis(AxisVertical);
-                var requestedDirection = GetDirection(moveHorizontal, moveVertical);
+                var requestedDirection = GetDirection(_inputX, _inputY);
 
                 // позволяем менять направление, если находимся в узле сетки,
                 // или если есть коллизии
@@ -179,6 +201,7 @@ namespace svtz.Tanks.Assets.Scripts
                         // если игрок жмёт в какую-либо сторону - пытаемся ехать туда
                         if (requestedDirection.HasValue)
                         {
+                            //поворачиваемся
                             CurrentDirection = requestedDirection.Value;
 
                             //едем
@@ -241,7 +264,7 @@ namespace svtz.Tanks.Assets.Scripts
             return v-reminder;
         }
 
-        private static Direction? GetDirection(float x, float y)
+        private Direction? GetDirection(float x, float y)
         {
             if (Math.Abs(x - y) < Epsilon)
             {
