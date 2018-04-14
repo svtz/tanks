@@ -117,6 +117,9 @@ namespace svtz.Tanks.Assets.Scripts
 
         private void Update()
         {
+            if (!isLocalPlayer)
+                return;
+
             // пропишем текущий вход управления
             _inputX = 0.0f;
             _inputY = 0.0f;
