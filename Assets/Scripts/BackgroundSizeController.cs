@@ -11,8 +11,12 @@ namespace svtz.Tanks.Assets.Scripts
         [SyncVar]
         private int _height;
 
-        public override void OnStartClient()
+        private bool _initialized;
+
+        private void Start()
         {
+            if (isServer && !_initialized)
+                Debug.LogError("размер фона не был установлен!");
             InitBackground();
         }
 
@@ -23,13 +27,10 @@ namespace svtz.Tanks.Assets.Scripts
 
         public void SetSize(int width, int height)
         {
-            if (!isServer)
-                return;
-
             _width = width;
             _height = height;
 
-            InitBackground();
+            _initialized = true;
         }
     }
 }
