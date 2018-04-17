@@ -202,8 +202,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 869513252}
-  - component: {fileID: 869513251}
+  - component: {fileID: 869513253}
   - component: {fileID: 869513250}
+  - component: {fileID: 869513254}
   m_Layer: 0
   m_Name: Network Manager
   m_TagString: Untagged
@@ -219,22 +220,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 869513249}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 227461547, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  manager: {fileID: 0}
-  showGUI: 1
-  offsetX: 0
-  offsetY: 0
---- !u!114 &869513251
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 869513249}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -822479833, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Script: {fileID: 11500000, guid: 58825c4741f6c354eba3e98b7f66c144, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_NetworkPort: 7777
@@ -246,16 +232,15 @@ MonoBehaviour:
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
   m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 1468370762080052, guid: b7c5dc9e331d42e49b79c9acc768f362,
-    type: 2}
+  m_PlayerPrefab: {fileID: 0}
   m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 0
   m_OfflineScene: Main
-  m_OnlineScene: Battle
+  m_OnlineScene: 
   m_SpawnPrefabs:
+  - {fileID: 1018151495389970, guid: 30f4e7d7d42ef1b4cba3a2781590bd71, type: 2}
   - {fileID: 1815654817061048, guid: e8a3fd7c90864644ba7a8ed6ee6d3d97, type: 2}
   - {fileID: 1998760418760660, guid: 291e98b2c3b260a4e9695095b9a1ea77, type: 2}
-  - {fileID: 1018151495389970, guid: 30f4e7d7d42ef1b4cba3a2781590bd71, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -298,7 +283,7 @@ MonoBehaviour:
     m_MaxTimerTimeout: 12000
     m_MinNetSimulatorTimeout: 1
     m_MaxNetSimulatorTimeout: 12000
-  m_Channels: 0500000000000000
+  m_Channels: 
   m_UseWebSockets: 0
   m_UseSimulator: 0
   m_SimulatedLatency: 1
@@ -311,6 +296,17 @@ MonoBehaviour:
   matchSize: 4
   isNetworkActive: 0
   matchMaker: {fileID: 0}
+  m_ShowLobbyGUI: 0
+  m_MaxPlayers: 4
+  m_MaxPlayersPerConnection: 1
+  m_MinPlayers: 0
+  m_LobbyPlayerPrefab: {fileID: 114373491417133502, guid: eacf86b4d40551048bd84f2b1665cb9e,
+    type: 2}
+  m_GamePlayerPrefab: {fileID: 1468370762080052, guid: b7c5dc9e331d42e49b79c9acc768f362,
+    type: 2}
+  m_LobbyScene: Main
+  m_PlayScene: Battle
+  lobbySlots: []
 --- !u!4 &869513252
 Transform:
   m_ObjectHideFlags: 0
@@ -324,3 +320,42 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &869513253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 869513249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc8d7a0d16fef1e47bb3f053b65c3109, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_BroadcastPort: 47777
+  m_BroadcastKey: 2222
+  m_BroadcastVersion: 1
+  m_BroadcastSubVersion: 1
+  m_BroadcastInterval: 1000
+  m_UseNetworkManager: 0
+  m_BroadcastData: HELLO
+  m_ShowGUI: 0
+  m_OffsetX: 0
+  m_OffsetY: 0
+  serverName: 
+  playerName: 
+  networkPort: 7777
+  findedServers: []
+--- !u!114 &869513254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 869513249}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d9e20b852ee67742bdd2fbbac3e8037, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skin: {fileID: 11400000, guid: e5c33d0194ffd2b4899df896897e63a5, type: 2}
+  showGUI: 1
+  gameName: "\u041F\u0430\u043D\u043A\u043E\u0422\u0430\u043D\u043A\u0438"
