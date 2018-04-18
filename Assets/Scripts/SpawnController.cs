@@ -31,7 +31,7 @@ namespace svtz.Tanks.Assets.Scripts
             }
         }
 
-        private Vector2 SelectSpawnPoint()
+        public Vector2 SelectSpawnPoint()
         {
             if (!_spawnedPlayers.Any())
                 return _points[Random.Range(0, _points.Count)];
