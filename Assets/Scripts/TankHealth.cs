@@ -1,5 +1,4 @@
-﻿using svtz.Tanks.Assets.Scripts.Common;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
 
 namespace svtz.Tanks.Assets.Scripts
@@ -13,9 +12,7 @@ namespace svtz.Tanks.Assets.Scripts
         protected override void OnZeroHealthAtServer()
         {
             var spawnController = FindObjectOfType<SpawnController>();
-
-            CurrentHealth = MaxHealth;
-            RpcRespawn(spawnController.SelectSpawnPoint());
+            spawnController.DestroyAndRespawn(connectionToClient, gameObject);
         }
 
         protected override void OnChangeHealthAtClient(int health)
@@ -23,15 +20,6 @@ namespace svtz.Tanks.Assets.Scripts
             HealthBar.sizeDelta = new Vector2(
                 health,
                 HealthBar.sizeDelta.y);
-        }
-
-        [ClientRpc]
-        private void RpcRespawn(Vector2 position)
-        {
-            if (isLocalPlayer)
-            {
-                transform.position = position;
-            }
         }
     }
 }
