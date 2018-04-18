@@ -4,6 +4,7 @@ namespace svtz.Tanks.Assets.Scripts.Map
     {
         None,
         RegularWall,
-        UnbreakableWall
+        UnbreakableWall,
+        RandomPlayerSpawn
     }
 }

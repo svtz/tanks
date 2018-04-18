@@ -42,7 +42,9 @@ namespace svtz.Tanks.Assets.Scripts.Map
                     return MapObjectKind.RegularWall;
                 case 'X':
                     return MapObjectKind.UnbreakableWall;
-
+                case 'S':
+                    return MapObjectKind.RandomPlayerSpawn;
+               
                 default:
                     throw new ArgumentException("Неверный формат уровня");
             }

@@ -12,8 +12,10 @@ namespace svtz.Tanks.Assets.Scripts
 
         protected override void OnZeroHealthAtServer()
         {
+            var spawnController = FindObjectOfType<SpawnController>();
+
             CurrentHealth = MaxHealth;
-            RpcRespawn();
+            RpcRespawn(spawnController.SelectSpawnPoint());
         }
 
         protected override void OnChangeHealthAtClient(int health)
@@ -24,12 +26,11 @@ namespace svtz.Tanks.Assets.Scripts
         }
 
         [ClientRpc]
-        private void RpcRespawn()
+        private void RpcRespawn(Vector2 position)
         {
             if (isLocalPlayer)
             {
-                // move back to zero location
-                transform.position = Vector3.zero;
+                transform.position = position;
             }
         }
     }

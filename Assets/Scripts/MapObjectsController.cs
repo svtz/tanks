@@ -19,8 +19,6 @@ namespace svtz.Tanks.Assets.Scripts
         {
             switch (kind)
             {
-                case MapObjectKind.None:
-                    return null;
                 case MapObjectKind.RegularWall:
                     return RegularWallPrefab;
                 case MapObjectKind.UnbreakableWall:
@@ -33,12 +31,9 @@ namespace svtz.Tanks.Assets.Scripts
         public void Add(Vector2 position, MapObjectKind objectKind)
         {
             var prefab = GetMapObjectPrototype(objectKind);
-            if (prefab != null)
-            {
-                var go = Instantiate(prefab, position, Quaternion.identity);
-                _gameObjectsIndex.Add(position, go);
-                NetworkServer.Spawn(go);
-            }
+            var go = Instantiate(prefab, position, Quaternion.identity);
+            _gameObjectsIndex.Add(position, go);
+            NetworkServer.Spawn(go);
         }
 
         public void Remove(Vector2 position)
