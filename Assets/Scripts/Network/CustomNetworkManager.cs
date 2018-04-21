@@ -1,6 +1,7 @@
 ﻿
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 public class CustomNetworkManager : NetworkLobbyManager
 {
     public override NetworkClient StartHost()
@@ -56,4 +57,10 @@ public class CustomNetworkManager : NetworkLobbyManager
         base.ServerChangeScene(sceneName);
     }*/
 
+    public override void OnLobbyClientSceneChanged(NetworkConnection conn)
+    {
+        base.OnLobbyClientSceneChanged(conn);
+        if (SceneManager.GetSceneAt(0).name == playScene)
+            GetComponent<CustomNetworkManagerHUD>().CloseMenu();
+    }
 }

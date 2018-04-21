@@ -83,16 +83,15 @@ public class CustomNetworkDiscovery : NetworkDiscovery {
         StopBroadcast();
     }
 
-    public void CustomStopServer()
+    public void CustomStop()
     {
-        StopBroadcast();
-        manager.StopClient();
-        manager.StopHost();
-    }
-
-    public void CustomStopClient()
-    {
-        manager.StopClient();
+        if (isServer)
+        {
+            StopBroadcast();
+            manager.StopHost();
+        }
+        else
+            manager.StopClient();
     }
 
 }
