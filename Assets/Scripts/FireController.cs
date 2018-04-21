@@ -1,4 +1,5 @@
-﻿using svtz.Tanks.Assets.Scripts.Common;
+﻿using System.Collections;
+using svtz.Tanks.Assets.Scripts.Common;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -9,17 +10,20 @@ namespace svtz.Tanks.Assets.Scripts
 #pragma warning disable 0649
         public float Speed;
         public float TTL;
+        public float Cooldown;
         public GameObject BulletPrefab;
         public Transform BulletSpawn;
 #pragma warning restore 0649
 
         private TeamId _id;
 
+        [SyncVar]
+        private bool _canFire = true;
+
         // Use this for initialization
         private void Start()
         {
             _id = GetComponent<TeamId>();
-
         }
 
         // Update is called once per frame
@@ -28,7 +32,7 @@ namespace svtz.Tanks.Assets.Scripts
             if (!isLocalPlayer)
                 return;
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (_canFire && Input.GetKey(KeyCode.Space))
             {
                 var id = _id.Id;
                 CmdFire(id);
@@ -54,6 +58,16 @@ namespace svtz.Tanks.Assets.Scripts
 
             // Destroy after 2 seconds
             Destroy(projectile, TTL);
+            StartCoroutine(DoCooldown());
+        }
+
+        private IEnumerator DoCooldown()
+        {
+            if (!isServer) yield break;
+
+            _canFire = false;
+            yield return new WaitForSeconds(Cooldown);
+            _canFire = true;
         }
     }
 }
