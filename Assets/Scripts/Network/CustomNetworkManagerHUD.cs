@@ -207,7 +207,7 @@ public class CustomNetworkManagerHUD : MonoBehaviour {
         }
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         EscapeHandler(Input.GetKeyDown(KeyCode.Escape));
     }
