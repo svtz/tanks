@@ -34,6 +34,8 @@ namespace svtz.Tanks.Assets.Scripts
 
             if (_canFire && Input.GetKey(KeyCode.Space))
             {
+                _canFire = false;
+
                 var id = _id.Id;
                 CmdFire(id);
             }
@@ -42,6 +44,9 @@ namespace svtz.Tanks.Assets.Scripts
         [Command]
         private void CmdFire(string teamId)
         {
+            if (!_canFire)
+                return;
+
             var projectile = (GameObject)Instantiate(
                 BulletPrefab,
                 BulletSpawn.position,
