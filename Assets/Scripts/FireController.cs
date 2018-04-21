@@ -34,8 +34,6 @@ namespace svtz.Tanks.Assets.Scripts
 
             if (_canFire && Input.GetKey(KeyCode.Space))
             {
-                _canFire = false;
-
                 var id = _id.Id;
                 CmdFire(id);
             }
