@@ -1,10 +1,10 @@
 ﻿using System;
-using svtz.Tanks.Assets.Scripts.Map;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace svtz.Tanks.Assets.Scripts
+namespace svtz.Tanks.Assets.Scripts.Map
 {
+    [RequireComponent(typeof(MapObjectsController), typeof(SpawnController))]
     internal sealed class MapLoader : NetworkBehaviour
     {
 #pragma warning disable 0649

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using svtz.Tanks.Assets.Scripts.Map;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace svtz.Tanks.Assets.Scripts
+namespace svtz.Tanks.Assets.Scripts.Map
 {
+    [RequireComponent(typeof(MapLoader), typeof(SpawnController))]
     internal sealed class MapObjectsController : MonoBehaviour
     {
 #pragma warning disable 0649

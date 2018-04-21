@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using svtz.Tanks.Assets.Scripts.Map;
+using UnityEngine;
 using UnityEngine.Networking;
 
 namespace svtz.Tanks.Assets.Scripts

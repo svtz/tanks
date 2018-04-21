@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 
-namespace svtz.Tanks.Assets.Scripts
+namespace svtz.Tanks.Assets.Scripts.Map
 {
+    [RequireComponent(typeof(MapLoader), typeof(MapObjectsController))]
     internal sealed class SpawnController : MonoBehaviour
     {
 #pragma warning disable 0649
