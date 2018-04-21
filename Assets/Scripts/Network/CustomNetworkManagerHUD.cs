@@ -36,6 +36,51 @@ public class CustomNetworkManagerHUD : MonoBehaviour {
             Screen.height - style.padding.top - style.padding.bottom);
     }
 
+    public void CloseMenu()
+    {
+        state = GUIState.InGame;
+    }
+
+    public void ShowMenu()
+    {
+        state = GUIState.GameMenu;
+    }
+
+    private void EscapeHandler(bool escape)
+    {
+        if (!escape)
+            return;
+        switch (state)
+        {
+            case GUIState.StartServer:
+                state = GUIState.MainMenu;
+                break;
+            case GUIState.StartClient:
+                GetComponent<CustomNetworkDiscovery>().CustomStopServerDiscovery();
+                state = GUIState.MainMenu;
+                break;
+            case GUIState.ServerLobby:
+                GetComponent<CustomNetworkDiscovery>().CustomStop();
+                state = GUIState.StartServer;
+                break;
+            case GUIState.ClientLobby:
+                GetComponent<CustomNetworkDiscovery>().CustomStop();
+                GetComponent<CustomNetworkDiscovery>().CustomStartServerDiscovery();
+                state = GUIState.StartClient;
+                break;
+            case GUIState.InGame:
+                state = GUIState.GameMenu;
+                break;
+            case GUIState.GameMenu:
+                state = GUIState.InGame;
+                break;
+            default:
+                break;
+        }
+
+
+    }
+
     private void OnGUI()
     {
         if (showGUI)
@@ -49,6 +94,7 @@ public class CustomNetworkManagerHUD : MonoBehaviour {
                     GUI.Box(GamePanel(), "");
                     GUILayout.BeginArea(GamePanel(), skin.GetStyle("MenuArea"));
                     GUILayout.BeginVertical();
+                    GUILayout.Label(gameName);
                     if (GUILayout.Button("Присоединиться к игре"))
                     {
                         GetComponent<CustomNetworkDiscovery>().CustomStartServerDiscovery();
@@ -81,8 +127,7 @@ public class CustomNetworkManagerHUD : MonoBehaviour {
                         if (GetComponent<CustomNetworkDiscovery>().CustomStartServer())
                             state = GUIState.ServerLobby;
                     }
-                    if (GUILayout.Button("Вернуться назад"))
-                        state = GUIState.MainMenu;
+                    EscapeHandler(GUILayout.Button("Вернуться назад"));
                     GUILayout.EndVertical();
                     GUILayout.EndArea();
                     break;
@@ -104,12 +149,9 @@ public class CustomNetworkManagerHUD : MonoBehaviour {
                         }
                     }
                     GUILayout.EndScrollView();
-                    
-                    if (GUILayout.Button("Вернуться назад"))
-                    {
-                        GetComponent<CustomNetworkDiscovery>().CustomStopServerDiscovery();
-                        state = GUIState.MainMenu;
-                    }
+
+
+                    EscapeHandler(GUILayout.Button("Вернуться назад"));
                     GUILayout.EndVertical();
                     GUILayout.EndArea();
                     break;
@@ -123,11 +165,7 @@ public class CustomNetworkManagerHUD : MonoBehaviour {
                             ((CustomLobbyPlayer)player).DrawGUI();
                     }
                     GUILayout.FlexibleSpace();
-                    if (GUILayout.Button("Вернуться назад"))
-                    {
-                        GetComponent<CustomNetworkDiscovery>().CustomStopServer();
-                        state = GUIState.StartServer;
-                    }
+                    EscapeHandler(GUILayout.Button("Вернуться назад"));
                     GUILayout.EndVertical();
                     GUILayout.EndArea();
                     break;
@@ -141,11 +179,24 @@ public class CustomNetworkManagerHUD : MonoBehaviour {
                             ((CustomLobbyPlayer)player).DrawGUI();
                     }
                     GUILayout.FlexibleSpace();
-                    if (GUILayout.Button("Вернуться назад"))
+                    EscapeHandler(GUILayout.Button("Вернуться назад"));
+                    GUILayout.EndVertical();
+                    GUILayout.EndArea();
+                    break;
+                case GUIState.InGame:
+                    break;
+                case GUIState.GameMenu:
+                    GUI.Box(GamePanel(), "");
+                    GUILayout.BeginArea(GamePanel(), skin.GetStyle("MenuArea"));
+                    GUILayout.BeginVertical();
+                    GUILayout.Label(gameName);
+                    GUILayout.Label("Игровое меню");
+
+                    EscapeHandler(GUILayout.Button("Вернуться в игру"));
+                    if (GUILayout.Button("Покинуть игру"))
                     {
-                        GetComponent<CustomNetworkDiscovery>().CustomStopClient();
-                        GetComponent<CustomNetworkDiscovery>().CustomStartServerDiscovery();
-                        state = GUIState.StartClient;
+                        GetComponent<CustomNetworkDiscovery>().CustomStop();
+                        state = GUIState.MainMenu;
                     }
                     GUILayout.EndVertical();
                     GUILayout.EndArea();
@@ -156,5 +207,9 @@ public class CustomNetworkManagerHUD : MonoBehaviour {
         }
     }
 
+    private void FixedUpdate()
+    {
+        EscapeHandler(Input.GetKeyDown(KeyCode.Escape));
+    }
 
 }
