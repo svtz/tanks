@@ -10,6 +10,7 @@ namespace svtz.Tanks.Assets.Scripts.Tank
         private Direction _currentDirection;
         private Vector2 _remotePosition;
         private Rigidbody2D _rb2D;
+        private bool _actual = false;
 
         private void Start()
         {
@@ -30,12 +31,15 @@ namespace svtz.Tanks.Assets.Scripts.Tank
 
             _currentDirection = newDirection;
             _remotePosition = position;
+            _actual = true;
         }
 
         private void FixedUpdate()
         {
-            if (isLocalPlayer)
+            if (isLocalPlayer || !_actual)
                 return;
+
+            _actual = false;
 
             var newPosition = transform.position;
             switch (_currentDirection)
