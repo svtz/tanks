@@ -16,35 +16,28 @@ namespace svtz.Tanks.Assets.Scripts
         private Rigidbody2D _rb2D;
 
         private Direction _currentDirection;
-        private Direction CurrentDirection 
-        {
-            get { return _currentDirection; }
-            set
-            {
-                if (value == _currentDirection) return;
+        private Vector2? _targetPosition;
 
-                _currentDirection = value;
-                if (isLocalPlayer)
-                    CmdSendDirectionToServer(value);
-            }
-        }
+
+        private Vector2 _remotePosition;
 
 
         [Command]
-        private void CmdSendDirectionToServer(Direction direction)
+        private void CmdSyncTankPosition(Direction direction, Vector2 position)
         {
-            RpcSendDirectionToClients(direction);
+            RpcSyncTankPosition(direction, position);
         }
+
         [ClientRpc]
-        private void RpcSendDirectionToClients(Direction newDirection)
+        private void RpcSyncTankPosition(Direction newDirection, Vector2 position)
         {
             if (isLocalPlayer)
                 return;
 
-            CurrentDirection = newDirection;
+            _currentDirection = newDirection;
+            _remotePosition = position;
         }
 
-        private Vector2? _targetPosition;
 
 
         private const float Epsilon = 0.01f;
@@ -67,6 +60,7 @@ namespace svtz.Tanks.Assets.Scripts
                 {Direction.YMinus, 180}
             };
 
+
         private enum Direction
         {
             XPlus,
@@ -74,9 +68,6 @@ namespace svtz.Tanks.Assets.Scripts
             YPlus,
             YMinus
         }
-
-        private const string AxisHorizontal = "Horizontal";
-        private const string AxisVertical = "Vertical";
 
 
         // Use this for initialization
@@ -144,7 +135,7 @@ namespace svtz.Tanks.Assets.Scripts
         {
             if (isLocalPlayer)
             {
-                AlignToGrid();
+                AlignPositionToGrid();
 
                 // куда-то едем
                 if (_targetPosition.HasValue)
@@ -175,15 +166,13 @@ namespace svtz.Tanks.Assets.Scripts
                     // если игрок жмёт в какую-либо сторону - пытаемся ехать туда
                     if (requestedDirection.HasValue)
                     {
-                        CurrentDirection = requestedDirection.Value;
+                        _currentDirection = requestedDirection.Value;
 
                         //задаём цель
-                        // тут ошибка: можно задать следующую клетку, когда не доехали предыдущую, и проехать остановку, если игрок внезапно отпускает клавишу.
-                        // надо как-то по-умоному обновлять _targetPosition
-                        _targetPosition = SnapToGrid(_rb2D.position + _directions[CurrentDirection] * Constants.GridSize);
+                        _targetPosition = SnapToGrid(_rb2D.position + _directions[_currentDirection] * Constants.GridSize);
 
                         //едем
-                        _rb2D.MovePosition(_rb2D.position + _directions[CurrentDirection] * Speed * Constants.GridSize);
+                        _rb2D.MovePosition(_rb2D.position + _directions[_currentDirection] * Speed * Constants.GridSize);
                     }
                     else
                     {
@@ -205,14 +194,14 @@ namespace svtz.Tanks.Assets.Scripts
                         if (requestedDirection.HasValue)
                         {
                             //поворачиваемся
-                            CurrentDirection = requestedDirection.Value;
+                            _currentDirection = requestedDirection.Value;
 
                             //едем
-                            _rb2D.MovePosition(_targetPosition.Value + _directions[CurrentDirection] * magnitudeDiff);
+                            _rb2D.MovePosition(_targetPosition.Value + _directions[_currentDirection] * magnitudeDiff);
 
                             //задаём цель
                             _targetPosition = SnapToGrid(_targetPosition.Value +
-                                                         _directions[CurrentDirection] * Constants.GridSize);
+                                                         _directions[_currentDirection] * Constants.GridSize);
                         }
                         else
                         {
@@ -224,14 +213,40 @@ namespace svtz.Tanks.Assets.Scripts
                         _rb2D.MovePosition(_rb2D.position + requiredMove.normalized * availableMagnitude);
                     }
                 }
-            }
 
-            _rb2D.MoveRotation(_rotations[CurrentDirection]);
+                _rb2D.MoveRotation(_rotations[_currentDirection]);
+
+                CmdSyncTankPosition(_currentDirection, transform.position);
+            }
+            else
+            {
+                var newPosition = transform.position;
+                switch (_currentDirection)
+                {
+                    case Direction.XPlus:
+                    case Direction.XMinus:
+                        newPosition.y = _remotePosition.y;
+                        _rb2D.constraints = RigidbodyConstraints2D.FreezePositionY;
+                        break;
+
+                    case Direction.YPlus:
+                    case Direction.YMinus:
+                        newPosition.x = _remotePosition.x;
+                        _rb2D.constraints = RigidbodyConstraints2D.FreezePositionX;
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                transform.position = newPosition;
+                transform.rotation = Quaternion.Euler(0, 0, _rotations[_currentDirection]);
+            }
         }
 
-        private void AlignToGrid()
+        private void AlignPositionToGrid()
         {
-            switch (CurrentDirection)
+            switch (_currentDirection)
             {
                 case Direction.XPlus:
                 case Direction.XMinus:
