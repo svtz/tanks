@@ -3,8 +3,9 @@ using svtz.Tanks.Assets.Scripts.Common;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace svtz.Tanks.Assets.Scripts
+namespace svtz.Tanks.Assets.Scripts.Tank
 {
+    [RequireComponent(typeof(TeamId))]
     internal sealed class FireController : NetworkBehaviour
     {
 #pragma warning disable 0649

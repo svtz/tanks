@@ -1,7 +1,6 @@
-﻿using svtz.Tanks.Assets.Scripts.Map;
-using UnityEngine;
+﻿using svtz.Tanks.Assets.Scripts.Common;
 
-namespace svtz.Tanks.Assets.Scripts
+namespace svtz.Tanks.Assets.Scripts.Map
 {
     internal sealed class WallHealth : HealthBase
     {

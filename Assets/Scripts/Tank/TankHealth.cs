@@ -1,8 +1,8 @@
-﻿using svtz.Tanks.Assets.Scripts.Map;
+﻿using svtz.Tanks.Assets.Scripts.Common;
+using svtz.Tanks.Assets.Scripts.Map;
 using UnityEngine;
-using UnityEngine.Networking;
 
-namespace svtz.Tanks.Assets.Scripts
+namespace svtz.Tanks.Assets.Scripts.Tank
 {
     internal sealed class TankHealth : HealthBase
     {

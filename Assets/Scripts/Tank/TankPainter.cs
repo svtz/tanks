@@ -1,7 +1,7 @@
 ﻿using svtz.Tanks.Assets.Scripts.Common;
 using UnityEngine;
 
-namespace svtz.Tanks.Assets.Scripts
+namespace svtz.Tanks.Assets.Scripts.Tank
 {
     public class TankPainter : MonoBehaviour
     {

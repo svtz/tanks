@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -11,15 +10,6 @@ namespace svtz.Tanks.Assets.Scripts.Tank
         private Direction _currentDirection;
         private Vector2 _remotePosition;
         private Rigidbody2D _rb2D;
-
-        private static readonly Dictionary<Direction, float> _rotations =
-            new Dictionary<Direction, float>
-            {
-                {Direction.XPlus, -90},
-                {Direction.XMinus, 90},
-                {Direction.YPlus, 0},
-                {Direction.YMinus, 180}
-            };
 
         private void Start()
         {
@@ -67,7 +57,7 @@ namespace svtz.Tanks.Assets.Scripts.Tank
             }
 
             transform.position = newPosition;
-            transform.rotation = Quaternion.Euler(0, 0, _rotations[_currentDirection]);
+            transform.rotation = Quaternion.Euler(0, 0, DirectionHelper.Rotations[_currentDirection]);
         }
     }
 }

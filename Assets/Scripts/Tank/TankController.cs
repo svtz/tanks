@@ -7,14 +7,6 @@ using UnityEngine.Networking;
 
 namespace svtz.Tanks.Assets.Scripts.Tank
 {
-    public enum Direction
-    {
-        XPlus,
-        XMinus,
-        YPlus,
-        YMinus
-    }
-
     [RequireComponent(typeof(Rigidbody2D), typeof(TankPositionSync))]
     internal sealed class TankController : NetworkBehaviour
     {
@@ -30,23 +22,7 @@ namespace svtz.Tanks.Assets.Scripts.Tank
 
         private const float Epsilon = 0.01f;
 
-        private static readonly Dictionary<Direction, Vector2> _directions =
-            new Dictionary<Direction, Vector2>
-            {
-                {Direction.XPlus, Vector2.right},
-                {Direction.XMinus, Vector2.left},
-                {Direction.YPlus, Vector2.up},
-                {Direction.YMinus, Vector2.down}
-            };
 
-        private static readonly Dictionary<Direction, float> _rotations =
-            new Dictionary<Direction, float>
-            {
-                {Direction.XPlus, -90},
-                {Direction.XMinus, 90},
-                {Direction.YPlus, 0},
-                {Direction.YMinus, 180}
-            };
 
 
         // Use this for initialization
@@ -147,10 +123,12 @@ namespace svtz.Tanks.Assets.Scripts.Tank
                     _currentDirection = requestedDirection.Value;
 
                     //задаём цель
-                    _targetPosition = SnapToGrid(_rb2D.position + _directions[_currentDirection] * Constants.GridSize);
+                    _targetPosition = SnapToGrid(_rb2D.position + 
+                        DirectionHelper.Directions[_currentDirection] * Constants.GridSize);
 
                     //едем
-                    _rb2D.MovePosition(_rb2D.position + _directions[_currentDirection] * Speed * Constants.GridSize);
+                    _rb2D.MovePosition(_rb2D.position + 
+                        DirectionHelper.Directions[_currentDirection] * Speed * Constants.GridSize);
                 }
                 else
                 {
@@ -175,10 +153,12 @@ namespace svtz.Tanks.Assets.Scripts.Tank
                         _currentDirection = requestedDirection.Value;
 
                         //едем
-                        _rb2D.MovePosition(_targetPosition.Value + _directions[_currentDirection] * magnitudeDiff);
+                        _rb2D.MovePosition(_targetPosition.Value + 
+                            DirectionHelper.Directions[_currentDirection] * magnitudeDiff);
 
                         //задаём цель
-                        _targetPosition = SnapToGrid(_targetPosition.Value + _directions[_currentDirection] * Constants.GridSize);
+                        _targetPosition = SnapToGrid(_targetPosition.Value + 
+                            DirectionHelper.Directions[_currentDirection] * Constants.GridSize);
                     }
                     else
                     {
@@ -191,7 +171,7 @@ namespace svtz.Tanks.Assets.Scripts.Tank
                 }
             }
 
-            _rb2D.MoveRotation(_rotations[_currentDirection]);
+            _rb2D.MoveRotation(DirectionHelper.Rotations[_currentDirection]);
             _sync.CmdSyncTankPosition(_currentDirection, transform.position);
         }
 

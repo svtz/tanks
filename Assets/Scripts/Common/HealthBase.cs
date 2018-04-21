@@ -1,6 +1,6 @@
 ﻿using UnityEngine.Networking;
 
-namespace svtz.Tanks.Assets.Scripts
+namespace svtz.Tanks.Assets.Scripts.Common
 {
     internal abstract class HealthBase : NetworkBehaviour
     {
