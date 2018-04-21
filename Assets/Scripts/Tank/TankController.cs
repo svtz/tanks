@@ -5,8 +5,17 @@ using svtz.Tanks.Assets.Scripts.Common;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace svtz.Tanks.Assets.Scripts
+namespace svtz.Tanks.Assets.Scripts.Tank
 {
+    public enum Direction
+    {
+        XPlus,
+        XMinus,
+        YPlus,
+        YMinus
+    }
+
+    [RequireComponent(typeof(Rigidbody2D), typeof(TankPositionSync))]
     internal sealed class TankController : NetworkBehaviour
     {
 #pragma warning disable 0649
@@ -14,31 +23,10 @@ namespace svtz.Tanks.Assets.Scripts
 #pragma warning restore 0649
 
         private Rigidbody2D _rb2D;
+        private TankPositionSync _sync;
 
         private Direction _currentDirection;
         private Vector2? _targetPosition;
-
-
-        private Vector2 _remotePosition;
-
-
-        [Command]
-        private void CmdSyncTankPosition(Direction direction, Vector2 position)
-        {
-            RpcSyncTankPosition(direction, position);
-        }
-
-        [ClientRpc]
-        private void RpcSyncTankPosition(Direction newDirection, Vector2 position)
-        {
-            if (isLocalPlayer)
-                return;
-
-            _currentDirection = newDirection;
-            _remotePosition = position;
-        }
-
-
 
         private const float Epsilon = 0.01f;
 
@@ -61,28 +49,17 @@ namespace svtz.Tanks.Assets.Scripts
             };
 
 
-        private enum Direction
-        {
-            XPlus,
-            XMinus,
-            YPlus,
-            YMinus
-        }
-
-
         // Use this for initialization
         private void Start()
         {
             _rb2D = GetComponent<Rigidbody2D>();
+            _sync = GetComponent<TankPositionSync>();
 
             if (Speed > Constants.GridSize)
                 throw new NotSupportedException("Слишком большая скорость");
 
             if (Speed <= 0)
                 throw new NotSupportedException("Слишком маленькая скорость");
-
-            if (!isLocalPlayer)
-                return;
         }
 
 
@@ -133,115 +110,89 @@ namespace svtz.Tanks.Assets.Scripts
         //FixedUpdate is called at a fixed interval and is independent of frame rate. Put physics code here.
         private void FixedUpdate()
         {
-            if (isLocalPlayer)
+            if (!isLocalPlayer)
+                return;
+
+            AlignPositionToGrid();
+
+            // куда-то едем
+            if (_targetPosition.HasValue)
             {
-                AlignPositionToGrid();
+                Debug.DrawLine(_rb2D.position, _targetPosition.Value, Color.red, Time.deltaTime, false);
 
-                // куда-то едем
-                if (_targetPosition.HasValue)
+                // достигли ли узла сетки?
+                var distanceToTarget = (_targetPosition.Value - _rb2D.position).magnitude;
+                if (distanceToTarget < Epsilon)
                 {
-                    Debug.DrawLine(_rb2D.position, _targetPosition.Value, Color.red, Time.deltaTime, false);
+                    // достигли, стоп машина
+                    Debug.Log(string.Format("Доехали до цели. InputX={0} InputY={1}", _inputX, _inputY));
+                    _targetPosition = null;
+                    _rb2D.velocity = Vector2.zero;
+                }
+            }
+            else
+            {
+                _rb2D.velocity = Vector2.zero;
+            }
 
-                    // достигли ли узла сетки?
-                    var distanceToTarget = (_targetPosition.Value - _rb2D.position).magnitude;
-                    if (distanceToTarget < Epsilon)
-                    {
-                        // достигли, стоп машина
-                        Debug.Log(string.Format("Доехали до цели. InputX={0} InputY={1}", _inputX, _inputY));
-                        _targetPosition = null;
-                        _rb2D.velocity = Vector2.zero;
-                    }
+            var requestedDirection = GetDirection(_inputX, _inputY);
+
+            // позволяем менять направление, если находимся в узле сетки,
+            // или если есть коллизии
+            if (!_targetPosition.HasValue || _collisions.Any())
+            {
+                // если игрок жмёт в какую-либо сторону - пытаемся ехать туда
+                if (requestedDirection.HasValue)
+                {
+                    _currentDirection = requestedDirection.Value;
+
+                    //задаём цель
+                    _targetPosition = SnapToGrid(_rb2D.position + _directions[_currentDirection] * Constants.GridSize);
+
+                    //едем
+                    _rb2D.MovePosition(_rb2D.position + _directions[_currentDirection] * Speed * Constants.GridSize);
                 }
                 else
                 {
-                    _rb2D.velocity = Vector2.zero;
+                    // стоим на месте
+                    _targetPosition = null;
                 }
+            }
+            //иначе просто едем
+            else
+            {
+                var requiredMove = _targetPosition.Value - _rb2D.position;
+                var availableMagnitude = Speed * Constants.GridSize;
 
-                var requestedDirection = GetDirection(_inputX, _inputY);
-
-                // позволяем менять направление, если находимся в узле сетки,
-                // или если есть коллизии
-                if (!_targetPosition.HasValue || _collisions.Any())
+                var magnitudeDiff = availableMagnitude - requiredMove.magnitude;
+                // если за следующий тик мы доедем куда нужно - можно послушать, чего же хочет игрок
+                if (magnitudeDiff > 0)
                 {
                     // если игрок жмёт в какую-либо сторону - пытаемся ехать туда
                     if (requestedDirection.HasValue)
                     {
+                        //поворачиваемся
                         _currentDirection = requestedDirection.Value;
 
-                        //задаём цель
-                        _targetPosition = SnapToGrid(_rb2D.position + _directions[_currentDirection] * Constants.GridSize);
-
                         //едем
-                        _rb2D.MovePosition(_rb2D.position + _directions[_currentDirection] * Speed * Constants.GridSize);
+                        _rb2D.MovePosition(_targetPosition.Value + _directions[_currentDirection] * magnitudeDiff);
+
+                        //задаём цель
+                        _targetPosition = SnapToGrid(_targetPosition.Value + _directions[_currentDirection] * Constants.GridSize);
                     }
                     else
                     {
-                        // стоим на месте
-                        _targetPosition = null;
+                        _rb2D.MovePosition(_rb2D.position + requiredMove);
                     }
                 }
-                //иначе просто едем
                 else
                 {
-                    var requiredMove = _targetPosition.Value - _rb2D.position;
-                    var availableMagnitude = Speed * Constants.GridSize;
-
-                    var magnitudeDiff = availableMagnitude - requiredMove.magnitude;
-                    // если за следующий тик мы доедем куда нужно - можно послушать, чего же хочет игрок
-                    if (magnitudeDiff > 0)
-                    {
-                        // если игрок жмёт в какую-либо сторону - пытаемся ехать туда
-                        if (requestedDirection.HasValue)
-                        {
-                            //поворачиваемся
-                            _currentDirection = requestedDirection.Value;
-
-                            //едем
-                            _rb2D.MovePosition(_targetPosition.Value + _directions[_currentDirection] * magnitudeDiff);
-
-                            //задаём цель
-                            _targetPosition = SnapToGrid(_targetPosition.Value +
-                                                         _directions[_currentDirection] * Constants.GridSize);
-                        }
-                        else
-                        {
-                            _rb2D.MovePosition(_rb2D.position + requiredMove);
-                        }
-                    }
-                    else
-                    {
-                        _rb2D.MovePosition(_rb2D.position + requiredMove.normalized * availableMagnitude);
-                    }
+                    _rb2D.MovePosition(_rb2D.position + requiredMove.normalized * availableMagnitude);
                 }
-
-                _rb2D.MoveRotation(_rotations[_currentDirection]);
-
-                CmdSyncTankPosition(_currentDirection, transform.position);
             }
-            else
-            {
-                var newPosition = transform.position;
-                switch (_currentDirection)
-                {
-                    case Direction.XPlus:
-                    case Direction.XMinus:
-                        newPosition.y = _remotePosition.y;
-                        _rb2D.constraints = RigidbodyConstraints2D.FreezePositionY;
-                        break;
 
-                    case Direction.YPlus:
-                    case Direction.YMinus:
-                        newPosition.x = _remotePosition.x;
-                        _rb2D.constraints = RigidbodyConstraints2D.FreezePositionX;
-                        break;
-
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                transform.position = newPosition;
-                transform.rotation = Quaternion.Euler(0, 0, _rotations[_currentDirection]);
-            }
+            _rb2D.MoveRotation(_rotations[_currentDirection]);
+            _sync.CmdSyncTankPosition(_currentDirection, transform.position);
         }
 
         private void AlignPositionToGrid()
