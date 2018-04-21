@@ -229,19 +229,5 @@ namespace svtz.Tanks.Assets.Scripts.Tank
                 return y > 0 ? Direction.YPlus : Direction.YMinus;
             }
         }
-
-        public override void OnStartAuthority()
-        {
-            base.OnStartAuthority();
-
-            FindObjectOfType<CameraController>().StartFollow(gameObject);
-        }
-
-        public override void OnStopAuthority()
-        {
-            base.OnStopAuthority();
-
-            FindObjectOfType<CameraController>().StopFollow();
-        }
     }
 }

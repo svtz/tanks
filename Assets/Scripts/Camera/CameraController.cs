@@ -12,12 +12,12 @@ namespace svtz.Tanks.Assets.Scripts
 
         private GameObject _followObject;
 
-        public void StartFollow(GameObject obj)
+        public void BindTo(GameObject obj)
         {
             _followObject = obj;
         }
 
-        public void StopFollow()
+        public void Unbind()
         {
             _followObject = null;
         }
