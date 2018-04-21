@@ -70,7 +70,7 @@ namespace svtz.Tanks.Assets.Scripts
         private IEnumerator WaitAndRespawn(NetworkConnection connection)
         {
             yield return new WaitForSeconds(RespawnSeconds);
-            if (connection.isConnected && connection.isReady)
+            if (connection.isReady)
                 SpawnPlayerForConnection(connection);
         }
     }
