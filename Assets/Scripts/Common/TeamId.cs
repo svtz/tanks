@@ -41,6 +41,8 @@ namespace svtz.Tanks.Assets.Scripts.Common
 
         public override void OnStartLocalPlayer()
         {
+            base.OnStartLocalPlayer();
+
             LocalPlayerTeamId = _id;
 
             var root = GetRoot(gameObject);

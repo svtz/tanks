@@ -5,20 +5,22 @@ namespace svtz.Tanks.Assets.Scripts
 {
     internal sealed class CameraController : MonoBehaviour
     {
-#pragma warning disable 0649
-        public GameObject Player;
-#pragma warning restore 0649
-
-        private Vector3 _offset;
-
-        private void Start()
+        private GameObject _followObject;
+        public void StartFollow(GameObject obj)
         {
-            //_offset = transform.position - Player.transform.position;
+            _followObject = obj;
         }
+
+        public void StopFollow()
+        {
+            _followObject = null;
+        }
+
+        private readonly Vector3 _offset = new Vector3(0, 0, -10);
 
         private void LateUpdate()
         {
-            //transform.position = Player.transform.position + _offset;
+            transform.position = _followObject.transform.position + _offset;
         }
     }
 }
