@@ -1,11 +1,17 @@
-﻿using JetBrains.Annotations;
+﻿using System;
 using UnityEngine;
 
 namespace svtz.Tanks.Assets.Scripts
 {
     internal sealed class CameraController : MonoBehaviour
     {
+#pragma warning disable 0649
+        public float MaxCameraSpeed;
+        public Vector3 Offset;
+#pragma warning restore 0649
+
         private GameObject _followObject;
+
         public void StartFollow(GameObject obj)
         {
             _followObject = obj;
@@ -16,11 +22,15 @@ namespace svtz.Tanks.Assets.Scripts
             _followObject = null;
         }
 
-        private readonly Vector3 _offset = new Vector3(0, 0, -10);
-
         private void LateUpdate()
         {
-            transform.position = _followObject.transform.position + _offset;
+            if (_followObject == null)
+                return;
+
+            var targetPosition = _followObject.transform.position + Offset;
+            var targetMove = targetPosition - transform.position;
+            var currentMove = Vector3.ClampMagnitude(targetMove, MaxCameraSpeed * Time.deltaTime);
+            transform.position += currentMove;
         }
     }
 }
