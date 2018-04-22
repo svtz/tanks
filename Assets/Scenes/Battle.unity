@@ -381,7 +381,7 @@ MonoBehaviour:
       type: 2}
   SpawnControllerSettings:
     RespawnSeconds: 5
-  TankFactorySettings:
+  TankObjectSettings:
     TankPrefab: {fileID: 1468370762080052, guid: b7c5dc9e331d42e49b79c9acc768f362,
       type: 2}
   BackgroundPrefab: {fileID: 1721471506832606, guid: 0b620a68fe75b824f85b2d44c87a37e4,

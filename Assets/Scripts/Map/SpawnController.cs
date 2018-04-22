@@ -21,9 +21,9 @@ namespace svtz.Tanks.Assets.Scripts.Map
 
         private readonly Settings _settings;
         private readonly DelayedExecutor _delayedExecutor;
-        private readonly TankFactory _tankFactory;
+        private readonly TankObject.Factory _tankFactory;
 
-        public SpawnController(Settings settings, DelayedExecutor delayedExecutor, TankFactory tankFactory)
+        public SpawnController(Settings settings, DelayedExecutor delayedExecutor, TankObject.Factory tankFactory)
         {
             _settings = settings;
             _delayedExecutor = delayedExecutor;
@@ -48,10 +48,10 @@ namespace svtz.Tanks.Assets.Scripts.Map
 
         private void SpawnPlayerForConnection(NetworkConnection networkConnection)
         {
-            var player = _tankFactory.Create(SelectSpawnPoint());
-            _spawnedPlayers.Add(player);
-            NetworkServer.ReplacePlayerForConnection(networkConnection, player, 0);
+            var player = _tankFactory.Create(networkConnection, SelectSpawnPoint());
+            _spawnedPlayers.Add(player.GameObject);
         }
+
 
         private Vector2 SelectSpawnPoint()
         {
