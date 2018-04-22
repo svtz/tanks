@@ -1,48 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityObject = UnityEngine.Object;
 
 namespace svtz.Tanks.Assets.Scripts.Map
 {
     internal sealed class MapObjectsController
     {
-        [Serializable]
-        public class Settings
-        {
-#pragma warning disable 0649
-            public GameObject UnbreakableWallPrefab;
-            public GameObject RegularWallPrefab;
-#pragma warning restore 0649
-        }
-
-        private readonly Settings _settings;
-
-        public MapObjectsController(Settings settings)
-        {
-            _settings = settings;
-        }
-
+        private readonly MapObjectsFactory _objFactory;
         private readonly Dictionary<Vector2, GameObject> _gameObjectsIndex = new Dictionary<Vector2, GameObject>();
 
-        private GameObject GetMapObjectPrototype(MapObjectKind kind)
+        public MapObjectsController(MapObjectsFactory objFactory)
         {
-            switch (kind)
-            {
-                case MapObjectKind.RegularWall:
-                    return _settings.RegularWallPrefab;
-                case MapObjectKind.UnbreakableWall:
-                    return _settings.UnbreakableWallPrefab;
-                default:
-                    throw new ArgumentOutOfRangeException("kind", kind, null);
-            }
+            _objFactory = objFactory;
         }
 
         public void Add(Vector2 position, MapObjectKind objectKind)
         {
-            var prefab = GetMapObjectPrototype(objectKind);
-            var go = UnityObject.Instantiate(prefab, position, Quaternion.identity);
+            var go = _objFactory.Create(objectKind, position);
+
             _gameObjectsIndex.Add(position, go);
             NetworkServer.Spawn(go);
         }

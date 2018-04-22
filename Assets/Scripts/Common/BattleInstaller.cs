@@ -8,14 +8,17 @@ namespace svtz.Tanks.Assets.Scripts.Common
     {
 #pragma warning disable 0649
         public MapCreator.Settings MapCreatorSettings;
-        public MapObjectsController.Settings MapObjectsControllerSettings;
+        public MapObjectsFactory.Settings MapObjectsFactorySettings;
         public SpawnController.Settings SpawnControllerSettings;
         public GameObject BackgroundPrefab;
 #pragma warning restore 0649
 
         public override void InstallBindings()
         {
-            Container.BindInstance(MapObjectsControllerSettings);
+            Container.BindInstance(MapObjectsFactorySettings);
+            Container.BindFactory<MapObjectKind, Vector2, GameObject, MapObjectsFactory>()
+                     .FromFactory<MapObjectsFactory.MapObjectsFactoryImpl>();
+
             Container.Bind<MapObjectsController>().AsSingle();
 
             Container.Bind<MapParser>().AsSingle();

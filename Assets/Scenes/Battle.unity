@@ -374,7 +374,7 @@ MonoBehaviour:
   MapCreatorSettings:
     AvailableMaps:
     - {fileID: 4900000, guid: 33fd1b2ee8710d24b88d4c16584c63f5, type: 3}
-  MapObjectsControllerSettings:
+  MapObjectsFactorySettings:
     UnbreakableWallPrefab: {fileID: 1998760418760660, guid: 291e98b2c3b260a4e9695095b9a1ea77,
       type: 2}
     RegularWallPrefab: {fileID: 1018151495389970, guid: 30f4e7d7d42ef1b4cba3a2781590bd71,
