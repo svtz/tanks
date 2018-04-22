@@ -1,6 +1,7 @@
 ﻿using svtz.Tanks.Assets.Scripts.Common;
 using svtz.Tanks.Assets.Scripts.Map;
 using UnityEngine;
+using Zenject;
 
 namespace svtz.Tanks.Assets.Scripts.Tank
 {
@@ -10,10 +11,17 @@ namespace svtz.Tanks.Assets.Scripts.Tank
         public RectTransform HealthBar;
 #pragma warning restore 0649
 
+        private SpawnController _spawnController;
+
+        [Inject]
+        private void Construct(SpawnController spawnController)
+        {
+            _spawnController = spawnController;
+        }
+
         protected override void OnZeroHealthAtServer()
         {
-            var spawnController = FindObjectOfType<SpawnController>();
-            spawnController.DestroyAndRespawn(connectionToClient, gameObject);
+            _spawnController.DestroyAndRespawn(connectionToClient, gameObject);
         }
 
         protected override void OnChangeHealthAtClient(int health)

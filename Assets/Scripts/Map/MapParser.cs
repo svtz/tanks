@@ -6,7 +6,7 @@ namespace svtz.Tanks.Assets.Scripts.Map
 {
     internal sealed class MapParser
     {
-        public static MapInfo Parse(TextAsset textAsset)
+        public MapInfo Parse(TextAsset textAsset)
         {
             var data = new MapInfo
             {

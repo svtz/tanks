@@ -1,29 +1,43 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using svtz.Tanks.Assets.Scripts.Common;
 using UnityEngine;
 using UnityEngine.Networking;
 using Random = UnityEngine.Random;
+using UnityObject = UnityEngine.Object;
 
 namespace svtz.Tanks.Assets.Scripts.Map
 {
-    [RequireComponent(typeof(MapLoader), typeof(MapObjectsController))]
-    internal sealed class SpawnController : MonoBehaviour
+    internal sealed class SpawnController
     {
+        [Serializable]
+        public class Settings
+        {
 #pragma warning disable 0649
-        public GameObject PlayerPrefab;
-        public int RespawnSeconds;
+            public GameObject PlayerPrefab;
+            public int RespawnSeconds;
 #pragma warning restore 0649
+        }
+
+        private readonly Settings _settings;
+        private readonly DelayedExecutor _delayedExecutor;
+
+        public SpawnController(Settings settings, DelayedExecutor delayedExecutor)
+        {
+            _settings = settings;
+            _delayedExecutor = delayedExecutor;
+        }
 
         private readonly List<Vector2> _points = new List<Vector2>();
         private readonly List<GameObject> _spawnedPlayers = new List<GameObject>();
 
-        public void Add(float x, float y)
+        public void AddSpawnPoint(float x, float y)
         {
             _points.Add(new Vector2(x, y));
         }
 
-        public void Start()
+        public void SpawnAllPlayers()
         {
             foreach (var networkConnection in NetworkServer.connections)
             {
@@ -33,7 +47,10 @@ namespace svtz.Tanks.Assets.Scripts.Map
 
         private void SpawnPlayerForConnection(NetworkConnection networkConnection)
         {
-            var player = Instantiate(PlayerPrefab, SelectSpawnPoint(), GetRandomQuanterion());
+            if (!networkConnection.isReady)
+                return;
+
+            var player = UnityObject.Instantiate(_settings.PlayerPrefab, SelectSpawnPoint(), GetRandomQuanterion());
             _spawnedPlayers.Add(player);
             NetworkServer.ReplacePlayerForConnection(networkConnection, player, 0);
         }
@@ -61,17 +78,9 @@ namespace svtz.Tanks.Assets.Scripts.Map
 
         public void DestroyAndRespawn(NetworkConnection connection, GameObject playerObject)
         {
-            Debug.Log("Destroying");
             _spawnedPlayers.Remove(playerObject);
             NetworkServer.Destroy(playerObject);
-            StartCoroutine(WaitAndRespawn(connection));
-        }
-
-        private IEnumerator WaitAndRespawn(NetworkConnection connection)
-        {
-            yield return new WaitForSeconds(RespawnSeconds);
-            if (connection.isReady)
-                SpawnPlayerForConnection(connection);
+            _delayedExecutor.Add(() => SpawnPlayerForConnection(connection), _settings.RespawnSeconds);
         }
     }
 }
