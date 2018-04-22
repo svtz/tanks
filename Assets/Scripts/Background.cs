@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 
 namespace svtz.Tanks.Assets.Scripts
 {
-    internal sealed class BackgroundSizeController : NetworkBehaviour
+    internal sealed class Background : NetworkBehaviour
     {
         [SyncVar]
         private int _width;
@@ -32,5 +32,7 @@ namespace svtz.Tanks.Assets.Scripts
 
             _initialized = true;
         }
+
+        public class Factory : Zenject.Factory<Background> { }
     }
 }

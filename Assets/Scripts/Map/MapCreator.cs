@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 
 namespace svtz.Tanks.Assets.Scripts.Map
@@ -16,19 +17,16 @@ namespace svtz.Tanks.Assets.Scripts.Map
 
         private readonly Settings _settings;
         private readonly MapParser _mapParser;
-        private readonly BackgroundSizeController _backgroundSizeController;
         private readonly MapObjectsController _mapObjectsController;
         private readonly SpawnController _spawnController;
 
         public MapCreator(Settings settings, 
             MapParser mapParser, 
-            BackgroundSizeController backgroundSizeController,
             MapObjectsController mapObjectsController,
             SpawnController spawnController)
         {
             _settings = settings;
             _mapParser = mapParser;
-            _backgroundSizeController = backgroundSizeController;
             _mapObjectsController = mapObjectsController;
             _spawnController = spawnController;
         }
@@ -43,7 +41,7 @@ namespace svtz.Tanks.Assets.Scripts.Map
         private void InstantiateMapObjects(MapInfo map)
         {
             // устанавливаем размеры фона
-            _backgroundSizeController.SetSize(map.Width, map.Height);
+            _mapObjectsController.SetSize(map.Width, map.Height);
 
             // строим периметр
             for (var i = -map.Width / 2 - 1; i <= map.Width / 2; i++)

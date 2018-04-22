@@ -7,11 +7,21 @@ namespace svtz.Tanks.Assets.Scripts.Map
     internal sealed class MapObjectsController
     {
         private readonly MapObjectsFactory _objFactory;
+        private readonly Background.Factory _backgroundFactory;
         private readonly Dictionary<Vector2, GameObject> _gameObjectsIndex = new Dictionary<Vector2, GameObject>();
 
-        public MapObjectsController(MapObjectsFactory objFactory)
+        public MapObjectsController(MapObjectsFactory objFactory, Background.Factory backgroundFactory)
         {
             _objFactory = objFactory;
+            _backgroundFactory = backgroundFactory;
+        }
+
+        public void SetSize(int width, int height)
+        {
+            var bg = _backgroundFactory.Create();
+            bg.SetSize(width, height);
+
+            NetworkServer.Spawn(bg.gameObject);
         }
 
         public void Add(Vector2 position, MapObjectKind objectKind)

@@ -20,10 +20,10 @@ namespace svtz.Tanks.Assets.Scripts.Map
         }
 
         private readonly Settings _settings;
-        private readonly IDelayedExecutor _delayedExecutor;
+        private readonly DelayedExecutor _delayedExecutor;
         private readonly TankFactory _tankFactory;
 
-        public SpawnController(Settings settings, IDelayedExecutor delayedExecutor, TankFactory tankFactory)
+        public SpawnController(Settings settings, DelayedExecutor delayedExecutor, TankFactory tankFactory)
         {
             _settings = settings;
             _delayedExecutor = delayedExecutor;

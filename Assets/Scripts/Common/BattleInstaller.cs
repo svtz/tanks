@@ -1,6 +1,7 @@
 ﻿using svtz.Tanks.Assets.Scripts.Map;
 using svtz.Tanks.Assets.Scripts.Tank;
 using UnityEngine;
+using UnityEngine.Networking;
 using Zenject;
 
 namespace svtz.Tanks.Assets.Scripts.Common
@@ -28,9 +29,9 @@ namespace svtz.Tanks.Assets.Scripts.Common
             Container.BindInstance(MapCreatorSettings);
             Container.Bind<MapCreator>().AsSingle();
 
-            Container.Bind<BackgroundSizeController>().FromComponentInNewPrefab(BackgroundPrefab).AsSingle().NonLazy();
+            Container.BindFactory<Background, Background.Factory>().FromComponentInNewPrefab(BackgroundPrefab);
 
-            Container.BindInterfacesTo<DelayedExecutor>().AsSingle();
+            Container.BindInterfacesAndSelfTo<DelayedExecutor>().AsSingle();
 
             Container.BindInstance(TankFactorySettings);
             Container.BindFactory<Vector2, GameObject, TankFactory>()

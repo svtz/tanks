@@ -5,12 +5,7 @@ using Zenject;
 
 namespace svtz.Tanks.Assets.Scripts.Common
 {
-    internal interface IDelayedExecutor
-    {
-        void Add(Action action, float executeAfterSeconds);
-    }
-
-    internal sealed class DelayedExecutor : ITickable, IDelayedExecutor
+    internal sealed class DelayedExecutor : ITickable
     {
         private readonly List<Entry> _entries = new List<Entry>();
 
