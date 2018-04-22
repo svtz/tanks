@@ -380,9 +380,10 @@ MonoBehaviour:
     RegularWallPrefab: {fileID: 1018151495389970, guid: 30f4e7d7d42ef1b4cba3a2781590bd71,
       type: 2}
   SpawnControllerSettings:
-    PlayerPrefab: {fileID: 1468370762080052, guid: b7c5dc9e331d42e49b79c9acc768f362,
-      type: 2}
     RespawnSeconds: 5
+  TankFactorySettings:
+    TankPrefab: {fileID: 1468370762080052, guid: b7c5dc9e331d42e49b79c9acc768f362,
+      type: 2}
   BackgroundPrefab: {fileID: 1721471506832606, guid: 0b620a68fe75b824f85b2d44c87a37e4,
     type: 2}
 --- !u!114 &1786389208

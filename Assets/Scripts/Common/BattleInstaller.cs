@@ -1,4 +1,5 @@
 ﻿using svtz.Tanks.Assets.Scripts.Map;
+using svtz.Tanks.Assets.Scripts.Tank;
 using UnityEngine;
 using Zenject;
 
@@ -10,6 +11,7 @@ namespace svtz.Tanks.Assets.Scripts.Common
         public MapCreator.Settings MapCreatorSettings;
         public MapObjectsFactory.Settings MapObjectsFactorySettings;
         public SpawnController.Settings SpawnControllerSettings;
+        public TankFactory.Settings TankFactorySettings;
         public GameObject BackgroundPrefab;
 #pragma warning restore 0649
 
@@ -26,10 +28,13 @@ namespace svtz.Tanks.Assets.Scripts.Common
             Container.BindInstance(MapCreatorSettings);
             Container.Bind<MapCreator>().AsSingle();
 
-            Container.Bind<BackgroundSizeController>().FromComponentInNewPrefab(BackgroundPrefab).AsSingle();
+            Container.Bind<BackgroundSizeController>().FromComponentInNewPrefab(BackgroundPrefab).AsSingle().NonLazy();
 
-            Container.Bind<DelayedExecutor>().AsSingle();
-            Container.BindInterfacesTo<DelayedExecutor>().AsTransient();
+            Container.BindInterfacesTo<DelayedExecutor>().AsSingle();
+
+            Container.BindInstance(TankFactorySettings);
+            Container.BindFactory<Vector2, GameObject, TankFactory>()
+                     .FromFactory<TankFactory.TankFactoryImpl>();
 
             Container.BindInstance(SpawnControllerSettings);
             Container.Bind<SpawnController>().AsSingle();

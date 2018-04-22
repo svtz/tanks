@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using svtz.Tanks.Assets.Scripts.Common;
+using svtz.Tanks.Assets.Scripts.Tank;
 using UnityEngine;
 using UnityEngine.Networking;
 using Random = UnityEngine.Random;
-using UnityObject = UnityEngine.Object;
 
 namespace svtz.Tanks.Assets.Scripts.Map
 {
@@ -15,18 +15,19 @@ namespace svtz.Tanks.Assets.Scripts.Map
         public class Settings
         {
 #pragma warning disable 0649
-            public GameObject PlayerPrefab;
             public int RespawnSeconds;
 #pragma warning restore 0649
         }
 
         private readonly Settings _settings;
-        private readonly DelayedExecutor _delayedExecutor;
+        private readonly IDelayedExecutor _delayedExecutor;
+        private readonly TankFactory _tankFactory;
 
-        public SpawnController(Settings settings, DelayedExecutor delayedExecutor)
+        public SpawnController(Settings settings, IDelayedExecutor delayedExecutor, TankFactory tankFactory)
         {
             _settings = settings;
             _delayedExecutor = delayedExecutor;
+            _tankFactory = tankFactory;
         }
 
         private readonly List<Vector2> _points = new List<Vector2>();
@@ -47,10 +48,7 @@ namespace svtz.Tanks.Assets.Scripts.Map
 
         private void SpawnPlayerForConnection(NetworkConnection networkConnection)
         {
-            if (!networkConnection.isReady)
-                return;
-
-            var player = UnityObject.Instantiate(_settings.PlayerPrefab, SelectSpawnPoint(), GetRandomQuanterion());
+            var player = _tankFactory.Create(SelectSpawnPoint());
             _spawnedPlayers.Add(player);
             NetworkServer.ReplacePlayerForConnection(networkConnection, player, 0);
         }
@@ -71,16 +69,18 @@ namespace svtz.Tanks.Assets.Scripts.Map
                 .SpawnPoint;
         }
 
-        private Quaternion GetRandomQuanterion()
-        {
-            return Quaternion.Euler(0, 0, Random.Range(0, 4) * 90);
-        }
 
         public void DestroyAndRespawn(NetworkConnection connection, GameObject playerObject)
         {
             _spawnedPlayers.Remove(playerObject);
             NetworkServer.Destroy(playerObject);
-            _delayedExecutor.Add(() => SpawnPlayerForConnection(connection), _settings.RespawnSeconds);
+            _delayedExecutor.Add(() => Respawn(connection), _settings.RespawnSeconds);
+        }
+
+        private void Respawn(NetworkConnection connection)
+        {
+            if (connection.isReady)
+                SpawnPlayerForConnection(connection);
         }
     }
 }
