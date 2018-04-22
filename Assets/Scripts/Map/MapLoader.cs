@@ -6,13 +6,13 @@ namespace svtz.Tanks.Assets.Scripts.Map
     internal sealed class MapLoader : NetworkBehaviour
     {
         private MapCreator _mapCreator;
-        private SpawnController _spawnController;
+        private TankSpawner _tankSpawner;
 
         [Inject]
-        private void Construct(MapCreator mapCreator, SpawnController spawnController)
+        private void Construct(MapCreator mapCreator, TankSpawner tankSpawner)
         {
             _mapCreator = mapCreator;
-            _spawnController = spawnController;
+            _tankSpawner = tankSpawner;
         }
 
         // Use this for initialization
@@ -23,7 +23,7 @@ namespace svtz.Tanks.Assets.Scripts.Map
 
         private void Start()
         {
-            _spawnController.SpawnAllPlayers();
+            _tankSpawner.SpawnAllPlayers();
         }
     }
 }

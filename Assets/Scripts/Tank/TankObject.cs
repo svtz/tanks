@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace svtz.Tanks.Assets.Scripts.Tank
 {
-    internal sealed class TankObject : GameObjectWrapper<TankObject>
+    internal sealed class TankObject : GameObjectHolder<TankObject>
     {
         [Serializable]
         public class Settings

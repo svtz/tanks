@@ -4,13 +4,13 @@ using UnityEngine.Networking;
 
 namespace svtz.Tanks.Assets.Scripts.Map
 {
-    internal sealed class MapObjectsController
+    internal sealed class MapObjectsManager
     {
         private readonly MapObject.Factory _objFactory;
         private readonly Background.Factory _backgroundFactory;
         private readonly Dictionary<Vector2, MapObject> _gameObjectsIndex = new Dictionary<Vector2, MapObject>();
 
-        public MapObjectsController(MapObject.Factory objFactory, Background.Factory backgroundFactory)
+        public MapObjectsManager(MapObject.Factory objFactory, Background.Factory backgroundFactory)
         {
             _objFactory = objFactory;
             _backgroundFactory = backgroundFactory;
@@ -46,7 +46,7 @@ namespace svtz.Tanks.Assets.Scripts.Map
 
     internal static class MapObjectsControllerExtensions
     {
-        public static void Add(this MapObjectsController mapObjects, float x, float y, MapObjectKind objectKind)
+        public static void Add(this MapObjectsManager mapObjects, float x, float y, MapObjectKind objectKind)
         {
             mapObjects.Add(new Vector2(x, y), objectKind);
         }

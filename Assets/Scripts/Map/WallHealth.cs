@@ -5,17 +5,17 @@ namespace svtz.Tanks.Assets.Scripts.Map
 {
     internal sealed class WallHealth : HealthBase
     {
-        private MapObjectsController _mapObjectsController;
+        private MapObjectsManager _mapObjectsManager;
 
         [Inject]
-        private void Construct(MapObjectsController mapObjectsController)
+        private void Construct(MapObjectsManager mapObjectsManager)
         {
-            _mapObjectsController = mapObjectsController;
+            _mapObjectsManager = mapObjectsManager;
         }
 
         protected override void OnZeroHealthAtServer()
         {
-            _mapObjectsController.RemoveAt(transform.position);
+            _mapObjectsManager.RemoveAt(transform.position);
         }
 
         protected override void OnChangeHealthAtClient(int health)

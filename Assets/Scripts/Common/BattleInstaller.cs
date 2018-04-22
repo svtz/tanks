@@ -11,7 +11,7 @@ namespace svtz.Tanks.Assets.Scripts.Common
 #pragma warning disable 0649
         public MapCreator.Settings MapCreatorSettings;
         public MapObject.Settings MapObjectSettings;
-        public SpawnController.Settings SpawnControllerSettings;
+        public TankSpawner.Settings SpawnControllerSettings;
         public TankObject.Settings TankObjectSettings;
         public GameObject BackgroundPrefab;
 #pragma warning restore 0649
@@ -21,7 +21,7 @@ namespace svtz.Tanks.Assets.Scripts.Common
             Container.BindInstance(MapObjectSettings);
             Container.BindFactory<MapObjectKind, Vector2, MapObject, MapObject.Factory>();
 
-            Container.Bind<MapObjectsController>().AsSingle();
+            Container.Bind<MapObjectsManager>().AsSingle();
 
             Container.Bind<MapParser>().AsSingle();
 
@@ -36,7 +36,7 @@ namespace svtz.Tanks.Assets.Scripts.Common
             Container.BindFactory<NetworkConnection, Vector2, TankObject, TankObject.Factory>();
 
             Container.BindInstance(SpawnControllerSettings);
-            Container.Bind<SpawnController>().AsSingle();
+            Container.Bind<TankSpawner>().AsSingle();
         }
     }
 }

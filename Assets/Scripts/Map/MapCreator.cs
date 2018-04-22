@@ -17,18 +17,18 @@ namespace svtz.Tanks.Assets.Scripts.Map
 
         private readonly Settings _settings;
         private readonly MapParser _mapParser;
-        private readonly MapObjectsController _mapObjectsController;
-        private readonly SpawnController _spawnController;
+        private readonly MapObjectsManager _mapObjectsManager;
+        private readonly TankSpawner _tankSpawner;
 
         public MapCreator(Settings settings, 
             MapParser mapParser, 
-            MapObjectsController mapObjectsController,
-            SpawnController spawnController)
+            MapObjectsManager mapObjectsManager,
+            TankSpawner tankSpawner)
         {
             _settings = settings;
             _mapParser = mapParser;
-            _mapObjectsController = mapObjectsController;
-            _spawnController = spawnController;
+            _mapObjectsManager = mapObjectsManager;
+            _tankSpawner = tankSpawner;
         }
 
         public void Create()
@@ -41,19 +41,19 @@ namespace svtz.Tanks.Assets.Scripts.Map
         private void InstantiateMapObjects(MapInfo map)
         {
             // устанавливаем размеры фона
-            _mapObjectsController.SetSize(map.Width, map.Height);
+            _mapObjectsManager.SetSize(map.Width, map.Height);
 
             // строим периметр
             for (var i = -map.Width / 2 - 1; i <= map.Width / 2; i++)
             {
-                _mapObjectsController.Add(i + 0.5f, map.Height / 2.0f + 0.5f, MapObjectKind.UnbreakableWall);
-                _mapObjectsController.Add(i + 0.5f, -map.Height / 2.0f - 0.5f, MapObjectKind.UnbreakableWall);
+                _mapObjectsManager.Add(i + 0.5f, map.Height / 2.0f + 0.5f, MapObjectKind.UnbreakableWall);
+                _mapObjectsManager.Add(i + 0.5f, -map.Height / 2.0f - 0.5f, MapObjectKind.UnbreakableWall);
             }
 
             for (var j = -map.Height / 2; j <= map.Height / 2 - 1; j++)
             {
-                _mapObjectsController.Add(map.Width / 2.0f + 0.5f, j + 0.5f, MapObjectKind.UnbreakableWall);
-                _mapObjectsController.Add(-map.Width / 2.0f - 0.5f, j + 0.5f, MapObjectKind.UnbreakableWall);
+                _mapObjectsManager.Add(map.Width / 2.0f + 0.5f, j + 0.5f, MapObjectKind.UnbreakableWall);
+                _mapObjectsManager.Add(-map.Width / 2.0f - 0.5f, j + 0.5f, MapObjectKind.UnbreakableWall);
             }
 
             // спавним остальное
@@ -68,11 +68,11 @@ namespace svtz.Tanks.Assets.Scripts.Map
 
                     case MapObjectKind.UnbreakableWall:
                     case MapObjectKind.RegularWall:
-                        _mapObjectsController.Add(-map.Width / 2 + j + 0.5f, -map.Height / 2 + i + 0.5f, cellKind);
+                        _mapObjectsManager.Add(-map.Width / 2 + j + 0.5f, -map.Height / 2 + i + 0.5f, cellKind);
                         break;
 
                     case MapObjectKind.RandomPlayerSpawn:
-                        _spawnController.AddSpawnPoint(-map.Width / 2 + j + 1.0f, -map.Height / 2 + i);
+                        _tankSpawner.AddSpawnPoint(-map.Width / 2 + j + 1.0f, -map.Height / 2 + i);
                         break;
 
                     default:

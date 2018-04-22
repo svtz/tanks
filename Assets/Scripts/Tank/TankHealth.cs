@@ -11,19 +11,19 @@ namespace svtz.Tanks.Assets.Scripts.Tank
         public RectTransform HealthBar;
 #pragma warning restore 0649
 
-        private SpawnController _spawnController;
+        private TankSpawner _tankSpawner;
         private TankObject _tank;
 
         [Inject]
-        private void Construct(SpawnController spawnController, TankObject tank)
+        private void Construct(TankSpawner tankSpawner, TankObject tank)
         {
-            _spawnController = spawnController;
+            _tankSpawner = tankSpawner;
             _tank = tank;
         }
 
         protected override void OnZeroHealthAtServer()
         {
-            _spawnController.DestroyAndRespawn(connectionToClient, _tank);
+            _tankSpawner.DestroyAndRespawn(connectionToClient, _tank);
         }
 
         protected override void OnChangeHealthAtClient(int health)

@@ -6,7 +6,7 @@ using Zenject;
 
 namespace svtz.Tanks.Assets.Scripts.Map
 {
-    internal sealed class MapObject : GameObjectWrapper<MapObject>
+    internal sealed class MapObject : GameObjectHolder<MapObject>
     {
         [Serializable]
         public class Settings

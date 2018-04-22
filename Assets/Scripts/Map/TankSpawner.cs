@@ -9,7 +9,7 @@ using Random = UnityEngine.Random;
 
 namespace svtz.Tanks.Assets.Scripts.Map
 {
-    internal sealed class SpawnController
+    internal sealed class TankSpawner
     {
         [Serializable]
         public class Settings
@@ -23,7 +23,7 @@ namespace svtz.Tanks.Assets.Scripts.Map
         private readonly DelayedExecutor _delayedExecutor;
         private readonly TankObject.Factory _tankFactory;
 
-        public SpawnController(Settings settings, DelayedExecutor delayedExecutor, TankObject.Factory tankFactory)
+        public TankSpawner(Settings settings, DelayedExecutor delayedExecutor, TankObject.Factory tankFactory)
         {
             _settings = settings;
             _delayedExecutor = delayedExecutor;
@@ -62,7 +62,7 @@ namespace svtz.Tanks.Assets.Scripts.Map
                 .Select(s => new
                 {
                     SpawnPoint = s,
-                    MinimalDistanceToPlayer = _spawnedPlayers.Min(p => (s - (Vector2)p.Position).magnitude)
+                    MinimalDistanceToPlayer = _spawnedPlayers.Min(p => (s - p.Position).magnitude)
                 })
                 .OrderByDescending(s => s.MinimalDistanceToPlayer)
                 .First()
