@@ -21,9 +21,9 @@ namespace svtz.Tanks.Assets.Scripts.Map
 
         private readonly Settings _settings;
         private readonly DelayedExecutor _delayedExecutor;
-        private readonly TankObject.Factory _tankFactory;
+        private readonly TankObject.ServerFactory _tankFactory;
 
-        public TankSpawner(Settings settings, DelayedExecutor delayedExecutor, TankObject.Factory tankFactory)
+        public TankSpawner(Settings settings, DelayedExecutor delayedExecutor, TankObject.ServerFactory tankFactory)
         {
             _settings = settings;
             _delayedExecutor = delayedExecutor;

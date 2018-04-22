@@ -1,4 +1,5 @@
-﻿using svtz.Tanks.Assets.Scripts.Map;
+﻿using svtz.Tanks.Assets.Scripts.Camera;
+using svtz.Tanks.Assets.Scripts.Map;
 using svtz.Tanks.Assets.Scripts.Tank;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -13,6 +14,7 @@ namespace svtz.Tanks.Assets.Scripts.Common
         public MapObject.Settings MapObjectSettings;
         public TankSpawner.Settings SpawnControllerSettings;
         public TankObject.Settings TankObjectSettings;
+        public GameObject CameraPrefab;
         public GameObject BackgroundPrefab;
 #pragma warning restore 0649
 
@@ -33,10 +35,16 @@ namespace svtz.Tanks.Assets.Scripts.Common
             Container.BindInterfacesAndSelfTo<DelayedExecutor>().AsSingle();
 
             Container.BindInstance(TankObjectSettings);
-            Container.BindFactory<NetworkConnection, Vector2, TankObject, TankObject.Factory>();
+            Container.BindFactory<Vector2, TankObject, TankObject.ClientFactory>()
+                     .FromFactory<TankObject.ClientFactory.Impl>();
+            Container.BindFactory<NetworkConnection, Vector2, TankObject, TankObject.ServerFactory>()
+                     .FromFactory<TankObject.ServerFactory.Impl>();
+            Container.Bind<TankObject.ClientSideSpawner>().AsSingle().NonLazy();
 
             Container.BindInstance(SpawnControllerSettings);
             Container.Bind<TankSpawner>().AsSingle();
+
+            Container.Bind<CameraController>().FromComponentInNewPrefab(CameraPrefab).AsSingle().NonLazy();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using Zenject;
 
 namespace svtz.Tanks.Assets.Scripts.Camera
 {
@@ -8,11 +9,16 @@ namespace svtz.Tanks.Assets.Scripts.Camera
     {
         private CameraController _cc;
 
+        [Inject]
+        private void Construct(CameraController cameraController)
+        {
+            _cc = cameraController;
+        }
+
         public override void OnStartAuthority()
         {
             base.OnStartAuthority();
 
-            _cc = FindObjectOfType<CameraController>();
             _cc.BindTo(gameObject);
         }
 
