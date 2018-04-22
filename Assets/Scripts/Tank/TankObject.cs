@@ -17,13 +17,20 @@ namespace svtz.Tanks.Assets.Scripts.Tank
 #pragma warning restore 0649
         }
 
-        public TankObject(IInstantiator container, Settings settings, NetworkConnection connection, Vector2 position)
+        public Vector2 Position { get { return GameObject.transform.position; } }
+
+        public TankObject(DiContainer container, Settings settings, NetworkConnection connection, Vector2 position)
             : base(container, settings.TankPrefab)
         {
             GameObject.transform.position = position;
             GameObject.transform.rotation = GetRandomQuanterion();
 
             NetworkServer.ReplacePlayerForConnection(connection, GameObject, 0);
+        }
+
+        public void Destroy()
+        {
+            NetworkServer.Destroy(GameObject);
         }
 
 

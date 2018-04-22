@@ -6,11 +6,11 @@ namespace svtz.Tanks.Assets.Scripts.Map
 {
     internal sealed class MapObjectsController
     {
-        private readonly MapObjectsFactory _objFactory;
+        private readonly MapObject.Factory _objFactory;
         private readonly Background.Factory _backgroundFactory;
-        private readonly Dictionary<Vector2, GameObject> _gameObjectsIndex = new Dictionary<Vector2, GameObject>();
+        private readonly Dictionary<Vector2, MapObject> _gameObjectsIndex = new Dictionary<Vector2, MapObject>();
 
-        public MapObjectsController(MapObjectsFactory objFactory, Background.Factory backgroundFactory)
+        public MapObjectsController(MapObject.Factory objFactory, Background.Factory backgroundFactory)
         {
             _objFactory = objFactory;
             _backgroundFactory = backgroundFactory;
@@ -26,22 +26,20 @@ namespace svtz.Tanks.Assets.Scripts.Map
 
         public void Add(Vector2 position, MapObjectKind objectKind)
         {
-            var go = _objFactory.Create(objectKind, position);
-
-            _gameObjectsIndex.Add(position, go);
-            NetworkServer.Spawn(go);
+            var obj = _objFactory.Create(objectKind, position);
+            _gameObjectsIndex.Add(position, obj);
         }
 
         public void RemoveAt(Vector2 position)
         {
-            GameObject go;
-            if (!_gameObjectsIndex.TryGetValue(position, out go))
+            MapObject mo;
+            if (!_gameObjectsIndex.TryGetValue(position, out mo))
             {
                 Debug.LogWarning("Попытка удалить несуществующий объект с карты");
                 return;
             }
 
-            NetworkServer.Destroy(go);
+            mo.Destroy();
             _gameObjectsIndex.Remove(position);
         }
     }

@@ -31,7 +31,7 @@ namespace svtz.Tanks.Assets.Scripts.Map
         }
 
         private readonly List<Vector2> _points = new List<Vector2>();
-        private readonly List<GameObject> _spawnedPlayers = new List<GameObject>();
+        private readonly List<TankObject> _spawnedPlayers = new List<TankObject>();
 
         public void AddSpawnPoint(float x, float y)
         {
@@ -49,7 +49,7 @@ namespace svtz.Tanks.Assets.Scripts.Map
         private void SpawnPlayerForConnection(NetworkConnection networkConnection)
         {
             var player = _tankFactory.Create(networkConnection, SelectSpawnPoint());
-            _spawnedPlayers.Add(player.GameObject);
+            _spawnedPlayers.Add(player);
         }
 
 
@@ -62,7 +62,7 @@ namespace svtz.Tanks.Assets.Scripts.Map
                 .Select(s => new
                 {
                     SpawnPoint = s,
-                    MinimalDistanceToPlayer = _spawnedPlayers.Min(p => (s - (Vector2)p.transform.position).magnitude)
+                    MinimalDistanceToPlayer = _spawnedPlayers.Min(p => (s - (Vector2)p.Position).magnitude)
                 })
                 .OrderByDescending(s => s.MinimalDistanceToPlayer)
                 .First()
@@ -70,10 +70,10 @@ namespace svtz.Tanks.Assets.Scripts.Map
         }
 
 
-        public void DestroyAndRespawn(NetworkConnection connection, GameObject playerObject)
+        public void DestroyAndRespawn(NetworkConnection connection, TankObject playerObject)
         {
             _spawnedPlayers.Remove(playerObject);
-            NetworkServer.Destroy(playerObject);
+            playerObject.Destroy();
             _delayedExecutor.Add(() => Respawn(connection), _settings.RespawnSeconds);
         }
 
