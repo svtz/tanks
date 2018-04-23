@@ -1,13 +1,21 @@
-﻿using svtz.Tanks.Assets.Scripts.Common;
+﻿using svtz.Tanks.Common;
+using Zenject;
 
-namespace svtz.Tanks.Assets.Scripts.Map
+namespace svtz.Tanks.Map
 {
     internal sealed class WallHealth : HealthBase
     {
+        private MapObjectsManager _mapObjectsManager;
+
+        [Inject]
+        private void Construct(MapObjectsManager mapObjectsManager)
+        {
+            _mapObjectsManager = mapObjectsManager;
+        }
+
         protected override void OnZeroHealthAtServer()
         {
-            var map = FindObjectOfType<MapObjectsController>();
-            map.Remove(transform.position);
+            _mapObjectsManager.RemoveAt(transform.position);
         }
 
         protected override void OnChangeHealthAtClient(int health)

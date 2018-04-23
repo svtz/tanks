@@ -1,9 +1,9 @@
 ﻿using System.Collections;
-using svtz.Tanks.Assets.Scripts.Common;
+using svtz.Tanks.Common;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace svtz.Tanks.Assets.Scripts.Tank
+namespace svtz.Tanks.Tank
 {
     [RequireComponent(typeof(TeamId))]
     internal sealed class FireController : NetworkBehaviour

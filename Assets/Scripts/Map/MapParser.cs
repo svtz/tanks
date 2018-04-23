@@ -2,11 +2,11 @@ using System;
 using System.Linq;
 using UnityEngine;
 
-namespace svtz.Tanks.Assets.Scripts.Map
+namespace svtz.Tanks.Map
 {
     internal sealed class MapParser
     {
-        public static MapInfo Parse(TextAsset textAsset)
+        public MapInfo Parse(TextAsset textAsset)
         {
             var data = new MapInfo
             {

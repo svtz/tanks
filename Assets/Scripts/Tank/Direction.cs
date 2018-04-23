@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace svtz.Tanks.Assets.Scripts.Tank
+namespace svtz.Tanks.Tank
 {
     public enum Direction
     {

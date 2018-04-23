@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace svtz.Tanks.Assets.Scripts.Tank
+namespace svtz.Tanks.Tank
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(TankController))]
     internal sealed class TankPositionSync : NetworkBehaviour

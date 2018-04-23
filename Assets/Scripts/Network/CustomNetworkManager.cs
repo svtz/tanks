@@ -1,33 +1,47 @@
-﻿
+﻿using svtz.Tanks.Common;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-public class CustomNetworkManager : NetworkLobbyManager
-{
-    public override NetworkClient StartHost()
-    {
-        return base.StartHost();
-    }
-    
-    public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
-    {
-        Debug.Log("Loaded");
-        return base.OnLobbyServerSceneLoadedForPlayer(lobbyPlayer, gamePlayer);
-    }
+using Zenject;
 
-    public override void OnLobbyServerPlayersReady()
+namespace svtz.Tanks.Network
+{
+    public class CustomNetworkManager : NetworkLobbyManager
     {
-        GetComponent<CustomNetworkDiscovery>().StopBroadcast();
-        base.OnLobbyServerPlayersReady();
-    }
-    public override GameObject OnLobbyServerCreateGamePlayer(NetworkConnection conn, short playerControllerId)
-    {
-        Debug.Log("Instantiated");
-        GameObject player = (GameObject)Instantiate(gamePlayerPrefab, Vector3.zero, Quaternion.identity);
-        NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
-        return player;
-    }
-    /*
+        public override NetworkClient StartHost()
+        {
+            return base.StartHost();
+        }
+    
+        public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
+        {
+            Debug.Log("Loaded");
+            return base.OnLobbyServerSceneLoadedForPlayer(lobbyPlayer, gamePlayer);
+        }
+
+        public override void OnLobbyServerPlayersReady()
+        {
+            GetComponent<CustomNetworkDiscovery>().StopBroadcast();
+            base.OnLobbyServerPlayersReady();
+        }
+        public override GameObject OnLobbyServerCreateGamePlayer(NetworkConnection conn, short playerControllerId)
+        {
+            Debug.Log("Instantiated");
+            GameObject player = (GameObject)Instantiate(gamePlayerPrefab, Vector3.zero, Quaternion.identity);
+            NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
+            return player;
+        }
+
+        public override void OnLobbyServerConnect(NetworkConnection conn)
+        {
+            base.OnLobbyServerConnect(conn);
+
+            // фу-фу-фу таким быть, но пока Network не запаковано в контейнер, будет так
+            var teamManager = ProjectContext.Instance.Container.Resolve<TeamManager>();
+            teamManager.RegisterPlayer(conn);
+        }
+
+        /*
     public override void ServerChangeScene(string sceneName)
     {
         if (sceneName == lobbyScene)
@@ -57,10 +71,11 @@ public class CustomNetworkManager : NetworkLobbyManager
         base.ServerChangeScene(sceneName);
     }*/
 
-    public override void OnLobbyClientSceneChanged(NetworkConnection conn)
-    {
-        base.OnLobbyClientSceneChanged(conn);
-        if (SceneManager.GetSceneAt(0).name == playScene)
-            GetComponent<CustomNetworkManagerHUD>().CloseMenu();
+        public override void OnLobbyClientSceneChanged(NetworkConnection conn)
+        {
+            base.OnLobbyClientSceneChanged(conn);
+            if (SceneManager.GetSceneAt(0).name == playScene)
+                GetComponent<CustomNetworkManagerHUD>().CloseMenu();
+        }
     }
 }

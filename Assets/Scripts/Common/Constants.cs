@@ -1,4 +1,4 @@
-﻿namespace svtz.Tanks.Assets.Scripts.Common
+﻿namespace svtz.Tanks.Common
 {
     internal static class Constants
     {
