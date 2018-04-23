@@ -1,7 +1,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace svtz.Tanks.Assets.Scripts.Common
+namespace svtz.Tanks.Common
 {
     internal abstract class GameObjectHolder<T>
         where T : GameObjectHolder<T>

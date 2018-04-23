@@ -1,7 +1,7 @@
-﻿using svtz.Tanks.Assets.Scripts.Common;
+﻿using svtz.Tanks.Common;
 using UnityEngine;
 
-namespace svtz.Tanks.Assets.Scripts
+namespace svtz.Tanks
 {
     internal sealed class Projectile : MonoBehaviour
     {

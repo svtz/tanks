@@ -1,7 +1,7 @@
 ﻿using UnityEngine.Networking;
 using Zenject;
 
-namespace svtz.Tanks.Assets.Scripts.Map
+namespace svtz.Tanks.Map
 {
     internal sealed class MapLoader : NetworkBehaviour
     {

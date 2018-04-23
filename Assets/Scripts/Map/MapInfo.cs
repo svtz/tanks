@@ -1,4 +1,4 @@
-namespace svtz.Tanks.Assets.Scripts.Map
+namespace svtz.Tanks.Map
 {
     internal sealed class MapInfo
     {

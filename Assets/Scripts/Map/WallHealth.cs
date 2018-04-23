@@ -1,7 +1,7 @@
-﻿using svtz.Tanks.Assets.Scripts.Common;
+﻿using svtz.Tanks.Common;
 using Zenject;
 
-namespace svtz.Tanks.Assets.Scripts.Map
+namespace svtz.Tanks.Map
 {
     internal sealed class WallHealth : HealthBase
     {

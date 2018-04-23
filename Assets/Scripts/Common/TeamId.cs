@@ -1,7 +1,7 @@
 ﻿using UnityEngine.Networking;
 using Zenject;
 
-namespace svtz.Tanks.Assets.Scripts.Common
+namespace svtz.Tanks.Common
 {
     internal sealed class TeamId : NetworkBehaviour
     {

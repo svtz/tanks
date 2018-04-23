@@ -1,11 +1,11 @@
 ﻿using System;
-using svtz.Tanks.Assets.Scripts.Common;
+using svtz.Tanks.Common;
 using UnityEngine;
 using UnityEngine.Networking;
 using Zenject;
 using Random = UnityEngine.Random;
 
-namespace svtz.Tanks.Assets.Scripts.Tank
+namespace svtz.Tanks.Tank
 {
     internal sealed class TankObject : GameObjectHolder<TankObject>
     {

@@ -1,11 +1,11 @@
-﻿using svtz.Tanks.Assets.Scripts.Camera;
-using svtz.Tanks.Assets.Scripts.Map;
-using svtz.Tanks.Assets.Scripts.Tank;
+﻿using svtz.Tanks.Camera;
+using svtz.Tanks.Map;
+using svtz.Tanks.Tank;
 using UnityEngine;
 using UnityEngine.Networking;
 using Zenject;
 
-namespace svtz.Tanks.Assets.Scripts.Common
+namespace svtz.Tanks.Common
 {
     internal sealed class BattleInstaller : MonoInstaller
     {

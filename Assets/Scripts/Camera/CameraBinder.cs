@@ -2,7 +2,7 @@
 using UnityEngine.Networking;
 using Zenject;
 
-namespace svtz.Tanks.Assets.Scripts.Camera
+namespace svtz.Tanks.Camera
 {
     [RequireComponent(typeof(NetworkIdentity))]
     internal sealed class CameraBinder : NetworkBehaviour

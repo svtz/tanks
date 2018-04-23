@@ -1,10 +1,10 @@
 ﻿using System;
-using svtz.Tanks.Assets.Scripts.Common;
+using svtz.Tanks.Common;
 using UnityEngine;
 using UnityEngine.Networking;
 using Zenject;
 
-namespace svtz.Tanks.Assets.Scripts.Map
+namespace svtz.Tanks.Map
 {
     internal sealed class MapObject : GameObjectHolder<MapObject>
     {

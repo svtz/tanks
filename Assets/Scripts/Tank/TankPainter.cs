@@ -1,9 +1,9 @@
-﻿using svtz.Tanks.Assets.Scripts.Common;
+﻿using svtz.Tanks.Common;
 using UnityEngine;
 using UnityEngine.Networking;
 using Zenject;
 
-namespace svtz.Tanks.Assets.Scripts.Tank
+namespace svtz.Tanks.Tank
 {
     public class TankPainter : MonoBehaviour
     {

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using svtz.Tanks.Assets.Scripts.Common;
+using svtz.Tanks.Common;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace svtz.Tanks.Assets.Scripts.Tank
+namespace svtz.Tanks.Tank
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(TankPositionSync))]
     internal sealed class TankController : NetworkBehaviour

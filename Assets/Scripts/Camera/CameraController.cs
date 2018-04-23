@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace svtz.Tanks.Assets.Scripts.Camera
+namespace svtz.Tanks.Camera
 {
     internal sealed class CameraController : MonoBehaviour
     {

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using svtz.Tanks.Assets.Scripts.Common;
-using svtz.Tanks.Assets.Scripts.Tank;
+using svtz.Tanks.Common;
+using svtz.Tanks.Tank;
 using UnityEngine;
 using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 
-namespace svtz.Tanks.Assets.Scripts.Map
+namespace svtz.Tanks.Map
 {
     internal sealed class TankSpawner
     {
