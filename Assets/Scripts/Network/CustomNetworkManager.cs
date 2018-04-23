@@ -1,7 +1,10 @@
 ﻿
+using svtz.Tanks.Assets.Scripts.Common;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
+using Zenject;
+
 public class CustomNetworkManager : NetworkLobbyManager
 {
     public override NetworkClient StartHost()
@@ -27,6 +30,16 @@ public class CustomNetworkManager : NetworkLobbyManager
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
         return player;
     }
+
+    public override void OnLobbyServerConnect(NetworkConnection conn)
+    {
+        base.OnLobbyServerConnect(conn);
+
+        // фу-фу-фу таким быть, но пока Network не запаковано в контейнер, будет так
+        var teamManager = ProjectContext.Instance.Container.Resolve<TeamManager>();
+        teamManager.RegisterPlayer(conn);
+    }
+
     /*
     public override void ServerChangeScene(string sceneName)
     {

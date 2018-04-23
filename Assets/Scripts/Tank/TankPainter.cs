@@ -1,5 +1,7 @@
 ﻿using svtz.Tanks.Assets.Scripts.Common;
 using UnityEngine;
+using UnityEngine.Networking;
+using Zenject;
 
 namespace svtz.Tanks.Assets.Scripts.Tank
 {
@@ -11,21 +13,34 @@ namespace svtz.Tanks.Assets.Scripts.Tank
         public Color AllyColor;
 #pragma warning restore 0649
 
-        private void OnTeamIdCreated(bool isLocal)
+        private TeamId _teamId;
+        private NetworkIdentity _identity;
+        private TeamManager _teamManager;
+        private SpriteRenderer _renderer;
+
+        [Inject]
+        private void Construct(TeamManager teamManager)
         {
-            PaintWithColor(isLocal ? PlayerColor : GetColor());
+            _teamManager = teamManager;
+        }
+
+        private void Start()
+        {
+            //todo https://github.com/modesttree/Zenject/issues/275 почему-то заинжектить не удалось
+            _identity = GetComponent<NetworkIdentity>() ?? GetComponentInParent<NetworkIdentity>(); ;
+            _teamId = GetComponent<TeamId>() ?? GetComponentInParent<TeamId>();
+            _renderer = GetComponent<SpriteRenderer>();
+
+            _renderer.color = GetColor();
         }
 
         private Color GetColor()
         {
-            var teamId = (GetComponent<TeamId>() ?? GetComponentInParent<TeamId>()).Id;
-            return teamId == TeamId.LocalPlayerTeamId ? AllyColor : EnemyColor;
-        }
+            if (_identity.isLocalPlayer)
+                return PlayerColor;
 
-        private void PaintWithColor(Color color)
-        {
-            var sprite = GetComponent<SpriteRenderer>();
-            sprite.color = color;
+            var teamId = _teamId.Id;
+            return _teamManager.IsAlly(teamId) ? AllyColor : EnemyColor;
         }
     }
 }
