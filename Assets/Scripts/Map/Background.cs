@@ -22,6 +22,7 @@ namespace svtz.Tanks.Map
         private void InitBackground()
         {
             GetComponent<SpriteRenderer>().size = new Vector2(_width, _height);
+            Destroy(this);
         }
 
         public void SetSize(int width, int height)
@@ -31,7 +32,5 @@ namespace svtz.Tanks.Map
 
             _initialized = true;
         }
-
-        public class Factory : Zenject.Factory<Background> { }
     }
 }

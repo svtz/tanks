@@ -1,9 +1,9 @@
-﻿using UnityEngine.Networking;
+﻿using UnityEngine;
 using Zenject;
 
 namespace svtz.Tanks.Map
 {
-    internal sealed class MapLoader : NetworkBehaviour
+    internal sealed class MapLoader : MonoBehaviour
     {
         private MapCreator _mapCreator;
         private TankSpawner _tankSpawner;
@@ -15,15 +15,12 @@ namespace svtz.Tanks.Map
             _tankSpawner = tankSpawner;
         }
 
-        // Use this for initialization
-        public override void OnStartServer()
-        {
-            _mapCreator.Create();
-        }
-
         private void Start()
         {
+            _mapCreator.Create();
             _tankSpawner.SpawnAllPlayers();
+
+            Destroy(gameObject);
         }
     }
 }

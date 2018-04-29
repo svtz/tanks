@@ -3,9 +3,9 @@ using Zenject;
 
 namespace svtz.Tanks.Infra
 {
-    public class PrefabInjectorInstaller : MonoInstaller<PrefabInjectorInstaller>
+    internal sealed class PrefabInjectorInstaller : MonoInstaller<PrefabInjectorInstaller>
     {
-        public static DiContainer SceneContainer { get; private set; }
+        private static DiContainer SceneContainer { get; set; }
 
         public override void InstallBindings()
         {

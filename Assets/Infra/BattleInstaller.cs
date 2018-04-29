@@ -11,30 +11,29 @@ namespace svtz.Tanks.Infra
     {
 #pragma warning disable 0649
         public MapCreator.Settings MapCreatorSettings;
-        public MapObject.Settings MapObjectSettings;
+        public MapObjectsFactory.Settings MapObjectsSettings;
         public TankSpawner.Settings SpawnControllerSettings;
-        public GameObject CameraPrefab;
-        public GameObject BackgroundPrefab;
 #pragma warning restore 0649
 
         public override void InstallBindings()
         {
-            Container.BindFactory<MapObjectKind, Vector2, MapObject, MapObject.Factory>().WithArguments(MapObjectSettings);
-
+            // Карта
+            Container.Bind<MapObjectsFactory>().AsSingle().WithArguments(MapObjectsSettings);
             Container.Bind<MapObjectsManager>().AsSingle();
-
             Container.Bind<MapParser>().AsSingle();
-
             Container.Bind<MapCreator>().AsSingle().WithArguments(MapCreatorSettings);
+            Container.Bind<Background>().FromComponentInHierarchy().AsSingle();
 
-            Container.BindFactory<Background, Background.Factory>().FromComponentInNewPrefab(BackgroundPrefab);
-
+            // Сервис отложенного исполнения
             Container.BindInterfacesAndSelfTo<DelayedExecutor>().AsSingle();
 
+            // Спавнер танков игроков
             Container.Bind<TankSpawner>().AsSingle().WithArguments(SpawnControllerSettings);
 
-            Container.Bind<CameraController>().FromComponentInNewPrefab(CameraPrefab).AsSingle().NonLazy();
+            // Камера игрока
+            Container.Bind<CameraController>().FromComponentInHierarchy().AsSingle();
 
+            // Компоненты объектов
             Container.Bind<TeamId>().FromComponentInParents();
             Container.Bind<NetworkIdentity>().FromComponentInParents();
             Container.Bind<SpriteRenderer>().FromComponentSibling();

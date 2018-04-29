@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace svtz.Tanks.Infra
 {
-    public class PrefabInjector : MonoBehaviour
+    internal sealed class PrefabInjector : MonoBehaviour
     {
         private void Awake()
         {

@@ -18,16 +18,19 @@ namespace svtz.Tanks.Map
         private readonly MapParser _mapParser;
         private readonly MapObjectsManager _mapObjectsManager;
         private readonly TankSpawner _tankSpawner;
+        private readonly Background _background;
 
         public MapCreator(Settings settings, 
             MapParser mapParser, 
             MapObjectsManager mapObjectsManager,
-            TankSpawner tankSpawner)
+            TankSpawner tankSpawner,
+            Background background)
         {
             _settings = settings;
             _mapParser = mapParser;
             _mapObjectsManager = mapObjectsManager;
             _tankSpawner = tankSpawner;
+            _background = background;
         }
 
         public void Create()
@@ -40,7 +43,7 @@ namespace svtz.Tanks.Map
         private void InstantiateMapObjects(MapInfo map)
         {
             // устанавливаем размеры фона
-            _mapObjectsManager.SetSize(map.Width, map.Height);
+            _background.SetSize(map.Width, map.Height);
 
             // строим периметр
             for (var i = -map.Width / 2 - 1; i <= map.Width / 2; i++)
