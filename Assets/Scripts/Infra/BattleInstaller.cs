@@ -1,6 +1,7 @@
 ﻿using svtz.Tanks.Camera;
 using svtz.Tanks.Common;
 using svtz.Tanks.Map;
+using svtz.Tanks.Projectile;
 using UnityEngine;
 using UnityEngine.Networking;
 using Zenject;
@@ -13,6 +14,8 @@ namespace svtz.Tanks.Infra
         public MapCreator.Settings MapCreatorSettings;
         public MapObjectsFactory.Settings MapObjectsSettings;
         public TankSpawner.Settings SpawnControllerSettings;
+        public GameObject ProjectilePrefab;
+        public int ProjectilePoolInitialSize;
 #pragma warning restore 0649
 
         public override void InstallBindings()
@@ -34,9 +37,16 @@ namespace svtz.Tanks.Infra
             Container.Bind<CameraController>().FromComponentInHierarchy().AsSingle();
 
             // Компоненты объектов
-            Container.Bind<TeamId>().FromComponentInParents();
-            Container.Bind<NetworkIdentity>().FromComponentInParents();
+            Container.Bind<TeamId>().FromComponentInParents(); // inParents - для башни танка
+            Container.Bind<NetworkIdentity>().FromComponentInParents(); // inParents - для башни танка
             Container.Bind<SpriteRenderer>().FromComponentSibling();
+            Container.Bind<Rigidbody2D>().FromComponentSibling();
+
+            // Снаряды
+            Container.BindMemoryPool<Projectile.Projectile, ProjectilePool>()
+                .WithInitialSize(ProjectilePoolInitialSize)
+                .ExpandByOneAtATime()
+                .FromComponentInNewPrefab(ProjectilePrefab);
         }
     }
 }
