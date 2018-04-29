@@ -8,22 +8,29 @@ namespace svtz.Tanks.Common
     {
         protected GameObject GameObject { get; private set; }
 
-        protected GameObjectHolder(DiContainer container, GameObject prefab)
-        {
-            // возможно, есть какой-то более лучший способ передать себя в компоненты?
-            var sub = container.CreateSubContainer();
-            sub.Bind(GetType()).FromInstance(this);
+        protected abstract GameObject Prefab { get; }
 
-            GameObject = sub.InstantiatePrefab(prefab);
+        protected virtual GameObjectCreationParameters CreationParameters
+        {
+            get { return GameObjectCreationParameters.Default; }
         }
 
-        protected GameObjectHolder(DiContainer container, GameObject prefab, Transform parent)
+        /// <summary> Создание объекта оформлено в виде отдельного метода из эстетических соображений
+        /// (тащить через все конструкторы, причём в виде именно контейнера  (а не IInstantiator) - не комильфо) </summary>
+        [Inject]
+        private void Construct(DiContainer container)
         {
             // возможно, есть какой-то более лучший способ передать себя в компоненты?
             var sub = container.CreateSubContainer();
             sub.Bind(GetType()).FromInstance(this);
 
-            GameObject = sub.InstantiatePrefab(prefab, parent);
+            GameObject = sub.InstantiatePrefab(Prefab, CreationParameters);
+
+            OnCreated();
+        }
+
+        protected virtual void OnCreated()
+        {
         }
     }
 }

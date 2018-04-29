@@ -1,6 +1,7 @@
-﻿using Zenject;
+﻿using svtz.Tanks.Common;
+using Zenject;
 
-namespace svtz.Tanks.Common
+namespace svtz.Tanks.Infra
 {
     internal sealed class CommonInstaller : MonoInstaller
     {

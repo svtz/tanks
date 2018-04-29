@@ -12,18 +12,16 @@ namespace svtz.Tanks.Tank
 #pragma warning restore 0649
 
         private TankSpawner _tankSpawner;
-        private TankObject _tank;
 
         [Inject]
-        private void Construct(TankSpawner tankSpawner, TankObject tank)
+        private void Construct(TankSpawner tankSpawner)
         {
             _tankSpawner = tankSpawner;
-            _tank = tank;
         }
 
         protected override void OnZeroHealthAtServer()
         {
-            _tankSpawner.DestroyAndRespawn(connectionToClient, _tank);
+            _tankSpawner.DestroyAndRespawn(connectionToClient, gameObject);
         }
 
         protected override void OnChangeHealthAtClient(int health)

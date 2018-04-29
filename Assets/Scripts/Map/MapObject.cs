@@ -30,11 +30,28 @@ namespace svtz.Tanks.Map
             }
         }
 
-        public MapObject(DiContainer container, Settings settings, MapObjectKind kind, Vector2 position)
-            : base(container, GetMapObjectPrototype(kind, settings))
+        public MapObject(Settings settings, MapObjectKind kind, Vector2 position)
         {
-            GameObject.transform.position = position;
-            GameObject.transform.rotation = Quaternion.identity;
+            _prefab = GetMapObjectPrototype(kind, settings);
+            _parameters = new GameObjectCreationParameters
+            {
+                Position = position,
+                Rotation = Quaternion.identity
+            };
+        }
+
+        private readonly GameObject _prefab;
+        protected override GameObject Prefab { get { return _prefab; } }
+
+        private readonly GameObjectCreationParameters _parameters;
+        protected override GameObjectCreationParameters CreationParameters
+        {
+            get { return _parameters; }
+        }
+
+        protected override void OnCreated()
+        {
+            base.OnCreated();
 
             NetworkServer.Spawn(GameObject);
         }

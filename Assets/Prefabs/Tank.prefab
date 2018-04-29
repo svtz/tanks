@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 114136163131772478}
   - component: {fileID: 114564911100488628}
   - component: {fileID: 114555901895947770}
+  - component: {fileID: 114985605735970602}
   m_Layer: 9
   m_Name: Tank
   m_TagString: Player
@@ -476,6 +477,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 100
   HealthBar: {fileID: 224752145976100650}
+--- !u!114 &114985605735970602
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1468370762080052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 748b1c374fe94bba8b37e81db7d54002, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212184405159310206
 SpriteRenderer:
   m_ObjectHideFlags: 1

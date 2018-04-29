@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using svtz.Tanks.Common;
-using svtz.Tanks.Tank;
 using UnityEngine;
 using UnityEngine.Networking;
 using Random = UnityEngine.Random;
+using UnityObject = UnityEngine.Object;
 
 namespace svtz.Tanks.Map
 {
@@ -16,22 +16,21 @@ namespace svtz.Tanks.Map
         {
 #pragma warning disable 0649
             public int RespawnSeconds;
+            public GameObject TankPrefab;
 #pragma warning restore 0649
         }
 
         private readonly Settings _settings;
         private readonly DelayedExecutor _delayedExecutor;
-        private readonly TankObject.ServerFactory _tankFactory;
 
-        public TankSpawner(Settings settings, DelayedExecutor delayedExecutor, TankObject.ServerFactory tankFactory)
+        public TankSpawner(Settings settings, DelayedExecutor delayedExecutor)
         {
             _settings = settings;
             _delayedExecutor = delayedExecutor;
-            _tankFactory = tankFactory;
         }
 
         private readonly List<Vector2> _points = new List<Vector2>();
-        private readonly List<TankObject> _spawnedPlayers = new List<TankObject>();
+        private readonly List<GameObject> _spawnedPlayers = new List<GameObject>();
 
         public void AddSpawnPoint(float x, float y)
         {
@@ -48,10 +47,15 @@ namespace svtz.Tanks.Map
 
         private void SpawnPlayerForConnection(NetworkConnection networkConnection)
         {
-            var player = _tankFactory.Create(networkConnection, SelectSpawnPoint());
+            var player = UnityObject.Instantiate(_settings.TankPrefab);
+
+            var transform = player.transform;
+            transform.position = SelectSpawnPoint();
+            transform.rotation = GetRandomQuanterion();
+
+            NetworkServer.ReplacePlayerForConnection(networkConnection, player, 0);
             _spawnedPlayers.Add(player);
         }
-
 
         private Vector2 SelectSpawnPoint()
         {
@@ -62,7 +66,7 @@ namespace svtz.Tanks.Map
                 .Select(s => new
                 {
                     SpawnPoint = s,
-                    MinimalDistanceToPlayer = _spawnedPlayers.Min(p => (s - p.Position).magnitude)
+                    MinimalDistanceToPlayer = _spawnedPlayers.Min(p => (s - (Vector2)p.transform.position).magnitude)
                 })
                 .OrderByDescending(s => s.MinimalDistanceToPlayer)
                 .First()
@@ -70,10 +74,10 @@ namespace svtz.Tanks.Map
         }
 
 
-        public void DestroyAndRespawn(NetworkConnection connection, TankObject playerObject)
+        public void DestroyAndRespawn(NetworkConnection connection, GameObject playerObject)
         {
             _spawnedPlayers.Remove(playerObject);
-            playerObject.Destroy();
+            NetworkServer.Destroy(playerObject);
             _delayedExecutor.Add(() => Respawn(connection), _settings.RespawnSeconds);
         }
 
@@ -82,5 +86,11 @@ namespace svtz.Tanks.Map
             if (connection.isReady)
                 SpawnPlayerForConnection(connection);
         }
+
+        private static Quaternion GetRandomQuanterion()
+        {
+            return Quaternion.Euler(0, 0, Random.Range(0, 4) * 90);
+        }
+
     }
 }

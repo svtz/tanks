@@ -16,22 +16,25 @@ namespace svtz.Tanks.Tank
         private TeamId _teamId;
         private NetworkIdentity _identity;
         private TeamManager _teamManager;
-        private SpriteRenderer _renderer;
+        private SpriteRenderer _spriteRenderer;
 
         [Inject]
-        private void Construct(TeamManager teamManager)
+        private void Construct(
+            TeamManager teamManager,
+            TeamId id,
+            NetworkIdentity identity,
+            SpriteRenderer spriteRenderer)
         {
             _teamManager = teamManager;
+            _teamId = id;
+            _identity = identity;
+            _spriteRenderer = spriteRenderer;
         }
 
         private void Start()
         {
-            //todo https://github.com/modesttree/Zenject/issues/275 почему-то заинжектить не удалось
-            _identity = GetComponent<NetworkIdentity>() ?? GetComponentInParent<NetworkIdentity>(); ;
-            _teamId = GetComponent<TeamId>() ?? GetComponentInParent<TeamId>();
-            _renderer = GetComponent<SpriteRenderer>();
-
-            _renderer.color = GetColor();
+            _spriteRenderer.color = GetColor();
+            Destroy(this);
         }
 
         private Color GetColor()
