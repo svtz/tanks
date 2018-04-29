@@ -7,9 +7,14 @@ namespace svtz.Tanks.Common
 {
     internal sealed class DelayedExecutor : ITickable
     {
+        public interface ICancellable
+        {
+            void Cancel();
+        }
+
         private readonly List<Entry> _entries = new List<Entry>();
 
-        private sealed class Entry
+        private sealed class Entry : ICancellable
         {
             private readonly Action _action;
             private readonly float _timeout;
@@ -35,17 +40,24 @@ namespace svtz.Tanks.Common
                     _action();
                 }
             }
+
+            void ICancellable.Cancel()
+            {
+                Complete = true;
+            }
         }
 
         private bool _currentlyTicking = false;
 
-        public void Add(Action action, float executeAfterSeconds)
+        public ICancellable Add(Action action, float executeAfterSeconds)
         {
             if (_currentlyTicking)
                 throw new InvalidOperationException("Не хотелось, но придётся добавить блокировочек.");
 
             var entry = new Entry(action, executeAfterSeconds);
             _entries.Add(entry);
+
+            return entry;
         }
 
         void ITickable.Tick()
