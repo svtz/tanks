@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -7,7 +8,6 @@ namespace svtz.Tanks.Map
     internal sealed class MapObjectsFactory
     {
         private readonly IInstantiator _instantiator;
-        private readonly Settings _settings;
 
         [Serializable]
         public class Settings
@@ -18,31 +18,58 @@ namespace svtz.Tanks.Map
 #pragma warning restore 0649
         }
 
-        private GameObject GetMapObjectPrototype(MapObjectKind kind)
+        private class CreationInfo
         {
-            switch (kind)
+            public GameObject Prefab { get; private set; }
+            public Vector2 Offset { get; private set; }
+
+            public CreationInfo(GameObject prefab)
             {
-                case MapObjectKind.RegularWall:
-                    return _settings.RegularWallPrefab;
-                case MapObjectKind.UnbreakableWall:
-                    return _settings.UnbreakableWallPrefab;
-                default:
-                    throw new ArgumentOutOfRangeException("kind", kind, null);
+                Prefab = prefab;
+                Offset = Vector2.zero;
+            }
+
+            public CreationInfo(GameObject prefab, Vector2 offset)
+            {
+                Prefab = prefab;
+                Offset = offset;
             }
         }
+
+        private readonly Dictionary<MapObjectKind, CreationInfo[]> _prototypes;
 
         public MapObjectsFactory(IInstantiator instantiator, Settings settings)
         {
             _instantiator = instantiator;
-            _settings = settings;
+
+            _prototypes = new Dictionary<MapObjectKind, CreationInfo[]>
+            {
+                {
+                    MapObjectKind.UnbreakableWall,
+                    new[] {new CreationInfo(settings.UnbreakableWallPrefab)}
+                },
+                {
+                    MapObjectKind.RegularWall,
+                    new[]
+                    {
+                        new CreationInfo(settings.RegularWallPrefab, new Vector2(0.25f, 0.25f)),
+                        new CreationInfo(settings.RegularWallPrefab, new Vector2(-0.25f, 0.25f)),
+                        new CreationInfo(settings.RegularWallPrefab, new Vector2(-0.25f, -0.25f)),
+                        new CreationInfo(settings.RegularWallPrefab, new Vector2(0.25f, -0.25f))
+                    }
+                }
+            };
         }
 
-        public GameObject Create(MapObjectKind kind, Vector2 position)
+        public IEnumerable<GameObject> Create(MapObjectKind kind, Vector2 position)
         {
-            var go = _instantiator.InstantiatePrefab(GetMapObjectPrototype(kind));
-            go.transform.position = position;
-
-            return go;
+            var infos = _prototypes[kind];
+            foreach (var info in infos)
+            {
+                var go = _instantiator.InstantiatePrefab(info.Prefab);
+                go.transform.position = position + info.Offset;
+                yield return go;
+            }
         }
     }
 }
