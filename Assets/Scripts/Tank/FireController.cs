@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using svtz.Tanks.Common;
+﻿using svtz.Tanks.Common;
 using svtz.Tanks.Projectile;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -12,63 +11,59 @@ namespace svtz.Tanks.Tank
     {
 #pragma warning disable 0649
         public float Cooldown;
-        public Transform BulletSpawn;
+        public Transform ProjectileSpawn;
 #pragma warning restore 0649
 
-        private TeamId _id;
+        private TeamId _teamId;
         private ProjectilePool _pool;
         private DelayedExecutor _delayedExecutor;
-
-        [SyncVar]
-        private bool _canFire = true;
 
         [Inject]
         private void Construct(TeamId teamId, ProjectilePool pool, DelayedExecutor delayedExecutor)
         {
-            _id = teamId;
+            _teamId = teamId;
             _pool = pool;
             _delayedExecutor = delayedExecutor;
         }
 
+
+        private bool _canFire = true;
+
+        [SyncVar]
+        private bool _isFiring = false;
+
         // Update is called once per frame
         private void Update()
         {
-            if (!isLocalPlayer)
-                return;
-
-            if (_canFire && Input.GetKey(KeyCode.Space))
+            if (isLocalPlayer)
             {
-                // на клиенте говорим, что больше стрелять не можем,
-                // чтобы не плодить лишних сообщений
-                if (!isServer)
-                    _canFire = false;
+                // клиент: сообщаем на сервер положение кнопки
+                var doFire = Input.GetKey(KeyCode.Space);
+                if (doFire ^ _isFiring)
+                {
+                    CmdFire(doFire);
+                }
+            }
 
-                var id = _id.Id;
-                CmdFire(id);
+            if (isServer)
+            {
+                // сервер: стреляем
+                if (_isFiring && _canFire)
+                {
+                    var projectile = _pool.Spawn();
+                    projectile.Launch(ProjectileSpawn, _teamId);
+                    
+                    // кулдаун
+                    _canFire = false;
+                    _delayedExecutor.Add(() => _canFire = true, Cooldown);
+                }
             }
         }
 
-        
-        [ClientRpc]
-        public void RpcFire(GameObject go)
-        {
-            var projectile = go.GetComponent<Projectile.Projectile>();
-            projectile.Launch(BulletSpawn, _id);
-        }
-
         [Command]
-        private void CmdFire(string teamId)
+        private void CmdFire(bool value)
         {
-            // серверная проверка возможности стрельбы
-            if (!_canFire)
-                return;
-
-            var projectile = _pool.Spawn();
-            RpcFire(projectile.gameObject);
-
-            // кулдаун
-            _canFire = false;
-            _delayedExecutor.Add(() => _canFire = true, Cooldown);
+            _isFiring = value;
         }
     }
 }

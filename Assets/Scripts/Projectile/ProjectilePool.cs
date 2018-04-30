@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using Zenject;
@@ -7,12 +6,9 @@ namespace svtz.Tanks.Projectile
 {
     internal sealed class ProjectilePool : MonoMemoryPool<Projectile>
     {
-        private readonly Dictionary<GameObject, Projectile> _spawned = new Dictionary<GameObject, Projectile>();
-
         protected override void OnSpawned(Projectile item)
         {
             base.OnSpawned(item);
-            _spawned.Add(item.gameObject, item);
             if (NetworkServer.active)
                 NetworkServer.Spawn(item.gameObject);
         }
@@ -20,7 +16,6 @@ namespace svtz.Tanks.Projectile
         protected override void OnDespawned(Projectile item)
         {
             base.OnDespawned(item);
-            _spawned.Remove(item.gameObject);
             if (NetworkServer.active)
                 NetworkServer.UnSpawn(item.gameObject);
         }
@@ -38,8 +33,10 @@ namespace svtz.Tanks.Projectile
 
             private void UnspawnHandler(GameObject spawned)
             {
-                var item = _pool._spawned[spawned];
-                _pool.Despawn(item);
+                // по-хорошему, снар€д на клиенте деспавнитс€ и без нашей помощи.
+                // но иногда что-то идЄт не по плану, например:
+                // стенка уничтожаетс€ раньше, чем  Ћ»≈Ќ“— »… снар€д прочухает, что врезалс€ в неЄ
+                spawned.GetComponent<Projectile>().TryDespawn();
             }
 
             private GameObject SpawnHandler(Vector3 position, NetworkHash128 id)

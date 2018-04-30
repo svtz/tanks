@@ -1,11 +1,12 @@
 ﻿using svtz.Tanks.Common;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Networking;
 using Zenject;
 
 namespace svtz.Tanks.Projectile
 {
-    internal sealed class Projectile : MonoBehaviour
+    internal sealed class Projectile : NetworkBehaviour
     {
 #pragma warning disable 0649
         public int Damage;
@@ -13,14 +14,11 @@ namespace svtz.Tanks.Projectile
         public float Speed;
 #pragma warning restore 0649
 
-        private static int _seqId = 0;
-
-        private readonly int _id = ++_seqId;
         private Rigidbody2D _rb2D;
         private ProjectilePool _pool;
         private DelayedExecutor _delayedExecutor;
-
-        private TeamId _teamId;
+        
+        private string _teamId;
         private DelayedExecutor.ICancellable _autoDespawn;
         private bool _despawned;
 
@@ -32,31 +30,31 @@ namespace svtz.Tanks.Projectile
             _delayedExecutor = delayedExecutor;
         }
 
-        public void Launch(Transform relativeSpawn, TeamId teamId)
+        [ClientRpc]
+        private void RpcLaunch(Vector2 position, Quaternion rotation, string teamId)
         {
             _teamId = teamId;
 
-            transform.SetParent(transform);
-
-            transform.position = relativeSpawn.position;
-            transform.rotation = relativeSpawn.rotation;
-
+            transform.position = position;
+            transform.rotation = rotation;
             _rb2D.velocity = transform.up * Speed;
 
             _despawned = false;
             _autoDespawn = _delayedExecutor.Add(TryDespawn, TTL);
+        }
 
-            Debug.LogWarning("Запущен снаряд " + _id);
+        public void Launch(Transform spawn, TeamId teamId)
+        {
+            Assert.IsTrue(isServer);
+            RpcLaunch(spawn.position, spawn.rotation, teamId.Id);
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            Debug.LogWarning("Снаряд " + _id + " с чем-то столкнулся.");
-
             var hit = collision.gameObject;
             var teamId = hit.GetComponent<TeamId>();
 
-            if (teamId == null || teamId.Id != _teamId.Id)
+            if (teamId == null || teamId.Id != _teamId)
             {
                 var health = hit.GetComponent<HealthBase>();
                 if (health != null)
@@ -64,33 +62,18 @@ namespace svtz.Tanks.Projectile
                     health.TakeDamage(Damage);
                 }
 
-                Debug.LogWarning("Инициирую уничтожение снаряда " + _id + " в результате столкновения.");
                 TryDespawn();
             }
         }
 
-        private void TryDespawn()
+        public void TryDespawn()
         {
             if (!_despawned)
             {
-                Debug.LogWarning("Уничтожаю снаряд " + _id);
-
-                if (_autoDespawn != null)
-                {
-                    _autoDespawn.Cancel();
-                    Debug.LogWarning("Автодеспавн отменён " + _id);
-                }
-                if (NetworkServer.active)
-                {
-                    _pool.Despawn(this);
-                    Debug.LogWarning("Снаряд убран в пул. Уничтожение завершено.");
-                }
-                else
-                {
-                    gameObject.SetActive(false);
-                    Debug.LogWarning("Снаряд деактивирован. Уничтожение завершено.");
-                }
+                _autoDespawn.Cancel();
+                _pool.Despawn(this);
             }
+
             _despawned = true;
         }
     }

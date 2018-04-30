@@ -241,10 +241,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07e8e1ee37ad66f49be395fa57ea60d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 15
-  TTL: 2
   Cooldown: 0.25
-  BulletSpawn: {fileID: 4912365734415398}
+  ProjectileSpawn: {fileID: 4912365734415398}
 --- !u!114 &114043458144605562
 MonoBehaviour:
   m_ObjectHideFlags: 1
