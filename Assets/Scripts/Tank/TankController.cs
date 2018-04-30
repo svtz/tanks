@@ -58,6 +58,7 @@ namespace svtz.Tanks.Tank
 
         private float _inputX = 0.0f;
         private float _inputY = 0.0f;
+        private bool _brake = false;
 
         private void Update()
         {
@@ -81,6 +82,8 @@ namespace svtz.Tanks.Tank
                 _inputX = 1.0f;
             else if (left && !right)
                 _inputX = -1.0f;
+
+            _brake = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
         }
 
         //FixedUpdate is called at a fixed interval and is independent of frame rate. Put physics code here.
@@ -101,7 +104,6 @@ namespace svtz.Tanks.Tank
                 if (distanceToTarget < Epsilon)
                 {
                     // достигли, стоп машина
-                    Debug.Log(string.Format("Доехали до цели. InputX={0} InputY={1}", _inputX, _inputY));
                     _targetPosition = null;
                     _rb2D.velocity = Vector2.zero;
                 }
@@ -122,13 +124,20 @@ namespace svtz.Tanks.Tank
                 {
                     _currentDirection = requestedDirection.Value;
 
-                    //задаём цель
-                    _targetPosition = SnapToGrid(_rb2D.position + 
-                        DirectionHelper.Directions[_currentDirection] * Constants.GridSize);
-
-                    //едем
-                    _rb2D.MovePosition(_rb2D.position + 
-                        DirectionHelper.Directions[_currentDirection] * Speed * Constants.GridSize);
+                    if (!_brake)
+                    {
+                        //задаём цель
+                        _targetPosition = SnapToGrid(_rb2D.position +
+                                                     DirectionHelper.Directions[_currentDirection] *
+                                                     Constants.GridSize);
+                        //едем
+                        _rb2D.MovePosition(_rb2D.position +
+                                           DirectionHelper.Directions[_currentDirection] * Speed * Constants.GridSize);
+                    }
+                    else
+                    {
+                        _targetPosition = null;
+                    }
                 }
                 else
                 {
@@ -142,9 +151,9 @@ namespace svtz.Tanks.Tank
                 var requiredMove = _targetPosition.Value - _rb2D.position;
                 var availableMagnitude = Speed * Constants.GridSize;
 
-                var magnitudeDiff = availableMagnitude - requiredMove.magnitude;
+                var magnitudeExcess = availableMagnitude - requiredMove.magnitude;
                 // если за следующий тик мы доедем куда нужно - можно послушать, чего же хочет игрок
-                if (magnitudeDiff > 0)
+                if (magnitudeExcess > 0)
                 {
                     // если игрок жмёт в какую-либо сторону - пытаемся ехать туда
                     if (requestedDirection.HasValue)
@@ -152,13 +161,17 @@ namespace svtz.Tanks.Tank
                         //поворачиваемся
                         _currentDirection = requestedDirection.Value;
 
-                        //едем
-                        _rb2D.MovePosition(_targetPosition.Value + 
-                            DirectionHelper.Directions[_currentDirection] * magnitudeDiff);
+                        if (!_brake)
+                        {
+                            //едем
+                            _rb2D.MovePosition(_targetPosition.Value +
+                                               DirectionHelper.Directions[_currentDirection] * magnitudeExcess);
 
-                        //задаём цель
-                        _targetPosition = SnapToGrid(_targetPosition.Value + 
-                            DirectionHelper.Directions[_currentDirection] * Constants.GridSize);
+                            //задаём цель
+                            _targetPosition = SnapToGrid(_targetPosition.Value +
+                                                         DirectionHelper.Directions[_currentDirection] *
+                                                         Constants.GridSize);
+                        }
                     }
                     else
                     {
