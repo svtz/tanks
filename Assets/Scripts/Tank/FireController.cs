@@ -1,7 +1,8 @@
-﻿using System.Collections;
-using svtz.Tanks.Common;
+﻿using svtz.Tanks.Common;
+using svtz.Tanks.Projectile;
 using UnityEngine;
 using UnityEngine.Networking;
+using Zenject;
 
 namespace svtz.Tanks.Tank
 {
@@ -9,69 +10,60 @@ namespace svtz.Tanks.Tank
     internal sealed class FireController : NetworkBehaviour
     {
 #pragma warning disable 0649
-        public float Speed;
-        public float TTL;
         public float Cooldown;
-        public GameObject BulletPrefab;
-        public Transform BulletSpawn;
+        public Transform ProjectileSpawn;
 #pragma warning restore 0649
 
-        private TeamId _id;
+        private TeamId _teamId;
+        private ProjectilePool _pool;
+        private DelayedExecutor _delayedExecutor;
 
-        [SyncVar]
+        [Inject]
+        private void Construct(TeamId teamId, ProjectilePool pool, DelayedExecutor delayedExecutor)
+        {
+            _teamId = teamId;
+            _pool = pool;
+            _delayedExecutor = delayedExecutor;
+        }
+
+
         private bool _canFire = true;
 
-        // Use this for initialization
-        private void Start()
-        {
-            _id = GetComponent<TeamId>();
-        }
+        [SyncVar]
+        private bool _isFiring = false;
 
         // Update is called once per frame
         private void Update()
         {
-            if (!isLocalPlayer)
-                return;
-
-            if (_canFire && Input.GetKey(KeyCode.Space))
+            if (isLocalPlayer)
             {
-                var id = _id.Id;
-                CmdFire(id);
+                // клиент: сообщаем на сервер положение кнопки
+                var doFire = Input.GetKey(KeyCode.Space);
+                if (doFire ^ _isFiring)
+                {
+                    CmdFire(doFire);
+                }
+            }
+
+            if (isServer)
+            {
+                // сервер: стреляем
+                if (_isFiring && _canFire)
+                {
+                    var projectile = _pool.Spawn();
+                    projectile.Launch(ProjectileSpawn, _teamId);
+                    
+                    // кулдаун
+                    _canFire = false;
+                    _delayedExecutor.Add(() => _canFire = true, Cooldown);
+                }
             }
         }
 
         [Command]
-        private void CmdFire(string teamId)
+        private void CmdFire(bool value)
         {
-            if (!_canFire)
-                return;
-
-            var projectile = (GameObject)Instantiate(
-                BulletPrefab,
-                BulletSpawn.position,
-                BulletSpawn.rotation);
-
-            // Add command
-            projectile.GetComponent<TeamId>().Id = teamId;
-
-            // Add velocity
-            projectile.GetComponent<Rigidbody2D>().velocity = projectile.transform.up * Speed;
-
-            // Spawn on the Clients
-            NetworkServer.Spawn(projectile);
-
-            // Destroy after 2 seconds
-            Destroy(projectile, TTL);
-            StartCoroutine(DoCooldown());
-        }
-
-        private IEnumerator DoCooldown()
-        {
-            if (!isServer) yield break;
-
-            _canFire = false;
-            yield return new WaitForSeconds(Cooldown);
-            _canFire = true;
+            _isFiring = value;
         }
     }
 }

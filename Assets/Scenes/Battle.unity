@@ -232,22 +232,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 11
-    i1: 98
-    i2: 10
-    i3: 104
-    i4: 254
-    i5: 117
-    i6: 184
-    i7: 36
-    i8: 248
-    i9: 91
-    i10: 45
-    i11: 68
-    i12: 200
-    i13: 122
-    i14: 55
-    i15: 228
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!212 &1123451702
@@ -412,9 +412,9 @@ MonoBehaviour:
     RespawnSeconds: 5
     TankPrefab: {fileID: 1468370762080052, guid: b7c5dc9e331d42e49b79c9acc768f362,
       type: 2}
-  CameraPrefab: {fileID: 0}
-  BackgroundPrefab: {fileID: 1721471506832606, guid: 0b620a68fe75b824f85b2d44c87a37e4,
+  ProjectilePrefab: {fileID: 1815654817061048, guid: e8a3fd7c90864644ba7a8ed6ee6d3d97,
     type: 2}
+  ProjectilePoolInitialSize: 20
 --- !u!114 &1786389208
 MonoBehaviour:
   m_ObjectHideFlags: 0

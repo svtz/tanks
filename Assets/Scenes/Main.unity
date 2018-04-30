@@ -231,7 +231,7 @@ MonoBehaviour:
   m_RunInBackground: 1
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
-  m_LogLevel: 2
+  m_LogLevel: 3
   m_PlayerPrefab: {fileID: 0}
   m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 0
@@ -239,9 +239,7 @@ MonoBehaviour:
   m_OnlineScene: 
   m_SpawnPrefabs:
   - {fileID: 1018151495389970, guid: 30f4e7d7d42ef1b4cba3a2781590bd71, type: 2}
-  - {fileID: 1815654817061048, guid: e8a3fd7c90864644ba7a8ed6ee6d3d97, type: 2}
   - {fileID: 1998760418760660, guid: 291e98b2c3b260a4e9695095b9a1ea77, type: 2}
-  - {fileID: 1721471506832606, guid: 0b620a68fe75b824f85b2d44c87a37e4, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -284,7 +282,7 @@ MonoBehaviour:
     m_MaxTimerTimeout: 12000
     m_MinNetSimulatorTimeout: 1
     m_MaxNetSimulatorTimeout: 12000
-  m_Channels: 
+  m_Channels: 0500000000000000
   m_UseWebSockets: 0
   m_UseSimulator: 0
   m_SimulatedLatency: 1
