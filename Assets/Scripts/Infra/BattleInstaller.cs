@@ -14,6 +14,7 @@ namespace svtz.Tanks.Infra
         public MapCreator.Settings MapCreatorSettings;
         public MapObjectsFactory.Settings MapObjectsSettings;
         public TankSpawner.Settings SpawnControllerSettings;
+        private DelayedExecutor _delayedExecutor;
         public GameObject ProjectilePrefab;
         public int ProjectilePoolInitialSize;
 #pragma warning restore 0649
@@ -47,6 +48,7 @@ namespace svtz.Tanks.Infra
                 .WithInitialSize(ProjectilePoolInitialSize)
                 .ExpandByOneAtATime()
                 .FromComponentInNewPrefab(ProjectilePrefab);
+            Container.Bind<ProjectilePool.Client>().AsSingle().WithArguments(ProjectilePrefab).NonLazy();
         }
     }
 }

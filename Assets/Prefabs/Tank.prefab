@@ -244,8 +244,6 @@ MonoBehaviour:
   Speed: 15
   TTL: 2
   Cooldown: 0.25
-  BulletPrefab: {fileID: 1815654817061048, guid: e8a3fd7c90864644ba7a8ed6ee6d3d97,
-    type: 2}
   BulletSpawn: {fileID: 4912365734415398}
 --- !u!114 &114043458144605562
 MonoBehaviour:

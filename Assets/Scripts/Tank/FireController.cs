@@ -11,8 +11,6 @@ namespace svtz.Tanks.Tank
     internal sealed class FireController : NetworkBehaviour
     {
 #pragma warning disable 0649
-        public float Speed;
-        public float TTL;
         public float Cooldown;
         public Transform BulletSpawn;
 #pragma warning restore 0649
@@ -50,6 +48,14 @@ namespace svtz.Tanks.Tank
             }
         }
 
+        
+        [ClientRpc]
+        public void RpcFire(GameObject go)
+        {
+            var projectile = go.GetComponent<Projectile.Projectile>();
+            projectile.Launch(BulletSpawn, _id);
+        }
+
         [Command]
         private void CmdFire(string teamId)
         {
@@ -57,14 +63,11 @@ namespace svtz.Tanks.Tank
             if (!_canFire)
                 return;
 
-            _canFire = false;
-
             var projectile = _pool.Spawn();
-            projectile.Launch(BulletSpawn, Speed, _id);
-            NetworkServer.Spawn(projectile.gameObject);
+            RpcFire(projectile.gameObject);
 
-            // Destroy after 2 seconds
-            Destroy(projectile, TTL);
+            // кулдаун
+            _canFire = false;
             _delayedExecutor.Add(() => _canFire = true, Cooldown);
         }
     }
