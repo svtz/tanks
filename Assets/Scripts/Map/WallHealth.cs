@@ -15,7 +15,7 @@ namespace svtz.Tanks.Map
 
         protected override void OnZeroHealthAtServer()
         {
-            _mapObjectsManager.RemoveAt(transform.position);
+            _mapObjectsManager.Remove(gameObject);
         }
 
         protected override void OnChangeHealthAtClient(int health)

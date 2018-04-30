@@ -7,7 +7,7 @@ namespace svtz.Tanks.Map
     internal sealed class MapObjectsManager
     {
         private readonly MapObjectsFactory _moFactory;
-        private readonly Dictionary<Vector2, GameObject> _gameObjectsIndex = new Dictionary<Vector2, GameObject>();
+        private readonly HashSet<GameObject> _mapObjects = new HashSet<GameObject>();
 
         public MapObjectsManager(MapObjectsFactory moFactory)
         {
@@ -16,22 +16,23 @@ namespace svtz.Tanks.Map
 
         public void Add(Vector2 position, MapObjectKind objectKind)
         {
-            var mo = _moFactory.Create(objectKind, position);
-            NetworkServer.Spawn(mo);
-            _gameObjectsIndex.Add(position, mo);
+            var mos = _moFactory.Create(objectKind, position);
+            foreach (var mo in mos)
+            {
+                NetworkServer.Spawn(mo);
+                _mapObjects.Add(mo);
+            }
         }
 
-        public void RemoveAt(Vector2 position)
+        public void Remove(GameObject mo)
         {
-            GameObject mo;
-            if (!_gameObjectsIndex.TryGetValue(position, out mo))
+            if (!_mapObjects.Remove(mo))
             {
                 Debug.LogWarning("Попытка удалить несуществующий объект с карты");
                 return;
             }
 
             NetworkServer.Destroy(mo);
-            _gameObjectsIndex.Remove(position);
         }
     }
 
