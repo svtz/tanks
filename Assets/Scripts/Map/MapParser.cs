@@ -42,6 +42,8 @@ namespace svtz.Tanks.Map
                     return MapObjectKind.RegularWall;
                 case 'X':
                     return MapObjectKind.UnbreakableWall;
+                case 'T':
+                    return MapObjectKind.Tree;
                 case 'S':
                     return MapObjectKind.RandomPlayerSpawn;
                

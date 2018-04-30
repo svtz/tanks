@@ -15,6 +15,7 @@ namespace svtz.Tanks.Map
 #pragma warning disable 0649
             public GameObject UnbreakableWallPrefab;
             public GameObject RegularWallPrefab;
+            public GameObject TreePrefab;
 #pragma warning restore 0649
         }
 
@@ -57,7 +58,11 @@ namespace svtz.Tanks.Map
                         new CreationInfo(settings.RegularWallPrefab, new Vector2(-0.25f, -0.25f)),
                         new CreationInfo(settings.RegularWallPrefab, new Vector2(0.25f, -0.25f))
                     }
-                }
+                },
+                {
+                    MapObjectKind.Tree,
+                    new[] {new CreationInfo(settings.TreePrefab)}
+                },
             };
         }
 

@@ -4,10 +4,10 @@ X                  X
  S      XXXX     S  
                     
   ***          ***  
-    *  XX**XX  *    
-    X  X    X  X    
-    X  X    X  X    
-    *  XX**XX  *    
+TTTT*  XX**XX  *TTTT
+TTTTX  X    X  XTTTT
+TTTTX  X    X  XTTTT
+TTTT*  XX**XX  *TTTT
   ***          ***  
                     
         XXXX        

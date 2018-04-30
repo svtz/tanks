@@ -408,6 +408,8 @@ MonoBehaviour:
       type: 2}
     RegularWallPrefab: {fileID: 1018151495389970, guid: 30f4e7d7d42ef1b4cba3a2781590bd71,
       type: 2}
+    TreePrefab: {fileID: 1289022681691262, guid: 472a9b8fc082a314b89cd13ef10cd45f,
+      type: 2}
   SpawnControllerSettings:
     RespawnSeconds: 5
     TankPrefab: {fileID: 1468370762080052, guid: b7c5dc9e331d42e49b79c9acc768f362,

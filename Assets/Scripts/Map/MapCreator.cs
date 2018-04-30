@@ -70,6 +70,7 @@ namespace svtz.Tanks.Map
 
                     case MapObjectKind.UnbreakableWall:
                     case MapObjectKind.RegularWall:
+                    case MapObjectKind.Tree:
                         _mapObjectsManager.Add(-map.Width / 2 + j + 0.5f, -map.Height / 2 + i + 0.5f, cellKind);
                         break;
 
