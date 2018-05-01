@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using svtz.Tanks.Common;
 using UnityEngine;
 using UnityEngine.Networking;
 using Zenject;
@@ -11,7 +12,7 @@ namespace svtz.Tanks.Network
         MainMenu, StartServer, StartClient, ServerLobby, ClientLobby, InGame, GameMenu
     }
 
-    internal sealed class CustomNetworkManagerHUD : MonoBehaviour {
+    internal sealed class GUIManager : MonoBehaviour {
         public GUISkin skin;
         private GUIState state = 0;
         public bool showGUI = true;

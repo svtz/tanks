@@ -24,7 +24,7 @@ namespace svtz.Tanks.Infra
 
             Container.Bind<CustomNetworkManager>().FromComponentInNewPrefab(NetworkManagerPrefab).AsSingle();
             Container.Bind<CustomNetworkDiscovery>().FromComponentInNewPrefab(NetworkDiscoveryPrefab).AsSingle();
-            Container.Bind<CustomNetworkManagerHUD>()
+            Container.Bind<GUIManager>()
                 .FromNewComponentOnNewGameObject()
                 .WithGameObjectName("GUI")
                 .AsSingle()
