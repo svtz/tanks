@@ -13,14 +13,28 @@ namespace svtz.Tanks.UserInterface.States
             NetworkManager = networkManager;
         }
 
-        protected Rect LobbyPanel()
+        public sealed override GUIState OnGUI()
         {
-            var style = GetStyle("LobbyArea");
-            return new Rect(
-                style.padding.left,
-                style.padding.top,
-                style.fixedWidth,
-                Screen.height - style.padding.top - style.padding.bottom);
+            var nextState = Key;
+
+            Center(() =>
+            {
+                foreach (var player in NetworkManager.lobbySlots)
+                {
+                    var customLobbyPlayer = player as CustomLobbyPlayer;
+                    if (customLobbyPlayer != null)
+                    {
+                        customLobbyPlayer.DrawGUI(GuiSkin);
+                    }
+                }
+
+                if (GUILayout.Button("Вернуться назад", GetStyle("ReturnButton")))
+                {
+                    nextState = OnEscapePressed();
+                }
+            });
+
+            return nextState;
         }
     }
 }

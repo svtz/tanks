@@ -30,13 +30,13 @@ namespace svtz.Tanks.Network
             _playerName = name;
         }
 
-        public void DrawGUI()
+        public void DrawGUI(GUISkin skin)
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label(_playerName, GUILayout.Width(100));
+            GUILayout.Label(_playerName, skin.GetStyle("LobbyPlayerLabel"));
             if (isLocalPlayer)
             {
-                if (GUILayout.Button(readyToBegin ? "ГОТОВ" : "Не готов"))
+                if (GUILayout.Button(readyToBegin ? "ГОТОВ" : "Не готов", skin.GetStyle("ReadyButton")))
                 {
                     readyToBegin = !readyToBegin;
                     if (readyToBegin)
@@ -46,7 +46,7 @@ namespace svtz.Tanks.Network
                 }
             }else
             {
-                GUILayout.Label(readyToBegin ? "ГОТОВ" : "Не готов");
+                GUILayout.Label(readyToBegin ? "ГОТОВ" : "Не готов", skin.GetStyle("ReadyButton"));
             }
             GUILayout.EndHorizontal();
         }

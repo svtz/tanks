@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace svtz.Tanks.UserInterface.States
 {
     internal abstract class AbstractGUIState : IGUIState
-{
-        private readonly GUISkin _guiSkin;
+    {
+        protected GUISkin GuiSkin { get; private set; }
 
         public abstract GUIState Key { get; }
         public abstract GUIState OnGUI();
@@ -12,12 +13,29 @@ namespace svtz.Tanks.UserInterface.States
 
         protected AbstractGUIState(GUISkin guiSkin)
         {
-            _guiSkin = guiSkin;
+            GuiSkin = guiSkin;
         }
 
         protected GUIStyle GetStyle(string name)
         {
-            return _guiSkin.GetStyle(name);
+            return GuiSkin.GetStyle(name);
+        }
+
+        protected void Center(Action layout)
+        {
+            GUILayout.BeginArea(Screen.safeArea);
+            GUILayout.FlexibleSpace();
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.BeginVertical(GetStyle("MenuArea"));
+
+            layout();
+
+            GUILayout.EndVertical();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndHorizontal();
+            GUILayout.FlexibleSpace();
+            GUILayout.EndArea();
         }
 
         protected Rect GamePanel()

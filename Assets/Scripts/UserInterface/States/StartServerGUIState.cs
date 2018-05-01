@@ -14,30 +14,29 @@ namespace svtz.Tanks.UserInterface.States
         {
             var newState = Key;
 
-            GUI.Box(GamePanel(), "");
-            GUILayout.BeginArea(GamePanel(), GetStyle("MenuArea"));
-            GUILayout.BeginVertical();
-            GUILayout.Label("Введите название игры");
-            NetworkDiscovery.serverName =
-                GUILayout.TextField(NetworkDiscovery.serverName);
-            GUILayout.Label("Введите порт");
-            string newPort = GUILayout.TextField(NetworkDiscovery.networkPort.ToString());
-            int i_new_port = 0;
-            if (int.TryParse(newPort, out i_new_port))
-                NetworkDiscovery.networkPort = i_new_port;
-            GUILayout.Label("Введите имя");
-            NetworkDiscovery.playerName =
-                GUILayout.TextField(NetworkDiscovery.playerName);
-            if (GUILayout.Button("Создать игру"))
+            Center(() =>
             {
-                if (NetworkDiscovery.CustomStartServer())
-                    newState = GUIState.ServerLobby;
-            }
-            if (GUILayout.Button("Вернуться назад"))
-                newState = OnEscapePressed();
-            GUILayout.EndVertical();
-            GUILayout.EndArea();
+                GUILayout.Label("НОВАЯ ИГРА: ХОСТ", GetStyle("MenuTitle"));
 
+                GUILayout.Label("Имя хоста:");
+                NetworkDiscovery.serverName =
+                    GUILayout.TextField(NetworkDiscovery.serverName);
+                GUILayout.Label("Порт:");
+                string newPort = GUILayout.TextField(NetworkDiscovery.networkPort.ToString());
+                int i_new_port = 0;
+                if (int.TryParse(newPort, out i_new_port))
+                    NetworkDiscovery.networkPort = i_new_port;
+                GUILayout.Label("Имя игрока:");
+                NetworkDiscovery.playerName =
+                    GUILayout.TextField(NetworkDiscovery.playerName);
+                if (GUILayout.Button("СОЗДАТЬ"))
+                {
+                    if (NetworkDiscovery.CustomStartServer())
+                        newState = GUIState.ServerLobby;
+                }
+                if (GUILayout.Button("ОТМЕНА", GetStyle("ReturnButton")))
+                    newState = OnEscapePressed();
+            });
             return newState;
         }
 

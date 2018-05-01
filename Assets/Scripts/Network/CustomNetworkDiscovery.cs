@@ -18,8 +18,8 @@ namespace svtz.Tanks.Network
         public void Construct(CustomNetworkManager networkManager)
         {
             manager = networkManager;
-            playerName = System.Environment.MachineName;
-            serverName = System.Environment.MachineName;
+            playerName = System.Environment.UserName;
+            serverName = "Игра " + System.Environment.MachineName;
         }
 
         public override void OnReceivedBroadcast(string fromAddress, string data)

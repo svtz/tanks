@@ -1,4 +1,5 @@
-﻿using svtz.Tanks.Network;
+﻿using System;
+using svtz.Tanks.Network;
 using UnityEngine;
 
 namespace svtz.Tanks.UserInterface.States
@@ -18,21 +19,30 @@ namespace svtz.Tanks.UserInterface.States
         {
             var nextState = Key;
 
-            GUI.Box(GamePanel(), "");
-            GUILayout.BeginArea(GamePanel(), GetStyle("MenuArea"));
-            GUILayout.BeginVertical();
-            GUILayout.Label("ПанкоТанки");
-            if (GUILayout.Button("Присоединиться к игре"))
+            Center(() =>
             {
-                NetworkDiscovery.CustomStartServerDiscovery();
-                nextState = GUIState.StartClient;
-            }
-            if (GUILayout.Button("Создать игру"))
-                nextState = GUIState.StartServer;
-            if (GUILayout.Button("Покинуть игру"))
-                Application.Quit();
-            GUILayout.EndVertical();
-            GUILayout.EndArea();
+                GUILayout.Label("ПанкоТанки", GetStyle("MenuTitle"));
+
+                if (GUILayout.Button("НОВАЯ ИГРА: ХОСТ"))
+                {
+                    nextState = GUIState.StartServer;
+                }
+
+                if (GUILayout.Button("НОВАЯ ИГРА: ПОИСК"))
+                {
+                    NetworkDiscovery.CustomStartServerDiscovery();
+                    nextState = GUIState.StartClient;
+                }
+
+                if (GUILayout.Button("ВЫХОД", GetStyle("ReturnButton")))
+                {
+#if UNITY_EDITOR
+                    UnityEditor.EditorApplication.isPlaying = false;
+#else
+                    Application.Quit();
+#endif
+                }
+            });
 
             return nextState;
         }
