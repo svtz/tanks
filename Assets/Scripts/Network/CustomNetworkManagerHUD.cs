@@ -43,9 +43,9 @@ namespace svtz.Tanks.Network
             state = GUIState.InGame;
         }
 
-        public void ShowMenu()
+        public void ShowMenu(GUIState state)
         {
-            state = GUIState.GameMenu;
+            this.state = state;
         }
 
         private void EscapeHandler(bool escape)
@@ -104,6 +104,7 @@ namespace svtz.Tanks.Network
                         }
                         if (GUILayout.Button("Создать игру"))
                             state = GUIState.StartServer;
+                        GUILayout.FlexibleSpace();
                         if (GUILayout.Button("Покинуть игру"))
                             Application.Quit();
                         GUILayout.EndVertical();
@@ -129,6 +130,7 @@ namespace svtz.Tanks.Network
                             if (GetComponent<CustomNetworkDiscovery>().CustomStartServer())
                                 state = GUIState.ServerLobby;
                         }
+                        GUILayout.FlexibleSpace();
                         EscapeHandler(GUILayout.Button("Вернуться назад"));
                         GUILayout.EndVertical();
                         GUILayout.EndArea();
@@ -151,8 +153,7 @@ namespace svtz.Tanks.Network
                             }
                         }
                         GUILayout.EndScrollView();
-
-
+                        GUILayout.FlexibleSpace();
                         EscapeHandler(GUILayout.Button("Вернуться назад"));
                         GUILayout.EndVertical();
                         GUILayout.EndArea();
@@ -195,6 +196,7 @@ namespace svtz.Tanks.Network
                         GUILayout.Label("Игровое меню");
 
                         EscapeHandler(GUILayout.Button("Вернуться в игру"));
+                        GUILayout.FlexibleSpace();
                         if (GUILayout.Button("Покинуть игру"))
                         {
                             GetComponent<CustomNetworkDiscovery>().CustomStop();

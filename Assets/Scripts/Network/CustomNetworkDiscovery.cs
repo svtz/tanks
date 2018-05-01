@@ -16,7 +16,7 @@ namespace svtz.Tanks.Network
 
         void Start()
         {
-            LogFilter.currentLogLevel = 1;
+            //LogFilter.currentLogLevel = 1;
             playerName = System.Environment.MachineName;
             serverName = System.Environment.MachineName;
             manager = GetComponent<NetworkManager>();
@@ -28,7 +28,7 @@ namespace svtz.Tanks.Network
             ServerData newServerData = ScriptableObject.CreateInstance<ServerData>();
             newServerData.Load(data);
             OnDiscovery(newServerData);
-            Debug.Log(data);
+            //Debug.Log(data);
         }
 
         private void OnDiscovery(ServerData newServerData)
@@ -86,9 +86,10 @@ namespace svtz.Tanks.Network
 
         public void CustomStop()
         {
-            if (isServer)
+            if (NetworkServer.active)
             {
-                StopBroadcast();
+                if (isServer)
+                    StopBroadcast();
                 manager.StopHost();
             }
             else

@@ -40,42 +40,18 @@ namespace svtz.Tanks.Network
             var teamManager = ProjectContext.Instance.Container.Resolve<TeamManager>();
             teamManager.RegisterPlayer(conn);
         }
-
-        /*
-    public override void ServerChangeScene(string sceneName)
-    {
-        if (sceneName == lobbyScene)
-        {
-            foreach (var lobbyPlayer in lobbySlots)
-            {
-                if (lobbyPlayer == null)
-                    continue;
-
-                // find the game-player object for this connection, and destroy it
-                var uv = lobbyPlayer.GetComponent<NetworkIdentity>();
-
-                PlayerController playerController;
-                if (uv.connectionToClient.GetPlayerController(uv.playerControllerId, out playerController))
-                {
-                    NetworkServer.Destroy(playerController.gameObject);
-                }
-
-                if (NetworkServer.active)
-                {
-                    // re-add the lobby object
-                    lobbyPlayer.GetComponent<NetworkLobbyPlayer>().readyToBegin = false;
-                    NetworkServer.ReplacePlayerForConnection(uv.connectionToClient, lobbyPlayer.gameObject, uv.playerControllerId);
-                }
-            }
-        }
-        base.ServerChangeScene(sceneName);
-    }*/
-
+        
         public override void OnLobbyClientSceneChanged(NetworkConnection conn)
         {
             base.OnLobbyClientSceneChanged(conn);
             if (SceneManager.GetSceneAt(0).name == playScene)
                 GetComponent<CustomNetworkManagerHUD>().CloseMenu();
+        }
+
+        public override void OnClientDisconnect(NetworkConnection conn)
+        {
+            base.OnClientDisconnect(conn);
+            GetComponent<CustomNetworkManagerHUD>().ShowMenu(GUIState.MainMenu);
         }
     }
 }
