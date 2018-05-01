@@ -52,6 +52,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68f1a27cc1cc187469877a4e2769c7d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GuiSkin: {fileID: 11400000, guid: e5c33d0194ffd2b4899df896897e63a5, type: 2}
+  NetworkManagerPrefab: {fileID: 1533877938861358, guid: fe81d39037da8b74ba7c734b5fc4b0ca,
+    type: 2}
+  NetworkDiscoveryPrefab: {fileID: 1311880834755664, guid: ec3c14463c2c03a4f977023d348d0fce,
+    type: 2}
 --- !u!114 &114315038620312670
 MonoBehaviour:
   m_ObjectHideFlags: 1

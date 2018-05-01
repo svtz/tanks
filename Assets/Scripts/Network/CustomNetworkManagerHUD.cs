@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using Zenject;
 
 namespace svtz.Tanks.Network
 {
@@ -10,8 +11,7 @@ namespace svtz.Tanks.Network
         MainMenu, StartServer, StartClient, ServerLobby, ClientLobby, InGame, GameMenu
     }
 
-    [RequireComponent(typeof(CustomNetworkDiscovery))]
-    public class CustomNetworkManagerHUD : MonoBehaviour {
+    internal sealed class CustomNetworkManagerHUD : MonoBehaviour {
         public GUISkin skin;
         private GUIState state = 0;
         public bool showGUI = true;
@@ -38,6 +38,20 @@ namespace svtz.Tanks.Network
                 Screen.height - style.padding.top - style.padding.bottom);
         }
 
+        private CustomNetworkDiscovery _networkDiscovery;
+        private CustomNetworkManager _networkManager;
+
+        [Inject]
+        public void Construct(
+            CustomNetworkDiscovery networkDiscovery,
+            CustomNetworkManager networkManager,
+            GUISkin guiSkin)
+        {
+            _networkDiscovery = networkDiscovery;
+            _networkManager = networkManager;
+            skin = guiSkin;
+        }
+
         public void CloseMenu()
         {
             state = GUIState.InGame;
@@ -58,16 +72,16 @@ namespace svtz.Tanks.Network
                     state = GUIState.MainMenu;
                     break;
                 case GUIState.StartClient:
-                    GetComponent<CustomNetworkDiscovery>().CustomStopServerDiscovery();
+                    _networkDiscovery.CustomStopServerDiscovery();
                     state = GUIState.MainMenu;
                     break;
                 case GUIState.ServerLobby:
-                    GetComponent<CustomNetworkDiscovery>().CustomStop();
+                    _networkDiscovery.CustomStop();
                     state = GUIState.StartServer;
                     break;
                 case GUIState.ClientLobby:
-                    GetComponent<CustomNetworkDiscovery>().CustomStop();
-                    GetComponent<CustomNetworkDiscovery>().CustomStartServerDiscovery();
+                    _networkDiscovery.CustomStop();
+                    _networkDiscovery.CustomStartServerDiscovery();
                     state = GUIState.StartClient;
                     break;
                 case GUIState.InGame:
@@ -89,7 +103,7 @@ namespace svtz.Tanks.Network
             {
                 if (skin != null)
                     GUI.skin = skin;
-                //GetComponent<CustomNetworkDiscovery>().
+                //_networkDiscovery.
                 switch (state)
                 {
                     case GUIState.MainMenu:
@@ -99,7 +113,7 @@ namespace svtz.Tanks.Network
                         GUILayout.Label(gameName);
                         if (GUILayout.Button("Присоединиться к игре"))
                         {
-                            GetComponent<CustomNetworkDiscovery>().CustomStartServerDiscovery();
+                            _networkDiscovery.CustomStartServerDiscovery();
                             state = GUIState.StartClient;
                         }
                         if (GUILayout.Button("Создать игру"))
@@ -114,19 +128,19 @@ namespace svtz.Tanks.Network
                         GUILayout.BeginArea(GamePanel(), skin.GetStyle("MenuArea"));
                         GUILayout.BeginVertical();
                         GUILayout.Label("Введите название игры");
-                        GetComponent<CustomNetworkDiscovery>().serverName =
-                            GUILayout.TextField(GetComponent<CustomNetworkDiscovery>().serverName);
+                        _networkDiscovery.serverName =
+                            GUILayout.TextField(_networkDiscovery.serverName);
                         GUILayout.Label("Введите порт");
-                        string newPort = GUILayout.TextField(GetComponent<CustomNetworkDiscovery>().networkPort.ToString());
+                        string newPort = GUILayout.TextField(_networkDiscovery.networkPort.ToString());
                         int i_new_port = 0;
                         if (int.TryParse(newPort, out i_new_port))
-                            GetComponent<CustomNetworkDiscovery>().networkPort = i_new_port;
+                            _networkDiscovery.networkPort = i_new_port;
                         GUILayout.Label("Введите имя");
-                        GetComponent<CustomNetworkDiscovery>().playerName =
-                            GUILayout.TextField(GetComponent<CustomNetworkDiscovery>().playerName);
+                        _networkDiscovery.playerName =
+                            GUILayout.TextField(_networkDiscovery.playerName);
                         if (GUILayout.Button("Создать игру"))
                         {
-                            if (GetComponent<CustomNetworkDiscovery>().CustomStartServer())
+                            if (_networkDiscovery.CustomStartServer())
                                 state = GUIState.ServerLobby;
                         }
                         EscapeHandler(GUILayout.Button("Вернуться назад"));
@@ -138,15 +152,15 @@ namespace svtz.Tanks.Network
                         GUILayout.BeginArea(GamePanel(), skin.GetStyle("MenuArea"));
                         GUILayout.BeginVertical();
                         GUILayout.Label("Введите имя");
-                        GetComponent<CustomNetworkDiscovery>().playerName =
-                            GUILayout.TextField(GetComponent<CustomNetworkDiscovery>().playerName);
+                        _networkDiscovery.playerName =
+                            GUILayout.TextField(_networkDiscovery.playerName);
                         GUILayout.Label("Выберите игру");
                         scrollPosition = GUILayout.BeginScrollView(scrollPosition);
-                        foreach(ServerData record in GetComponent<CustomNetworkDiscovery>().findedServers)
+                        foreach(ServerData record in _networkDiscovery.findedServers)
                         {
                             if (GUILayout.Button(record.ServerName +  "("+ record.NetworkAddress+":"+record.Port +")"))
                             {
-                                GetComponent<CustomNetworkDiscovery>().CustomStartClient(record);
+                                _networkDiscovery.CustomStartClient(record);
                                 state = GUIState.ClientLobby;
                             }
                         }
@@ -161,7 +175,7 @@ namespace svtz.Tanks.Network
                         GUI.Box(LobbyPanel(), "");
                         GUILayout.BeginArea(LobbyPanel(), skin.GetStyle("LobbyArea"));
                         GUILayout.BeginVertical();
-                        foreach (NetworkLobbyPlayer player in GetComponent<NetworkLobbyManager>().lobbySlots)
+                        foreach (NetworkLobbyPlayer player in _networkManager.lobbySlots)
                         {
                             if (player != null)
                                 ((CustomLobbyPlayer)player).DrawGUI();
@@ -175,7 +189,7 @@ namespace svtz.Tanks.Network
                         GUI.Box(LobbyPanel(), "");
                         GUILayout.BeginArea(LobbyPanel(), skin.GetStyle("LobbyArea"));
                         GUILayout.BeginVertical();
-                        foreach (NetworkLobbyPlayer player in GetComponent<NetworkLobbyManager>().lobbySlots)
+                        foreach (NetworkLobbyPlayer player in _networkManager.lobbySlots)
                         {
                             if (player != null)
                                 ((CustomLobbyPlayer)player).DrawGUI();
@@ -197,7 +211,7 @@ namespace svtz.Tanks.Network
                         EscapeHandler(GUILayout.Button("Вернуться в игру"));
                         if (GUILayout.Button("Покинуть игру"))
                         {
-                            GetComponent<CustomNetworkDiscovery>().CustomStop();
+                            _networkDiscovery.CustomStop();
                             state = GUIState.MainMenu;
                         }
                         GUILayout.EndVertical();

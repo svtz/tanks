@@ -68,7 +68,7 @@ namespace Zenject
             {
                 prefab = (GameObject)Resources.Load(ProjectContextResourcePathOld);
             }
-
+            
             return prefab;
         }
 

@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using svtz.Tanks.Network;
 using UnityEngine.Networking;
 using Zenject;
 
 namespace svtz.Tanks.Common
 {
-    internal sealed class TeamManager : IInitializable
+    internal sealed class TeamManager
     {
         private readonly Dictionary<NetworkConnection, string> _teamByConnection
             = new Dictionary<NetworkConnection, string>();
@@ -13,15 +14,37 @@ namespace svtz.Tanks.Common
 
         private const int TeamIdMessageCode = 2143;
 
+
+
+        private ConnectedToServerSignal _connectedToServer;
+        private NetworkClient _currentClient;
+
+        [Inject]
+        private void Construct(ConnectedToServerSignal connectedToServer)
+        {
+            _connectedToServer = connectedToServer;
+            _connectedToServer.Listen(InitializeTeamIdMessages);
+        }
+
+        private void InitializeTeamIdMessages(NetworkClient newClient)
+        {
+            if (newClient == _currentClient)
+                return;
+
+            if (_currentClient != null)
+            {
+                _currentClient.UnregisterHandler(TeamIdMessageCode);
+                _allyTeam = null;
+            }
+
+            _currentClient = newClient;
+            _currentClient.RegisterHandler(TeamIdMessageCode, OnTeamIdReceived);
+        }
+
         private void OnTeamIdReceived(NetworkMessage netmsg)
         {
             var msg = netmsg.ReadMessage<TeamIdMessage>();
             _allyTeam = msg.TeamId;
-        }
-
-        public void Initialize()
-        {
-            NetworkManager.singleton.client.RegisterHandler(TeamIdMessageCode, OnTeamIdReceived);
         }
 
         private class TeamIdMessage : MessageBase

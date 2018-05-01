@@ -14,7 +14,6 @@ namespace svtz.Tanks.Infra
         public MapCreator.Settings MapCreatorSettings;
         public MapObjectsFactory.Settings MapObjectsSettings;
         public TankSpawner.Settings SpawnControllerSettings;
-        private DelayedExecutor _delayedExecutor;
         public GameObject ProjectilePrefab;
         public int ProjectilePoolInitialSize;
 #pragma warning restore 0649

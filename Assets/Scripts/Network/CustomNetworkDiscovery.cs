@@ -1,25 +1,29 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using Zenject;
 
 namespace svtz.Tanks.Network
 {
-    [RequireComponent(typeof(NetworkManager))]
-
-    public class CustomNetworkDiscovery : NetworkDiscovery {
+    internal sealed class CustomNetworkDiscovery : NetworkDiscovery {
         public string serverName;
         public string playerName;
         public int networkPort = 7777;
         private ServerData serverData ;
-        private NetworkManager manager;
+        private CustomNetworkManager manager;
         public List<ServerData> findedServers = null;
+
+
+        [Inject]
+        public void Construct(CustomNetworkManager networkManager)
+        {
+            manager = networkManager;
+        }
 
         void Start()
         {
-            LogFilter.currentLogLevel = 1;
             playerName = System.Environment.MachineName;
             serverName = System.Environment.MachineName;
-            manager = GetComponent<NetworkManager>();
         }
     
 

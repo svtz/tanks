@@ -6,8 +6,25 @@ using Zenject;
 
 namespace svtz.Tanks.Network
 {
-    public class CustomNetworkManager : NetworkLobbyManager
+    internal sealed class CustomNetworkManager : NetworkLobbyManager
     {
+        private CustomNetworkManagerHUD _hud;
+        private CustomNetworkDiscovery _networkDiscovery;
+        private TeamManager _teamManager;
+        private ConnectedToServerSignal _connectedToServer;
+
+        [Inject]
+        public void Construct(CustomNetworkManagerHUD hud,
+            TeamManager teamManager,
+            CustomNetworkDiscovery networkDiscovery,
+            ConnectedToServerSignal connectedToServer)
+        {
+            _hud = hud;
+            _teamManager = teamManager;
+            _connectedToServer = connectedToServer;
+            _networkDiscovery = networkDiscovery;
+        }
+
         public override NetworkClient StartHost()
         {
             return base.StartHost();
@@ -21,7 +38,7 @@ namespace svtz.Tanks.Network
 
         public override void OnLobbyServerPlayersReady()
         {
-            GetComponent<CustomNetworkDiscovery>().StopBroadcast();
+            _networkDiscovery.StopBroadcast();
             base.OnLobbyServerPlayersReady();
         }
         public override GameObject OnLobbyServerCreateGamePlayer(NetworkConnection conn, short playerControllerId)
@@ -36,46 +53,22 @@ namespace svtz.Tanks.Network
         {
             base.OnLobbyServerConnect(conn);
 
-            // фу-фу-фу таким быть, но пока Network не запаковано в контейнер, будет так
-            var teamManager = ProjectContext.Instance.Container.Resolve<TeamManager>();
-            teamManager.RegisterPlayer(conn);
+            _teamManager.RegisterPlayer(conn);
         }
 
-        /*
-    public override void ServerChangeScene(string sceneName)
-    {
-        if (sceneName == lobbyScene)
+
+        public override void OnStartClient(NetworkClient lobbyClient)
         {
-            foreach (var lobbyPlayer in lobbySlots)
-            {
-                if (lobbyPlayer == null)
-                    continue;
+            base.OnStartClient(lobbyClient);
 
-                // find the game-player object for this connection, and destroy it
-                var uv = lobbyPlayer.GetComponent<NetworkIdentity>();
-
-                PlayerController playerController;
-                if (uv.connectionToClient.GetPlayerController(uv.playerControllerId, out playerController))
-                {
-                    NetworkServer.Destroy(playerController.gameObject);
-                }
-
-                if (NetworkServer.active)
-                {
-                    // re-add the lobby object
-                    lobbyPlayer.GetComponent<NetworkLobbyPlayer>().readyToBegin = false;
-                    NetworkServer.ReplacePlayerForConnection(uv.connectionToClient, lobbyPlayer.gameObject, uv.playerControllerId);
-                }
-            }
+            _connectedToServer.Fire(lobbyClient);
         }
-        base.ServerChangeScene(sceneName);
-    }*/
 
         public override void OnLobbyClientSceneChanged(NetworkConnection conn)
         {
             base.OnLobbyClientSceneChanged(conn);
             if (SceneManager.GetSceneAt(0).name == playScene)
-                GetComponent<CustomNetworkManagerHUD>().CloseMenu();
+                _hud.CloseMenu();
         }
     }
 }
