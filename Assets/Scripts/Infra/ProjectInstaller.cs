@@ -20,6 +20,7 @@ namespace svtz.Tanks.Infra
             Container.BindInstance(GuiSkin);
 
             Container.DeclareSignal<ConnectedToServerSignal>();
+            Container.DeclareSignal<GameStartedSignal>();
 
             Container.Bind<CustomNetworkManager>().FromComponentInNewPrefab(NetworkManagerPrefab).AsSingle();
             Container.Bind<CustomNetworkDiscovery>().FromComponentInNewPrefab(NetworkDiscoveryPrefab).AsSingle();

@@ -45,16 +45,19 @@ namespace svtz.Tanks.Network
         public void Construct(
             CustomNetworkDiscovery networkDiscovery,
             CustomNetworkManager networkManager,
+            GameStartedSignal gameStartedSignal,
             GUISkin guiSkin)
         {
             _networkDiscovery = networkDiscovery;
             _networkManager = networkManager;
             skin = guiSkin;
+            gameStartedSignal.Listen(OnGameStarted);
         }
 
-        public void CloseMenu()
+        private void OnGameStarted()
         {
             state = GUIState.InGame;
+
         }
 
         public void ShowMenu()

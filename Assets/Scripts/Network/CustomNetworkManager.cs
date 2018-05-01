@@ -8,32 +8,21 @@ namespace svtz.Tanks.Network
 {
     internal sealed class CustomNetworkManager : NetworkLobbyManager
     {
-        private CustomNetworkManagerHUD _hud;
         private CustomNetworkDiscovery _networkDiscovery;
         private TeamManager _teamManager;
-        private ConnectedToServerSignal _connectedToServer;
+        private ConnectedToServerSignal _connectedToServerSignal;
+        private GameStartedSignal _gameStartedSignal;
 
         [Inject]
-        public void Construct(CustomNetworkManagerHUD hud,
-            TeamManager teamManager,
+        public void Construct(TeamManager teamManager,
             CustomNetworkDiscovery networkDiscovery,
-            ConnectedToServerSignal connectedToServer)
+            ConnectedToServerSignal connectedToServerSignal,
+            GameStartedSignal gameStartedSignal)
         {
-            _hud = hud;
             _teamManager = teamManager;
-            _connectedToServer = connectedToServer;
+            _connectedToServerSignal = connectedToServerSignal;
             _networkDiscovery = networkDiscovery;
-        }
-
-        public override NetworkClient StartHost()
-        {
-            return base.StartHost();
-        }
-    
-        public override bool OnLobbyServerSceneLoadedForPlayer(GameObject lobbyPlayer, GameObject gamePlayer)
-        {
-            Debug.Log("Loaded");
-            return base.OnLobbyServerSceneLoadedForPlayer(lobbyPlayer, gamePlayer);
+            _gameStartedSignal = gameStartedSignal;
         }
 
         public override void OnLobbyServerPlayersReady()
@@ -43,8 +32,7 @@ namespace svtz.Tanks.Network
         }
         public override GameObject OnLobbyServerCreateGamePlayer(NetworkConnection conn, short playerControllerId)
         {
-            Debug.Log("Instantiated");
-            GameObject player = (GameObject)Instantiate(gamePlayerPrefab, Vector3.zero, Quaternion.identity);
+            var player = Instantiate(gamePlayerPrefab, Vector3.zero, Quaternion.identity);
             NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
             return player;
         }
@@ -61,14 +49,14 @@ namespace svtz.Tanks.Network
         {
             base.OnStartClient(lobbyClient);
 
-            _connectedToServer.Fire(lobbyClient);
+            _connectedToServerSignal.Fire(lobbyClient);
         }
 
         public override void OnLobbyClientSceneChanged(NetworkConnection conn)
         {
             base.OnLobbyClientSceneChanged(conn);
             if (SceneManager.GetSceneAt(0).name == playScene)
-                _hud.CloseMenu();
+                _gameStartedSignal.Fire();
         }
     }
 }
