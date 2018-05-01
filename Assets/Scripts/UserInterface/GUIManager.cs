@@ -49,15 +49,9 @@ namespace svtz.Tanks.UserInterface
             _currentState = _guiStates[state];
         }
 
-        private bool _skinSet = false;
         private void OnGUI()
         {
-            if (_skinSet)
-            {
-                GUI.skin = _skin;
-                _skinSet = true;
-            }
-
+            GUI.skin = _skin;
             GoToState(_currentState.OnGUI());
         }
 
