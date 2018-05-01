@@ -1,30 +1,39 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
+using Zenject;
 
 namespace svtz.Tanks.Network
 {
-    public class CustomLobbyPlayer : NetworkLobbyPlayer {
+    internal sealed class CustomLobbyPlayer : NetworkLobbyPlayer {
         [SyncVar]
-        public string playerName;
-   
+        private string _playerName;
+
+        private CustomNetworkDiscovery _networkDiscovery;
+
+        [Inject]
+        public void Construct(CustomNetworkDiscovery networkDiscovery)
+        {
+            _networkDiscovery = networkDiscovery;
+        }
+
         // Use this for initialization
         void Start () {
             if (isLocalPlayer)
             {
-                CmdSetName(FindObjectOfType<CustomNetworkDiscovery>().playerName);
+                CmdSetName(_networkDiscovery.playerName);
             }
         }
 
         [Command]
         public void CmdSetName(string name)
         {
-            playerName = name;
+            _playerName = name;
         }
 
         public void DrawGUI()
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label(playerName, GUILayout.Width(100));
+            GUILayout.Label(_playerName, GUILayout.Width(100));
             if (isLocalPlayer)
             {
                 if (GUILayout.Button(readyToBegin ? "ГОТОВ" : "Не готов"))
