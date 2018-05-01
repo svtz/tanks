@@ -11,7 +11,7 @@ namespace svtz.Tanks.Network
         void Start () {
             if (isLocalPlayer)
             {
-                CmdSetName(NetworkManager.singleton.GetComponent<CustomNetworkDiscovery>().playerName);
+                CmdSetName(FindObjectOfType<CustomNetworkDiscovery>().playerName);
             }
         }
 
@@ -19,11 +19,6 @@ namespace svtz.Tanks.Network
         public void CmdSetName(string name)
         {
             playerName = name;
-        }
-
-        // Update is called once per frame
-        void Update () {
-		
         }
 
         public void DrawGUI()

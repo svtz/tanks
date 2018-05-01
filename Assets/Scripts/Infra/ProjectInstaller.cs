@@ -1,5 +1,6 @@
 ﻿using svtz.Tanks.Common;
 using svtz.Tanks.Network;
+using svtz.Tanks.UserInterface;
 using UnityEngine;
 using Zenject;
 
@@ -17,18 +18,13 @@ namespace svtz.Tanks.Infra
         {
             Container.BindInterfacesAndSelfTo<TeamManager>().AsSingle();
 
-            Container.BindInstance(GuiSkin);
-
             Container.DeclareSignal<ConnectedToServerSignal>();
             Container.DeclareSignal<GameStartedSignal>();
 
             Container.Bind<CustomNetworkManager>().FromComponentInNewPrefab(NetworkManagerPrefab).AsSingle();
             Container.Bind<CustomNetworkDiscovery>().FromComponentInNewPrefab(NetworkDiscoveryPrefab).AsSingle();
-            Container.Bind<GUIManager>()
-                .FromNewComponentOnNewGameObject()
-                .WithGameObjectName("GUI")
-                .AsSingle()
-                .NonLazy();
+
+            GUIInstaller.Install(Container, GuiSkin);
         }
     }
 }

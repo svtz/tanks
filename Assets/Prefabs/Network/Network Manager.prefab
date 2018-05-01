@@ -19,9 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4030630833320564}
-  - component: {fileID: 114310534612297668}
   - component: {fileID: 114194050177708128}
-  - component: {fileID: 114687739137718040}
   m_Layer: 0
   m_Name: Network Manager
   m_TagString: Untagged
@@ -137,42 +135,3 @@ MonoBehaviour:
   m_LobbyScene: Main
   m_PlayScene: Battle
   lobbySlots: []
---- !u!114 &114310534612297668
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1533877938861358}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc8d7a0d16fef1e47bb3f053b65c3109, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_BroadcastPort: 47777
-  m_BroadcastKey: 2222
-  m_BroadcastVersion: 1
-  m_BroadcastSubVersion: 1
-  m_BroadcastInterval: 1000
-  m_UseNetworkManager: 0
-  m_BroadcastData: HELLO
-  m_ShowGUI: 0
-  m_OffsetX: 0
-  m_OffsetY: 0
-  serverName: 
-  playerName: 
-  networkPort: 7777
-  findedServers: []
---- !u!114 &114687739137718040
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1533877938861358}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d9e20b852ee67742bdd2fbbac3e8037, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skin: {fileID: 11400000, guid: e5c33d0194ffd2b4899df896897e63a5, type: 2}
-  showGUI: 1
-  gameName: "\u041F\u0430\u043D\u043A\u043E\u0422\u0430\u043D\u043A\u0438"
