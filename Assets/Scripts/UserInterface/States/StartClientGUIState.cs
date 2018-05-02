@@ -37,7 +37,7 @@ namespace svtz.Tanks.UserInterface.States
                     foreach (var record in NetworkDiscovery.foundServers)
                     {
                         var serverTitle = string.Concat(record.ServerName, Environment.NewLine, record.NetworkAddress, ":", record.Port);
-                        if (GUILayout.Button(serverTitle))
+                        if (GUILayout.Button(serverTitle, GetStyle("ServerButton")))
                         {
                             NetworkDiscovery.CustomStartClient(record);
                             nextState = GUIState.ClientLobby;
