@@ -18,21 +18,24 @@ namespace svtz.Tanks.UserInterface.States
         public override GUIState OnGUI()
         {
             var nextState = Key;
-            GUI.Box(GamePanel(), "");
-            GUILayout.BeginArea(GamePanel(), GetStyle("MenuArea"));
-            GUILayout.BeginVertical();
-            GUILayout.Label("ПанкоТанки");
-            GUILayout.Label("Игровое меню");
 
-            if (GUILayout.Button("Вернуться в игру"))
-                nextState = OnEscapePressed();
-            if (GUILayout.Button("Покинуть игру"))
+            Center(() =>
             {
-                NetworkDiscovery.CustomStop();
-                nextState = GUIState.MainMenu;
-            }
-            GUILayout.EndVertical();
-            GUILayout.EndArea();
+                GUILayout.BeginVertical(GetStyle("InGameBox"));
+                GUILayout.Label("ПанкоТанки", GetStyle("MenuTitle"));
+
+                if (GUILayout.Button("Вернуться в бой"))
+                {
+                    nextState = OnEscapePressed();
+                }
+
+                if (GUILayout.Button("Выйти в меню", GetStyle("ReturnButton")))
+                {
+                    NetworkDiscovery.CustomStop();
+                    nextState = GUIState.MainMenu;
+                }
+                GUILayout.EndVertical();
+            });
 
             return nextState;
         }

@@ -11,7 +11,7 @@ namespace svtz.Tanks.Network
         public int networkPort = 7777;
         private ServerData serverData ;
         private CustomNetworkManager manager;
-        public List<ServerData> findedServers = null;
+        public List<ServerData> foundServers = null;
 
 
         [Inject]
@@ -32,16 +32,16 @@ namespace svtz.Tanks.Network
 
         private void OnDiscovery(ServerData newServerData)
         {
-            for (int index = 0; index < findedServers.Count; ++index)
+            for (int index = 0; index < foundServers.Count; ++index)
             {
-                if (findedServers[index].NetworkAddress == newServerData.NetworkAddress &&
-                    findedServers[index].Port == newServerData.Port)
+                if (foundServers[index].NetworkAddress == newServerData.NetworkAddress &&
+                    foundServers[index].Port == newServerData.Port)
                 {
-                    findedServers[index] = newServerData;
+                    foundServers[index] = newServerData;
                     return;
                 }
             }
-            findedServers.Add(newServerData);
+            foundServers.Add(newServerData);
         }
 
         public bool CustomStartServer()
@@ -71,7 +71,7 @@ namespace svtz.Tanks.Network
         {
             if (Initialize())
             {
-                findedServers = new List<ServerData>();
+                foundServers = new List<ServerData>();
                 return StartAsClient();
             }
             else

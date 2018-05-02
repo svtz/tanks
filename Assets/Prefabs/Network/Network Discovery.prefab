@@ -64,4 +64,4 @@ MonoBehaviour:
   serverName: 
   playerName: 
   networkPort: 7777
-  findedServers: []
+  foundServers: []

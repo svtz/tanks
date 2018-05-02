@@ -46,7 +46,7 @@ namespace svtz.Tanks.Network
                 }
             }else
             {
-                GUILayout.Label(readyToBegin ? "ГОТОВ" : "Не готов", skin.GetStyle("ReadyButton"));
+                GUILayout.Label(readyToBegin ? "ГОТОВ" : "Не готов", skin.GetStyle("ReadyButtonDisabled"));
             }
             GUILayout.EndHorizontal();
         }

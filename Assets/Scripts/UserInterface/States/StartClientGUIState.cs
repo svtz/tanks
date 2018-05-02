@@ -1,4 +1,6 @@
-﻿using svtz.Tanks.Network;
+﻿using System;
+using System.Linq;
+using svtz.Tanks.Network;
 using UnityEngine;
 
 namespace svtz.Tanks.UserInterface.States
@@ -20,30 +22,45 @@ namespace svtz.Tanks.UserInterface.States
         {
             var nextState = Key;
 
-            GUI.Box(GamePanel(), "");
-            GUILayout.BeginArea(GamePanel(), GetStyle("MenuArea"));
-            GUILayout.BeginVertical();
-            GUILayout.Label("Введите имя");
-            NetworkDiscovery.playerName =
-                GUILayout.TextField(NetworkDiscovery.playerName);
-            GUILayout.Label("Выберите игру");
-            _scrollPosition = GUILayout.BeginScrollView(_scrollPosition);
-            foreach (ServerData record in NetworkDiscovery.findedServers)
+            Center(() =>
             {
-                if (GUILayout.Button(record.ServerName + "(" + record.NetworkAddress + ":" + record.Port + ")"))
+                GUILayout.Label("ПОИСК ИГРЫ", GetStyle("MenuTitle"));
+
+                GUILayout.Label("Имя игрока:");
+                NetworkDiscovery.playerName = GUILayout.TextField(NetworkDiscovery.playerName);
+
+                GUILayout.Label("Найденные игры:");
+
+                if (NetworkDiscovery.foundServers.Any())
                 {
-                    NetworkDiscovery.CustomStartClient(record);
-                    nextState = GUIState.ClientLobby;
+                    _scrollPosition = GUILayout.BeginScrollView(_scrollPosition);
+                    foreach (var record in NetworkDiscovery.foundServers)
+                    {
+                        var serverTitle = string.Concat(record.ServerName, Environment.NewLine, record.NetworkAddress, ":", record.Port);
+                        if (GUILayout.Button(serverTitle))
+                        {
+                            NetworkDiscovery.CustomStartClient(record);
+                            nextState = GUIState.ClientLobby;
+                        }
+                    }
+                    GUILayout.EndScrollView();
                 }
-            }
-            GUILayout.EndScrollView();
+                else
+                {
+                    GUILayout.BeginHorizontal();
+                    GUILayout.FlexibleSpace();
 
+                    GUILayout.Label("<идёт поиск>");
 
-            if (GUILayout.Button("Вернуться назад"))
-                nextState = OnEscapePressed();
-            GUILayout.EndVertical();
-            GUILayout.EndArea();
+                    GUILayout.FlexibleSpace();
+                    GUILayout.EndHorizontal();
+                }
 
+                if (GUILayout.Button("Вернуться назад", GetStyle("ReturnButton")))
+                {
+                    nextState = OnEscapePressed();
+                }
+            });
             return nextState;
         }
 
