@@ -14,7 +14,7 @@ namespace svtz.Tanks.UserInterface.States
         {
             var newState = Key;
 
-            Center(() =>
+            CenterScreen(() =>
             {
                 GUILayout.Label("НОВАЯ ИГРА: ХОСТ", GetStyle("MenuTitle"));
 

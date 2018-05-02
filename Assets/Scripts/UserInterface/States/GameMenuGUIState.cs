@@ -19,7 +19,7 @@ namespace svtz.Tanks.UserInterface.States
         {
             var nextState = Key;
 
-            Center(() =>
+            CenterScreen(() =>
             {
                 GUILayout.BeginVertical(GetStyle("InGameBox"));
                 GUILayout.Label("ПанкоТанки", GetStyle("MenuTitle"));

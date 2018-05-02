@@ -5,7 +5,7 @@ namespace svtz.Tanks.UserInterface.States
 {
     internal abstract class AbstractGUIState : IGUIState
     {
-        protected GUISkin GuiSkin { get; private set; }
+        private readonly GUISkin _guiSkin;
 
         public abstract GUIState Key { get; }
         public abstract GUIState OnGUI();
@@ -13,15 +13,15 @@ namespace svtz.Tanks.UserInterface.States
 
         protected AbstractGUIState(GUISkin guiSkin)
         {
-            GuiSkin = guiSkin;
+            _guiSkin = guiSkin;
         }
 
         protected GUIStyle GetStyle(string name)
         {
-            return GuiSkin.GetStyle(name);
+            return _guiSkin.GetStyle(name);
         }
 
-        protected void Center(Action layout)
+        protected void CenterScreen(Action layout)
         {
             GUILayout.BeginArea(Screen.safeArea);
             GUILayout.FlexibleSpace();

@@ -22,7 +22,7 @@ namespace svtz.Tanks.UserInterface.States
         {
             var nextState = Key;
 
-            Center(() =>
+            CenterScreen(() =>
             {
                 GUILayout.Label("ПОИСК ИГРЫ", GetStyle("MenuTitle"));
 
