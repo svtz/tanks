@@ -22,14 +22,14 @@ namespace svtz.Tanks.UserInterface.States
             CenterScreen(() =>
             {
                 GUILayout.BeginVertical(GetStyle("InGameBox"));
-                GUILayout.Label("ПанкоТанки", GetStyle("MenuTitle"));
+                MenuTitle("ПанкоТанки");
 
-                if (GUILayout.Button("Вернуться в бой"))
+                if (GUILayout.Button("ЗАКРЫТЬ"))
                 {
                     nextState = OnEscapePressed();
                 }
 
-                if (GUILayout.Button("Выйти в меню", GetStyle("ReturnButton")))
+                if (ReturnButton("В МЕНЮ"))
                 {
                     NetworkDiscovery.CustomStop();
                     nextState = GUIState.MainMenu;

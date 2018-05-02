@@ -37,7 +37,7 @@ namespace svtz.Tanks.UserInterface.States
 
             CenterScreen(() =>
             {
-                GUILayout.Label("ОЖИДАНИЕ ИГРОКОВ", GetStyle("MenuTitle"));
+                MenuTitle("ОЖИДАНИЕ ИГРОКОВ");
 
                 foreach (var player in NetworkManager.lobbySlots)
                 {
@@ -58,7 +58,7 @@ namespace svtz.Tanks.UserInterface.States
                     }
                 }
 
-                if (GUILayout.Button("Вернуться назад", GetStyle("ReturnButton")))
+                if (ReturnButton("НАЗАД"))
                 {
                     nextState = OnEscapePressed();
                 }

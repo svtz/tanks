@@ -21,7 +21,7 @@ namespace svtz.Tanks.UserInterface.States
 
             CenterScreen(() =>
             {
-                GUILayout.Label("ПанкоТанки", GetStyle("MenuTitle"));
+                MenuTitle("ПанкоТанки");
 
                 if (GUILayout.Button("НОВАЯ ИГРА: ХОСТ"))
                 {
@@ -34,7 +34,7 @@ namespace svtz.Tanks.UserInterface.States
                     nextState = GUIState.StartClient;
                 }
 
-                if (GUILayout.Button("ВЫХОД", GetStyle("ReturnButton")))
+                if (ReturnButton("ВЫХОД"))
                 {
 #if UNITY_EDITOR
                     UnityEditor.EditorApplication.isPlaying = false;

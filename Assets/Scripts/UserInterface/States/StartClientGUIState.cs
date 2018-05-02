@@ -24,7 +24,7 @@ namespace svtz.Tanks.UserInterface.States
 
             CenterScreen(() =>
             {
-                GUILayout.Label("ПОИСК ИГРЫ", GetStyle("MenuTitle"));
+                MenuTitle("ПОИСК ИГРЫ");
 
                 GUILayout.Label("Имя игрока:");
                 NetworkDiscovery.playerName = GUILayout.TextField(NetworkDiscovery.playerName);
@@ -56,7 +56,7 @@ namespace svtz.Tanks.UserInterface.States
                     GUILayout.EndHorizontal();
                 }
 
-                if (GUILayout.Button("Вернуться назад", GetStyle("ReturnButton")))
+                if (ReturnButton("НАЗАД"))
                 {
                     nextState = OnEscapePressed();
                 }

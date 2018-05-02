@@ -16,7 +16,7 @@ namespace svtz.Tanks.UserInterface.States
 
             CenterScreen(() =>
             {
-                GUILayout.Label("НОВАЯ ИГРА: ХОСТ", GetStyle("MenuTitle"));
+                MenuTitle("НОВАЯ ИГРА: ХОСТ");
 
                 GUILayout.Label("Имя хоста:");
                 NetworkDiscovery.serverName =
@@ -34,7 +34,7 @@ namespace svtz.Tanks.UserInterface.States
                     if (NetworkDiscovery.CustomStartServer())
                         newState = GUIState.ServerLobby;
                 }
-                if (GUILayout.Button("ОТМЕНА", GetStyle("ReturnButton")))
+                if (ReturnButton("НАЗАД"))
                     newState = OnEscapePressed();
             });
             return newState;

@@ -37,5 +37,15 @@ namespace svtz.Tanks.UserInterface.States
             GUILayout.FlexibleSpace();
             GUILayout.EndArea();
         }
+
+        protected void MenuTitle(string text)
+        {
+            GUILayout.Label(text, GetStyle("MenuTitle"));
+        }
+
+        protected bool ReturnButton(string text)
+        {
+            return GUILayout.Button(text, GetStyle("ReturnButton"));
+        }
     }
 }
