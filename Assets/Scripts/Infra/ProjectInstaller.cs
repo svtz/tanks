@@ -19,6 +19,7 @@ namespace svtz.Tanks.Infra
             Container.BindInterfacesAndSelfTo<TeamManager>().AsSingle();
 
             Container.DeclareSignal<ConnectedToServerSignal>();
+            Container.DeclareSignal<DisconnectedFromServerSignal>();
             Container.DeclareSignal<GameStartedSignal>();
 
             Container.Bind<CustomNetworkManager>().FromComponentInNewPrefab(NetworkManagerPrefab).AsSingle();

@@ -11,16 +11,19 @@ namespace svtz.Tanks.Network
         private CustomNetworkDiscovery _networkDiscovery;
         private TeamManager _teamManager;
         private ConnectedToServerSignal _connectedToServerSignal;
+        private DisconnectedFromServerSignal _disconnectedFromServerSignal;
         private GameStartedSignal _gameStartedSignal;
 
         [Inject]
         public void Construct(TeamManager teamManager,
             CustomNetworkDiscovery networkDiscovery,
             ConnectedToServerSignal connectedToServerSignal,
+            DisconnectedFromServerSignal disconnectedFromServerSignal,
             GameStartedSignal gameStartedSignal)
         {
             _teamManager = teamManager;
             _connectedToServerSignal = connectedToServerSignal;
+            _disconnectedFromServerSignal = disconnectedFromServerSignal;
             _networkDiscovery = networkDiscovery;
             _gameStartedSignal = gameStartedSignal;
         }
@@ -58,5 +61,11 @@ namespace svtz.Tanks.Network
             if (SceneManager.GetSceneAt(0).name == playScene)
                 _gameStartedSignal.Fire();
         }
+
+        public override void OnClientDisconnect(NetworkConnection conn)
+        {
+            base.OnClientDisconnect(conn);
+            _disconnectedFromServerSignal.Fire();
     }
+}
 }

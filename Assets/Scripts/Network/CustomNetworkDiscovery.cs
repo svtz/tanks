@@ -27,7 +27,6 @@ namespace svtz.Tanks.Network
             ServerData newServerData = ScriptableObject.CreateInstance<ServerData>();
             newServerData.Load(data);
             OnDiscovery(newServerData);
-            Debug.Log(data);
         }
 
         private void OnDiscovery(ServerData newServerData)
@@ -85,8 +84,9 @@ namespace svtz.Tanks.Network
 
         public void CustomStop()
         {
-            if (isServer)
+            if (NetworkServer.active)
             {
+            if (isServer)
                 StopBroadcast();
                 manager.StopHost();
             }

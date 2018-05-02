@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using svtz.Tanks.Common;
+using svtz.Tanks.Network;
 using svtz.Tanks.UserInterface.States;
 using UnityEngine;
 using Zenject;
@@ -14,10 +15,12 @@ namespace svtz.Tanks.UserInterface
         private Dictionary<GUIState, IGUIState> _guiStates;
         private List<IGUIState> _guiImplementations;
         private GameStartedSignal _gameStartedSignal;
+        private DisconnectedFromServerSignal _disconnectedFromServerSignal;
 
         [Inject]
         public void Construct(
             GameStartedSignal gameStartedSignal,
+            DisconnectedFromServerSignal disconnectedFromServerSignal,
             GUISkin guiSkin,
             DiContainer container,
             List<IGUIState> guiStates)
@@ -25,18 +28,25 @@ namespace svtz.Tanks.UserInterface
             _skin = guiSkin;
             _gameStartedSignal = gameStartedSignal;
             _guiImplementations = guiStates;
+            _disconnectedFromServerSignal = disconnectedFromServerSignal;
         }
 
         void IInitializable.Initialize()
         {
             _guiStates = _guiImplementations.ToDictionary(s => s.Key);
             _gameStartedSignal.Listen(OnGameStarted);
+            _disconnectedFromServerSignal.Listen(OnDisconnected);
             GoToState(GUIState.MainMenu);
         }
 
         private void OnGameStarted()
         {
             GoToState(GUIState.InGame);
+        }
+
+        private void OnDisconnected()
+        {
+            GoToState(GUIState.MainMenu);
         }
 
         private void GoToState(GUIState state)
