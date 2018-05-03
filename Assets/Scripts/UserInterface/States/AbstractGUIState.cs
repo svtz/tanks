@@ -1,51 +1,39 @@
-﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using Zenject;
 
 namespace svtz.Tanks.UserInterface.States
 {
-    internal abstract class AbstractGUIState : IGUIState
+    internal abstract class AbstractGUIState : MonoBehaviour, IGUIState
     {
-        private readonly GUISkin _guiSkin;
+        private GUIManager _guiManager;
 
         public abstract GUIState Key { get; }
-        public abstract GUIState OnGUI();
-        public abstract GUIState OnEscapePressed();
 
-        protected AbstractGUIState(GUISkin guiSkin)
+        public virtual void OnExitState()
         {
-            _guiSkin = guiSkin;
+            gameObject.SetActive(false);
         }
 
-        protected GUIStyle GetStyle(string name)
+        public virtual void OnEnterState()
         {
-            return _guiSkin.GetStyle(name);
+            FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
+            gameObject.SetActive(true);
         }
 
-        protected void CenterScreen(Action layout)
+        public virtual void OnEscape()
         {
-            GUILayout.BeginArea(Screen.safeArea);
-            GUILayout.FlexibleSpace();
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            GUILayout.BeginVertical(GetStyle("MenuArea"));
-
-            layout();
-
-            GUILayout.EndVertical();
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-            GUILayout.FlexibleSpace();
-            GUILayout.EndArea();
         }
 
-        protected void MenuTitle(string text)
+        [Inject]
+        public void Construct(GUIManager guiManager)
         {
-            GUILayout.Label(text, GetStyle("MenuTitle"));
+            _guiManager = guiManager;
         }
 
-        protected bool ReturnButton(string text)
+        protected void GoToState(GUIState newState)
         {
-            return GUILayout.Button(text, GetStyle("ReturnButton"));
+            _guiManager.GoToState(newState);
         }
     }
 }

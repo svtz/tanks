@@ -31,7 +31,7 @@ namespace svtz.Tanks.Network
         void Start () {
             if (isLocalPlayer)
             {
-                CmdSetName(_networkDiscovery.playerName);
+                CmdSetName(_networkDiscovery.PlayerName);
             }
         }
 

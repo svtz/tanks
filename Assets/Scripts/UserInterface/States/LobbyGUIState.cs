@@ -1,70 +1,70 @@
-﻿using svtz.Tanks.Network;
-using UnityEngine;
+﻿//using svtz.Tanks.Network;
+//using UnityEngine;
 
-namespace svtz.Tanks.UserInterface.States
-{
-    internal abstract class LobbyGUIState : NetworkMenuGUIState
-    {
-        private CustomNetworkManager NetworkManager { get; set; }
+//namespace svtz.Tanks.UserInterface.States
+//{
+//    internal abstract class LobbyGUIState : NetworkMenuGUIState
+//    {
+//        private CustomNetworkManager NetworkManager { get; set; }
 
-        protected LobbyGUIState(GUISkin guiSkin, CustomNetworkDiscovery networkDiscovery,
-            CustomNetworkManager networkManager) : base(guiSkin, networkDiscovery)
-        {
-            NetworkManager = networkManager;
-        }
+//        protected LobbyGUIState(GUISkin guiSkin, CustomNetworkDiscovery networkDiscovery,
+//            CustomNetworkManager networkManager) : base(guiSkin, networkDiscovery)
+//        {
+//            NetworkManager = networkManager;
+//        }
 
-        private void DrawPlayerGUI(CustomLobbyPlayer player)
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(player.PlayerName, GetStyle("LobbyPlayerLabel"));
-            if (player.isLocalPlayer)
-            {
-                if (GUILayout.Button(player.readyToBegin ? "ГОТОВ" : "Не готов", GetStyle("ReadyButton")))
-                {
-                    player.ToggleReady();
-                }
-            }
-            else
-            {
-                GUILayout.Label(player.readyToBegin ? "ГОТОВ" : "Не готов", GetStyle("ReadyButtonDisabled"));
-            }
-            GUILayout.EndHorizontal();
-        }
+//        private void DrawPlayerGUI(CustomLobbyPlayer player)
+//        {
+//            GUILayout.BeginHorizontal();
+//            GUILayout.Label(player.PlayerName, GetStyle("LobbyPlayerLabel"));
+//            if (player.isLocalPlayer)
+//            {
+//                if (GUILayout.Button(player.readyToBegin ? "ГОТОВ" : "Не готов", GetStyle("ReadyButton")))
+//                {
+//                    player.ToggleReady();
+//                }
+//            }
+//            else
+//            {
+//                GUILayout.Label(player.readyToBegin ? "ГОТОВ" : "Не готов", GetStyle("ReadyButtonDisabled"));
+//            }
+//            GUILayout.EndHorizontal();
+//        }
 
-        public sealed override GUIState OnGUI()
-        {
-            var nextState = Key;
+//        public sealed override GUIState OnGUI()
+//        {
+//            var nextState = Key;
 
-            CenterScreen(() =>
-            {
-                MenuTitle("ОЖИДАНИЕ ИГРОКОВ");
+//            CenterScreen(() =>
+//            {
+//                MenuTitle("ОЖИДАНИЕ ИГРОКОВ");
 
-                foreach (var player in NetworkManager.lobbySlots)
-                {
-                    var customLobbyPlayer = player as CustomLobbyPlayer;
-                    if (customLobbyPlayer != null)
-                    {
-                        DrawPlayerGUI(customLobbyPlayer);
-                    }
-                    else
-                    {
-                        GUILayout.BeginHorizontal();
-                        GUILayout.FlexibleSpace();
+//                foreach (var player in NetworkManager.lobbySlots)
+//                {
+//                    var customLobbyPlayer = player as CustomLobbyPlayer;
+//                    if (customLobbyPlayer != null)
+//                    {
+//                        DrawPlayerGUI(customLobbyPlayer);
+//                    }
+//                    else
+//                    {
+//                        GUILayout.BeginHorizontal();
+//                        GUILayout.FlexibleSpace();
 
-                        GUILayout.Label("—", GetStyle("LobbyPlayerStub"));
+//                        GUILayout.Label("—", GetStyle("LobbyPlayerStub"));
 
-                        GUILayout.FlexibleSpace();
-                        GUILayout.EndHorizontal();
-                    }
-                }
+//                        GUILayout.FlexibleSpace();
+//                        GUILayout.EndHorizontal();
+//                    }
+//                }
 
-                if (ReturnButton("НАЗАД"))
-                {
-                    nextState = OnEscapePressed();
-                }
-            });
+//                if (ReturnButton("НАЗАД"))
+//                {
+//                    nextState = OnEscapePressed();
+//                }
+//            });
 
-            return nextState;
-        }
-    }
-}
+//            return nextState;
+//        }
+//    }
+//}

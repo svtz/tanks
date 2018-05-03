@@ -3,7 +3,10 @@
     internal interface IGUIState
     {
         GUIState Key { get; }
-        GUIState OnGUI();
-        GUIState OnEscapePressed();
+
+        void OnExitState();
+        void OnEnterState();
+
+        void OnEscape();
     }
 }
