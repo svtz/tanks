@@ -37,6 +37,7 @@ namespace svtz.Tanks.UserInterface.States
             ServerNameInput.GetComponent<InputField>().text = NetworkDiscovery.ServerName;
             PortInput.GetComponent<InputField>().text = NetworkDiscovery.NetworkPort.ToString();
             PlayerNameInput.GetComponent<InputField>().text = NetworkDiscovery.PlayerName;
+            _portText.color = _normalColor;
         }
 
         public void SetServerName(string newName)
@@ -47,7 +48,7 @@ namespace svtz.Tanks.UserInterface.States
         public void SetPort(string newPortString)
         {
             int newValue;
-            if (!int.TryParse(newPortString, out newValue))
+            if (!int.TryParse(newPortString, out newValue) || newValue < 1 || newValue > 65535)
             {
                 _portText.color = ErrorColor;
                 _createButton.interactable = false;
