@@ -93,7 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.04411763, g: 0.19874558, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.78431374, b: 0.19607843, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -207,7 +207,7 @@ MonoBehaviour:
     m_RichText: 1
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
-    m_LineSpacing: 1
+    m_LineSpacing: 1.4
   m_Text: "\u0418\u0433\u0440\u0430 MONSTRO-III\n192.168.1.1"
 --- !u!222 &222425596723160008
 CanvasRenderer:
