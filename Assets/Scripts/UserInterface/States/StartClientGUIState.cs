@@ -1,73 +1,84 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using svtz.Tanks.Network;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace svtz.Tanks.UserInterface.States
 {
     internal sealed class StartClientGUIState : NetworkMenuGUIState
     {
-        private Vector2 _scrollPosition = new Vector2(0, 0);
+#pragma warning disable 0649
+        public RectTransform ServerItemPrefab;
+        public RectTransform ScrollContent;
+        public RectTransform PlayerNameInput;
+#pragma warning restore 0649
 
-        public StartClientGUIState(GUISkin guiSkin, CustomNetworkDiscovery networkDiscovery) : base(guiSkin, networkDiscovery)
-        {
-        }
+        private readonly Dictionary<string, RectTransform> _serverItems = new Dictionary<string, RectTransform>();
+        private readonly Dictionary<string, ServerData> _serverData = new Dictionary<string, ServerData>();
 
         public override GUIState Key
         {
             get { return GUIState.StartClient; }
         }
 
-        public override GUIState OnGUI()
+        public override void OnEnterState()
         {
-            var nextState = Key;
+            base.OnEnterState();
 
-            Center(() =>
-            {
-                GUILayout.Label("ПОИСК ИГРЫ", GetStyle("MenuTitle"));
-
-                GUILayout.Label("Имя игрока:");
-                NetworkDiscovery.playerName = GUILayout.TextField(NetworkDiscovery.playerName);
-
-                GUILayout.Label("Найденные игры:");
-
-                if (NetworkDiscovery.foundServers.Any())
-                {
-                    _scrollPosition = GUILayout.BeginScrollView(_scrollPosition);
-                    foreach (var record in NetworkDiscovery.foundServers)
-                    {
-                        var serverTitle = string.Concat(record.ServerName, Environment.NewLine, record.NetworkAddress, ":", record.Port);
-                        if (GUILayout.Button(serverTitle))
-                        {
-                            NetworkDiscovery.CustomStartClient(record);
-                            nextState = GUIState.ClientLobby;
-                        }
-                    }
-                    GUILayout.EndScrollView();
-                }
-                else
-                {
-                    GUILayout.BeginHorizontal();
-                    GUILayout.FlexibleSpace();
-
-                    GUILayout.Label("<идёт поиск>");
-
-                    GUILayout.FlexibleSpace();
-                    GUILayout.EndHorizontal();
-                }
-
-                if (GUILayout.Button("Вернуться назад", GetStyle("ReturnButton")))
-                {
-                    nextState = OnEscapePressed();
-                }
-            });
-            return nextState;
+            NetworkDiscovery.CustomStartServerDiscovery(AddOrReplaceServerItem);
+            PlayerNameInput.GetComponent<InputField>().text = NetworkDiscovery.PlayerName;
         }
 
-        public override GUIState OnEscapePressed()
+        public override void OnExitState()
         {
+            base.OnExitState();
+
+            foreach (var item in _serverItems)
+            {
+                Destroy(item.Value.gameObject);
+            }
+            _serverItems.Clear();
+            _serverData.Clear();
+        }
+
+        public override void OnEscape()
+        {
+            base.OnEscape();
+
             NetworkDiscovery.CustomStopServerDiscovery();
-            return GUIState.MainMenu;
+            GoToState(GUIState.MainMenu);
+        }
+
+        private void AddOrReplaceServerItem(ServerData data)
+        {
+            RectTransform item;
+            if (!_serverItems.TryGetValue(data.Key, out item))
+            {
+                item = Instantiate(ServerItemPrefab);
+                item.transform.SetParent(ScrollContent, false);
+
+                var button = item.GetComponent<Button>();
+                button.onClick.AddListener(() => ConnectToServer(data.Key));
+
+                _serverItems.Add(data.Key, item);
+            }
+
+            var text = item.GetComponentInChildren<Text>();
+            var serverTitle = string.Concat(data.ServerName, Environment.NewLine, data.NetworkAddress, ":", data.Port);
+            text.text = serverTitle;
+            _serverData[data.Key] = data;
+        }
+
+        private void ConnectToServer(string key)
+        {
+            NetworkDiscovery.CustomStartClient(_serverData[key]);
+            GoToState(GUIState.ClientLobby);
+        }
+
+        public void SetPlayerName(string newName)
+        {
+            NetworkDiscovery.PlayerName = newName;
         }
     }
 }

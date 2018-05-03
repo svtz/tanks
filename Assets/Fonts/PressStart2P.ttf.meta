@@ -13,7 +13,8 @@ TrueTypeFontImporter:
   fontName: Press Start 2P
   fontNames:
   - Press Start 2P
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {instanceID: 0}
   customCharacters: 
   fontRenderingMode: 2
   ascentCalculationMode: 1

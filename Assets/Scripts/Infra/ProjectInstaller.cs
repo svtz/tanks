@@ -9,7 +9,7 @@ namespace svtz.Tanks.Infra
     internal sealed class ProjectInstaller : MonoInstaller
     {
 #pragma warning disable 0649
-        public GUISkin GuiSkin;
+        public GUIInstaller.GUIMenus Menus;
         public GameObject NetworkManagerPrefab;
         public GameObject NetworkDiscoveryPrefab;
 #pragma warning restore 0649
@@ -25,7 +25,7 @@ namespace svtz.Tanks.Infra
             Container.Bind<CustomNetworkManager>().FromComponentInNewPrefab(NetworkManagerPrefab).AsSingle();
             Container.Bind<CustomNetworkDiscovery>().FromComponentInNewPrefab(NetworkDiscoveryPrefab).AsSingle();
 
-            GUIInstaller.Install(Container, GuiSkin);
+            GUIInstaller.Install(Container, Menus);
         }
     }
 }

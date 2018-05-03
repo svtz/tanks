@@ -1,40 +1,99 @@
-﻿using svtz.Tanks.Network;
+﻿using System.Collections;
+using System.Collections.Generic;
+using svtz.Tanks.Network;
 using UnityEngine;
+using UnityEngine.UI;
+using Zenject;
 
 namespace svtz.Tanks.UserInterface.States
 {
     internal abstract class LobbyGUIState : NetworkMenuGUIState
     {
-        protected CustomNetworkManager NetworkManager { get; private set; }
+        private CustomNetworkManager NetworkManager { get; set; }
+        private LobbyGUISettings _settings;
 
-        protected LobbyGUIState(GUISkin guiSkin, CustomNetworkDiscovery networkDiscovery,
-            CustomNetworkManager networkManager) : base(guiSkin, networkDiscovery)
+        private readonly Dictionary<CustomLobbyPlayer, RectTransform> _playerItems = 
+            new Dictionary<CustomLobbyPlayer, RectTransform>();
+
+        [Inject]
+        private void Construct(CustomNetworkManager networkManager, LobbyGUISettings settings)
         {
             NetworkManager = networkManager;
+            _settings = settings;
         }
 
-        public sealed override GUIState OnGUI()
+        public override void OnEscape()
         {
-            var nextState = Key;
+            base.OnEscape();
+            NetworkDiscovery.CustomStop();
+        }
 
-            Center(() =>
+        public override void OnEnterState()
+        {
+            base.OnEnterState();
+
+            StartCoroutine(RefreshPlayers());
+        }
+
+
+        public override void OnExitState()
+        {
+            base.OnExitState();
+
+            StopCoroutine(RefreshPlayers());
+        }
+
+        private IEnumerator RefreshPlayers()
+        {
+            while (true)
             {
-                foreach (var player in NetworkManager.lobbySlots)
+
+                var outdatedPlayers = new HashSet<CustomLobbyPlayer>(_playerItems.Keys);
+
+                if (NetworkManager != null)
                 {
-                    var customLobbyPlayer = player as CustomLobbyPlayer;
-                    if (customLobbyPlayer != null)
+                    foreach (var player in NetworkManager.lobbySlots)
                     {
-                        customLobbyPlayer.DrawGUI(GuiSkin);
+                        var customLobbyPlayer = player as CustomLobbyPlayer;
+                        if (customLobbyPlayer == null)
+                            continue;
+
+                        RectTransform item;
+                        if (!_playerItems.TryGetValue(customLobbyPlayer, out item))
+                        {
+                            item = Instantiate(_settings.PlayerItemPrefab);
+                            item.SetParent(_settings.ScrollContent, false);
+                            _playerItems.Add(customLobbyPlayer, item);
+                        }
+                        else
+                        {
+                            outdatedPlayers.Remove(customLobbyPlayer);
+                        }
+
+                        var toggle = item.GetComponentInChildren<Toggle>();
+                        toggle.interactable = customLobbyPlayer.isLocalPlayer;
+                        if (customLobbyPlayer.isLocalPlayer)
+                        {
+                            customLobbyPlayer.SetReady(toggle.isOn);
+                        }
+                        else
+                        {
+                            toggle.isOn = customLobbyPlayer.readyToBegin;
+                        }
+
+                        var text = item.GetComponentInChildren<Text>();
+                        text.text = customLobbyPlayer.PlayerName;
                     }
                 }
 
-                if (GUILayout.Button("Вернуться назад", GetStyle("ReturnButton")))
+                foreach (var player in outdatedPlayers)
                 {
-                    nextState = OnEscapePressed();
+                    Destroy(_playerItems[player].gameObject);
+                    _playerItems.Remove(player);
                 }
-            });
 
-            return nextState;
+                yield return new WaitForSeconds(_settings.RefreshIntervalSeconds);
+            }
         }
     }
 }

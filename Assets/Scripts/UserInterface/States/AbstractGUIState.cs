@@ -1,41 +1,39 @@
-﻿using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using Zenject;
 
 namespace svtz.Tanks.UserInterface.States
 {
-    internal abstract class AbstractGUIState : IGUIState
+    internal abstract class AbstractGUIState : MonoBehaviour, IGUIState
     {
-        protected GUISkin GuiSkin { get; private set; }
+        private GUIManager _guiManager;
 
         public abstract GUIState Key { get; }
-        public abstract GUIState OnGUI();
-        public abstract GUIState OnEscapePressed();
 
-        protected AbstractGUIState(GUISkin guiSkin)
+        public virtual void OnExitState()
         {
-            GuiSkin = guiSkin;
+            gameObject.SetActive(false);
         }
 
-        protected GUIStyle GetStyle(string name)
+        public virtual void OnEnterState()
         {
-            return GuiSkin.GetStyle(name);
+            FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
+            gameObject.SetActive(true);
         }
 
-        protected void Center(Action layout)
+        public virtual void OnEscape()
         {
-            GUILayout.BeginArea(Screen.safeArea);
-            GUILayout.FlexibleSpace();
-            GUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            GUILayout.BeginVertical(GetStyle("MenuArea"));
+        }
 
-            layout();
+        [Inject]
+        public void Construct(GUIManager guiManager)
+        {
+            _guiManager = guiManager;
+        }
 
-            GUILayout.EndVertical();
-            GUILayout.FlexibleSpace();
-            GUILayout.EndHorizontal();
-            GUILayout.FlexibleSpace();
-            GUILayout.EndArea();
+        protected void GoToState(GUIState newState)
+        {
+            _guiManager.GoToState(newState);
         }
     }
 }

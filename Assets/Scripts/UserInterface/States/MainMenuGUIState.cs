@@ -1,55 +1,33 @@
-﻿using System;
-using svtz.Tanks.Network;
+﻿#if !UNITY_EDITOR
 using UnityEngine;
+#endif
 
 namespace svtz.Tanks.UserInterface.States
 {
-    internal sealed class MainMenuGUIState : NetworkMenuGUIState
+    internal sealed class MainMenuGUIState : AbstractGUIState
     {
-        public MainMenuGUIState(GUISkin guiSkin, CustomNetworkDiscovery networkDiscovery) : base(guiSkin, networkDiscovery)
-        {
-        }
-
         public override GUIState Key
         {
             get { return GUIState.MainMenu; }
         }
 
-        public override GUIState OnGUI()
+        public void CreateGame()
         {
-            var nextState = Key;
-
-            Center(() =>
-            {
-                GUILayout.Label("ПанкоТанки", GetStyle("MenuTitle"));
-
-                if (GUILayout.Button("НОВАЯ ИГРА: ХОСТ"))
-                {
-                    nextState = GUIState.StartServer;
-                }
-
-                if (GUILayout.Button("НОВАЯ ИГРА: ПОИСК"))
-                {
-                    NetworkDiscovery.CustomStartServerDiscovery();
-                    nextState = GUIState.StartClient;
-                }
-
-                if (GUILayout.Button("ВЫХОД", GetStyle("ReturnButton")))
-                {
-#if UNITY_EDITOR
-                    UnityEditor.EditorApplication.isPlaying = false;
-#else
-                    Application.Quit();
-#endif
-                }
-            });
-
-            return nextState;
+            GoToState(GUIState.StartServer);
         }
 
-        public override GUIState OnEscapePressed()
+        public void SearchGame()
         {
-            return Key;
+            GoToState(GUIState.StartClient);
+        }
+
+        public void Exit()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
     }
 }

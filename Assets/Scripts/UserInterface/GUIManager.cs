@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using svtz.Tanks.Common;
 using svtz.Tanks.Network;
@@ -10,7 +11,6 @@ namespace svtz.Tanks.UserInterface
 {
     internal sealed class GUIManager : MonoBehaviour, IInitializable
     {
-        private GUISkin _skin;
         private IGUIState _currentState;
         private Dictionary<GUIState, IGUIState> _guiStates;
         private List<IGUIState> _guiImplementations;
@@ -21,11 +21,8 @@ namespace svtz.Tanks.UserInterface
         public void Construct(
             GameStartedSignal gameStartedSignal,
             DisconnectedFromServerSignal disconnectedFromServerSignal,
-            GUISkin guiSkin,
-            DiContainer container,
             List<IGUIState> guiStates)
         {
-            _skin = guiSkin;
             _gameStartedSignal = gameStartedSignal;
             _guiImplementations = guiStates;
             _disconnectedFromServerSignal = disconnectedFromServerSignal;
@@ -34,33 +31,36 @@ namespace svtz.Tanks.UserInterface
         void IInitializable.Initialize()
         {
             _guiStates = _guiImplementations.ToDictionary(s => s.Key);
-            _gameStartedSignal.Listen(OnGameStarted);
-            _disconnectedFromServerSignal.Listen(OnDisconnected);
+            _gameStartedSignal.Listen(() => GoToState(GUIState.InGame));
+            _disconnectedFromServerSignal.Listen(() => GoToState(GUIState.MainMenu));
             GoToState(GUIState.MainMenu);
         }
 
-        private void OnGameStarted()
-        {
-            GoToState(GUIState.InGame);
-        }
+        private bool _lockTransitions = false;
 
-        private void OnDisconnected()
+        public void GoToState(GUIState state)
         {
-            GoToState(GUIState.MainMenu);
-        }
+            if (_lockTransitions)
+                throw new InvalidOperationException("Попытка изменения UI-состояния в момент открытия-закрытия другого состояния.");
 
-        private void GoToState(GUIState state)
-        {
-            if (_currentState != null && _currentState.Key == state)
-                return;
+            _lockTransitions = true;
+            try
+            {
+                if (_currentState != null)
+                {
+                    if (_currentState.Key == state)
+                        return;
 
-            _currentState = _guiStates[state];
-        }
+                    _currentState.OnExitState();
+                }
 
-        private void OnGUI()
-        {
-            GUI.skin = _skin;
-            GoToState(_currentState.OnGUI());
+                _currentState = _guiStates[state];
+                _currentState.OnEnterState();
+            }
+            finally
+            {
+                _lockTransitions = false;
+            }
         }
 
         private void Update()
@@ -71,7 +71,7 @@ namespace svtz.Tanks.UserInterface
 
         private void OnEscape()
         {
-            GoToState(_currentState.OnEscapePressed());
+            _currentState.OnEscape();
         }
     }
 }

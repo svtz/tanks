@@ -8,6 +8,8 @@ namespace svtz.Tanks.Network
         [SyncVar]
         private string _playerName;
 
+        public string PlayerName { get { return _playerName; } }
+
         private CustomNetworkDiscovery _networkDiscovery;
 
         [Inject]
@@ -16,11 +18,23 @@ namespace svtz.Tanks.Network
             _networkDiscovery = networkDiscovery;
         }
 
+        public void SetReady(bool value)
+        {
+            if (value == readyToBegin)
+                return;
+
+            readyToBegin = value;
+            if (readyToBegin)
+                SendReadyToBeginMessage();
+            else
+                SendNotReadyToBeginMessage();
+        }
+
         // Use this for initialization
         void Start () {
             if (isLocalPlayer)
             {
-                CmdSetName(_networkDiscovery.playerName);
+                CmdSetName(_networkDiscovery.PlayerName);
             }
         }
 
@@ -28,27 +42,6 @@ namespace svtz.Tanks.Network
         public void CmdSetName(string name)
         {
             _playerName = name;
-        }
-
-        public void DrawGUI(GUISkin skin)
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(_playerName, skin.GetStyle("LobbyPlayerLabel"));
-            if (isLocalPlayer)
-            {
-                if (GUILayout.Button(readyToBegin ? "ГОТОВ" : "Не готов", skin.GetStyle("ReadyButton")))
-                {
-                    readyToBegin = !readyToBegin;
-                    if (readyToBegin)
-                        SendReadyToBeginMessage();
-                    else
-                        SendNotReadyToBeginMessage();
-                }
-            }else
-            {
-                GUILayout.Label(readyToBegin ? "ГОТОВ" : "Не готов", skin.GetStyle("ReadyButtonDisabled"));
-            }
-            GUILayout.EndHorizontal();
         }
     }
 }

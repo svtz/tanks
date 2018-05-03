@@ -1,5 +1,5 @@
 ﻿using svtz.Tanks.Network;
-using UnityEngine;
+using Zenject;
 
 namespace svtz.Tanks.UserInterface.States
 {
@@ -7,7 +7,8 @@ namespace svtz.Tanks.UserInterface.States
     {
         protected CustomNetworkDiscovery NetworkDiscovery { get; private set; }
 
-        protected NetworkMenuGUIState(GUISkin guiSkin, CustomNetworkDiscovery networkDiscovery) : base(guiSkin)
+        [Inject]
+        protected void Construct(CustomNetworkDiscovery networkDiscovery)
         {
             NetworkDiscovery = networkDiscovery;
         }
