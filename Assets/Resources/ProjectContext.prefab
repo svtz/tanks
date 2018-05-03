@@ -60,6 +60,7 @@ MonoBehaviour:
       type: 2}
     LobbyMenu: {fileID: 1294526431238508, guid: 45590ab2bbf49b241b4a38b3e237ea89,
       type: 2}
+    GameMenu: {fileID: 1993471037056320, guid: c515bb2a24d747e42b05a315face51bb, type: 2}
   NetworkManagerPrefab: {fileID: 1533877938861358, guid: fe81d39037da8b74ba7c734b5fc4b0ca,
     type: 2}
   NetworkDiscoveryPrefab: {fileID: 1311880834755664, guid: ec3c14463c2c03a4f977023d348d0fce,
