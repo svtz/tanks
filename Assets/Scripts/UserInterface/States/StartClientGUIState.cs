@@ -34,9 +34,9 @@ namespace svtz.Tanks.UserInterface.States
         {
             base.OnExitState();
 
-            foreach (var entry in _serverItems)
+            foreach (var item in _serverItems)
             {
-                Destroy(entry.Value);
+                Destroy(item.Value.gameObject);
             }
             _serverItems.Clear();
             _serverData.Clear();

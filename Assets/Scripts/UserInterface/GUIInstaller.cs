@@ -14,6 +14,7 @@ namespace svtz.Tanks.UserInterface
             public GameObject MainMenu;
             public GameObject SearchGamesMenu;
             public GameObject CreateGameMenu;
+            public GameObject LobbyMenu;
 #pragma warning restore 0649
         }
 
@@ -29,13 +30,17 @@ namespace svtz.Tanks.UserInterface
             // состояния
             Container.BindInterfacesTo<MainMenuGUIState>().FromComponentInNewPrefab(_menus.MainMenu).AsSingle();
 
-            //Container.BindInterfacesTo<ClientLobbyGUIState>().AsSingle();
-            //Container.BindInterfacesTo<ServerLobbyGUIState>().AsSingle();
+            // лобби вот с такими сложными байдингами, зато на UI это одно и то же меню
+            Container.Bind<LobbyGUISettings>().FromComponentSibling();
+            Container.Bind<LobbyGUIState>().FromComponentSibling();
+            // хотел сделать AsSingle, но тогда Zenject создаёт оба компонента в одном объекте, что для нас не подходит
+            Container.BindInterfacesAndSelfTo<ClientLobbyGUIState>().FromNewComponentOnNewPrefab(_menus.LobbyMenu).AsCached();
+            Container.BindInterfacesAndSelfTo<ServerLobbyGUIState>().FromNewComponentOnNewPrefab(_menus.LobbyMenu).AsCached();
 
             Container.BindInterfacesTo<StartClientGUIState>().FromComponentInNewPrefab(_menus.SearchGamesMenu).AsSingle();
             Container.BindInterfacesTo<StartServerGUIState>().FromComponentInNewPrefab(_menus.CreateGameMenu).AsSingle();
 
-            //Container.BindInterfacesTo<InGameGUIState>().AsSingle();
+            Container.BindInterfacesTo<InGameGUIState>().FromNewComponentOnNewGameObject().AsSingle();
             //Container.BindInterfacesTo<GameMenuGUIState>().AsSingle();
 
             // менеджер

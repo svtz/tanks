@@ -18,9 +18,12 @@ namespace svtz.Tanks.Network
             _networkDiscovery = networkDiscovery;
         }
 
-        public void ToggleReady()
+        public void SetReady(bool value)
         {
-            readyToBegin = !readyToBegin;
+            if (value == readyToBegin)
+                return;
+
+            readyToBegin = value;
             if (readyToBegin)
                 SendReadyToBeginMessage();
             else

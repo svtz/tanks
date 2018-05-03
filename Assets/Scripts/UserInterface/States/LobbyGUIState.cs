@@ -1,70 +1,99 @@
-﻿//using svtz.Tanks.Network;
-//using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using svtz.Tanks.Network;
+using UnityEngine;
+using UnityEngine.UI;
+using Zenject;
 
-//namespace svtz.Tanks.UserInterface.States
-//{
-//    internal abstract class LobbyGUIState : NetworkMenuGUIState
-//    {
-//        private CustomNetworkManager NetworkManager { get; set; }
+namespace svtz.Tanks.UserInterface.States
+{
+    internal abstract class LobbyGUIState : NetworkMenuGUIState
+    {
+        private CustomNetworkManager NetworkManager { get; set; }
+        private LobbyGUISettings _settings;
 
-//        protected LobbyGUIState(GUISkin guiSkin, CustomNetworkDiscovery networkDiscovery,
-//            CustomNetworkManager networkManager) : base(guiSkin, networkDiscovery)
-//        {
-//            NetworkManager = networkManager;
-//        }
+        private readonly Dictionary<CustomLobbyPlayer, RectTransform> _playerItems = 
+            new Dictionary<CustomLobbyPlayer, RectTransform>();
 
-//        private void DrawPlayerGUI(CustomLobbyPlayer player)
-//        {
-//            GUILayout.BeginHorizontal();
-//            GUILayout.Label(player.PlayerName, GetStyle("LobbyPlayerLabel"));
-//            if (player.isLocalPlayer)
-//            {
-//                if (GUILayout.Button(player.readyToBegin ? "ГОТОВ" : "Не готов", GetStyle("ReadyButton")))
-//                {
-//                    player.ToggleReady();
-//                }
-//            }
-//            else
-//            {
-//                GUILayout.Label(player.readyToBegin ? "ГОТОВ" : "Не готов", GetStyle("ReadyButtonDisabled"));
-//            }
-//            GUILayout.EndHorizontal();
-//        }
+        [Inject]
+        private void Construct(CustomNetworkManager networkManager, LobbyGUISettings settings)
+        {
+            NetworkManager = networkManager;
+            _settings = settings;
+        }
 
-//        public sealed override GUIState OnGUI()
-//        {
-//            var nextState = Key;
+        public override void OnEscape()
+        {
+            base.OnEscape();
+            NetworkDiscovery.CustomStop();
+        }
 
-//            CenterScreen(() =>
-//            {
-//                MenuTitle("ОЖИДАНИЕ ИГРОКОВ");
+        public override void OnEnterState()
+        {
+            base.OnEnterState();
 
-//                foreach (var player in NetworkManager.lobbySlots)
-//                {
-//                    var customLobbyPlayer = player as CustomLobbyPlayer;
-//                    if (customLobbyPlayer != null)
-//                    {
-//                        DrawPlayerGUI(customLobbyPlayer);
-//                    }
-//                    else
-//                    {
-//                        GUILayout.BeginHorizontal();
-//                        GUILayout.FlexibleSpace();
+            StartCoroutine(RefreshPlayers());
+        }
 
-//                        GUILayout.Label("—", GetStyle("LobbyPlayerStub"));
 
-//                        GUILayout.FlexibleSpace();
-//                        GUILayout.EndHorizontal();
-//                    }
-//                }
+        public override void OnExitState()
+        {
+            base.OnExitState();
 
-//                if (ReturnButton("НАЗАД"))
-//                {
-//                    nextState = OnEscapePressed();
-//                }
-//            });
+            StopCoroutine(RefreshPlayers());
+        }
 
-//            return nextState;
-//        }
-//    }
-//}
+        private IEnumerator RefreshPlayers()
+        {
+            while (true)
+            {
+
+                var outdatedPlayers = new HashSet<CustomLobbyPlayer>(_playerItems.Keys);
+
+                if (NetworkManager != null)
+                {
+                    foreach (var player in NetworkManager.lobbySlots)
+                    {
+                        var customLobbyPlayer = player as CustomLobbyPlayer;
+                        if (customLobbyPlayer == null)
+                            continue;
+
+                        RectTransform item;
+                        if (!_playerItems.TryGetValue(customLobbyPlayer, out item))
+                        {
+                            item = Instantiate(_settings.PlayerItemPrefab);
+                            item.SetParent(_settings.ScrollContent, false);
+                            _playerItems.Add(customLobbyPlayer, item);
+                        }
+                        else
+                        {
+                            outdatedPlayers.Remove(customLobbyPlayer);
+                        }
+
+                        var toggle = item.GetComponentInChildren<Toggle>();
+                        toggle.interactable = customLobbyPlayer.isLocalPlayer;
+                        if (customLobbyPlayer.isLocalPlayer)
+                        {
+                            customLobbyPlayer.SetReady(toggle.isOn);
+                        }
+                        else
+                        {
+                            toggle.isOn = customLobbyPlayer.readyToBegin;
+                        }
+
+                        var text = item.GetComponentInChildren<Text>();
+                        text.text = customLobbyPlayer.PlayerName;
+                    }
+                }
+
+                foreach (var player in outdatedPlayers)
+                {
+                    Destroy(_playerItems[player].gameObject);
+                    _playerItems.Remove(player);
+                }
+
+                yield return new WaitForSeconds(_settings.RefreshIntervalSeconds);
+            }
+        }
+    }
+}

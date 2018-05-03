@@ -58,6 +58,8 @@ MonoBehaviour:
       type: 2}
     CreateGameMenu: {fileID: 1100934687816794, guid: 230b42fdacee00347a6a60abc4c33ecd,
       type: 2}
+    LobbyMenu: {fileID: 1294526431238508, guid: 45590ab2bbf49b241b4a38b3e237ea89,
+      type: 2}
   NetworkManagerPrefab: {fileID: 1533877938861358, guid: fe81d39037da8b74ba7c734b5fc4b0ca,
     type: 2}
   NetworkDiscoveryPrefab: {fileID: 1311880834755664, guid: ec3c14463c2c03a4f977023d348d0fce,
