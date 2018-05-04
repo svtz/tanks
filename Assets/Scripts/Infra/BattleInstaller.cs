@@ -2,6 +2,7 @@
 using svtz.Tanks.Common;
 using svtz.Tanks.Map;
 using svtz.Tanks.Projectile;
+using svtz.Tanks.Tank;
 using UnityEngine;
 using UnityEngine.Networking;
 using Zenject;

@@ -1,5 +1,4 @@
-﻿using svtz.Tanks.Map;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
 using Zenject;
 

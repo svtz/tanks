@@ -1,5 +1,6 @@
 ﻿using svtz.Tanks.Common;
 using svtz.Tanks.Network;
+using svtz.Tanks.Tank;
 using svtz.Tanks.UserInterface;
 using UnityEngine;
 using Zenject;
@@ -21,6 +22,7 @@ namespace svtz.Tanks.Infra
             Container.DeclareSignal<ConnectedToServerSignal>();
             Container.DeclareSignal<DisconnectedFromServerSignal>();
             Container.DeclareSignal<GameStartedSignal>();
+            Container.DeclareSignal<RespawningSignal>();
 
             Container.Bind<CustomNetworkManager>().FromComponentInNewPrefab(NetworkManagerPrefab).AsSingle();
             Container.Bind<CustomNetworkDiscovery>().FromComponentInNewPrefab(NetworkDiscoveryPrefab).AsSingle();

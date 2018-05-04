@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 using Random = UnityEngine.Random;
 using UnityObject = UnityEngine.Object;
 
-namespace svtz.Tanks.Map
+namespace svtz.Tanks.Tank
 {
     internal sealed class TankSpawner
     {
@@ -22,11 +22,14 @@ namespace svtz.Tanks.Map
 
         private readonly Settings _settings;
         private readonly DelayedExecutor _delayedExecutor;
+        private readonly RespawningSignal _respawningSignal;
 
-        public TankSpawner(Settings settings, DelayedExecutor delayedExecutor)
+        public TankSpawner(Settings settings, DelayedExecutor delayedExecutor,
+            RespawningSignal respawningSignal)
         {
             _settings = settings;
             _delayedExecutor = delayedExecutor;
+            _respawningSignal = respawningSignal;
         }
 
         private readonly List<Vector2> _points = new List<Vector2>();
@@ -78,6 +81,7 @@ namespace svtz.Tanks.Map
         {
             _spawnedPlayers.Remove(playerObject);
             NetworkServer.Destroy(playerObject);
+            _respawningSignal.FireOnClient(connection, _settings.RespawnSeconds);
             _delayedExecutor.Add(() => Respawn(connection), _settings.RespawnSeconds);
         }
 

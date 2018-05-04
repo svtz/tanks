@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using svtz.Tanks.Tank;
+using UnityEngine;
 using Zenject;
 
 namespace svtz.Tanks.Map
