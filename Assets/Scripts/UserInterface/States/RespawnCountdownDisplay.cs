@@ -16,7 +16,7 @@ namespace svtz.Tanks.UserInterface.States
         private RespawningSignal _respawningSignal;
         private Text _countdownText;
         private bool _active = false;
-        private float _timeRemaining;
+        private float _respawnTime;
 
 
         [Inject]
@@ -35,7 +35,7 @@ namespace svtz.Tanks.UserInterface.States
         {
             Debug.Assert(!_active);
 
-            _timeRemaining = time;
+            _respawnTime = Time.time  + time;
             _active = true;
             gameObject.SetActive(true);
         }
@@ -44,10 +44,10 @@ namespace svtz.Tanks.UserInterface.States
         {
             Debug.Assert(_active);
 
-            _timeRemaining -= Time.deltaTime;
-            if (_timeRemaining > 0)
+            var remaining = _respawnTime - Time.time;
+            if (remaining > 0)
             {
-                _countdownText.text = string.Format(CountdownFormat, _timeRemaining);
+                _countdownText.text = string.Format(CountdownFormat, remaining);
             }
             else
             {
