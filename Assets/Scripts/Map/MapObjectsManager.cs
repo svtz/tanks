@@ -23,17 +23,6 @@ namespace svtz.Tanks.Map
                 _mapObjects.Add(mo);
             }
         }
-
-        public void Remove(GameObject mo)
-        {
-            if (!_mapObjects.Remove(mo))
-            {
-                Debug.LogWarning("Попытка удалить несуществующий объект с карты");
-                return;
-            }
-
-            NetworkServer.Destroy(mo);
-        }
     }
 
     internal static class MapObjectsControllerExtensions
