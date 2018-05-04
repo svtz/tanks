@@ -22,10 +22,10 @@ namespace svtz.Tanks.Tank
 
         private readonly Settings _settings;
         private readonly DelayedExecutor _delayedExecutor;
-        private readonly RespawningSignal _respawningSignal;
+        private readonly RespawningSignal.ServerToClient _respawningSignal;
 
         public TankSpawner(Settings settings, DelayedExecutor delayedExecutor,
-            RespawningSignal respawningSignal)
+            RespawningSignal.ServerToClient respawningSignal)
         {
             _settings = settings;
             _delayedExecutor = delayedExecutor;
@@ -81,7 +81,7 @@ namespace svtz.Tanks.Tank
         {
             _spawnedPlayers.Remove(playerObject);
             NetworkServer.Destroy(playerObject);
-            _respawningSignal.FireOnClient(connection, _settings.RespawnSeconds);
+            _respawningSignal.FireOnClient(connection, new RespawningSignal.Msg { Time = _settings.RespawnSeconds });
             _delayedExecutor.Add(() => Respawn(connection), _settings.RespawnSeconds);
         }
 

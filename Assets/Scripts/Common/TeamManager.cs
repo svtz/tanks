@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using svtz.Tanks.Infra;
 using svtz.Tanks.Network;
 using UnityEngine.Networking;
 using Zenject;
@@ -11,10 +12,6 @@ namespace svtz.Tanks.Common
             = new Dictionary<NetworkConnection, string>();
 
         private string _allyTeam;
-
-        private const int TeamIdMessageCode = 2143;
-
-
 
         private ConnectedToServerSignal _connectedToServer;
         private NetworkClient _currentClient;
@@ -33,12 +30,12 @@ namespace svtz.Tanks.Common
 
             if (_currentClient != null)
             {
-                _currentClient.UnregisterHandler(TeamIdMessageCode);
+                _currentClient.UnregisterHandler(MessageCodes.TeamId);
                 _allyTeam = null;
             }
 
             _currentClient = newClient;
-            _currentClient.RegisterHandler(TeamIdMessageCode, OnTeamIdReceived);
+            _currentClient.RegisterHandler(MessageCodes.TeamId, OnTeamIdReceived);
         }
 
         private void OnTeamIdReceived(NetworkMessage netmsg)
@@ -70,7 +67,7 @@ namespace svtz.Tanks.Common
             var id = (_teamByConnection.Count + 1).ToString();
             _teamByConnection.Add(connection, id);
 
-            connection.Send(TeamIdMessageCode, new TeamIdMessage {TeamId = id});
+            connection.Send(MessageCodes.TeamId, new TeamIdMessage {TeamId = id});
         }
 
         public string GetTeamForConnection(NetworkConnection connection)

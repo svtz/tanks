@@ -18,7 +18,6 @@ namespace svtz.Tanks.UserInterface.States
         private bool _active = false;
         private float _respawnTime;
 
-
         [Inject]
         private void Construct(RespawningSignal respawningSignal)
         {
@@ -31,11 +30,11 @@ namespace svtz.Tanks.UserInterface.States
             _countdownText = CountdownText.GetComponent<Text>();
         }
 
-        private void Run(float time)
+        private void Run(RespawningSignal.Msg msg)
         {
             Debug.Assert(!_active);
 
-            _respawnTime = Time.time  + time;
+            _respawnTime = Time.time  + msg.Time;
             _active = true;
             gameObject.SetActive(true);
         }
