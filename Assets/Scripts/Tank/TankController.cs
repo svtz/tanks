@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using svtz.Tanks.Common;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -22,9 +20,6 @@ namespace svtz.Tanks.Tank
 
         private const float Epsilon = 0.01f;
 
-
-
-
         // Use this for initialization
         private void Start()
         {
@@ -38,23 +33,10 @@ namespace svtz.Tanks.Tank
                 throw new NotSupportedException("Слишком маленькая скорость");
         }
 
-
-        #region это что-то кривое, но, может, будет работать?
-        private readonly HashSet<int> _collisions = new HashSet<int>();
-
-        private void OnCollisionEnter2D(Collision2D collision)
+        private bool IsInCollision()
         {
-            _collisions.Add(collision.collider.GetInstanceID());
+            return _rb2D.IsTouching(new ContactFilter2D());
         }
-
-        private void OnCollisionExit2D(Collision2D collision)
-        {
-            var result = _collisions.Remove(collision.collider.GetInstanceID());
-            if (!result)
-                throw new InvalidOperationException("Выход из коллизии, в которую не входили.");
-        }
-        #endregion
-
 
         private float _inputX = 0.0f;
         private float _inputY = 0.0f;
@@ -117,7 +99,7 @@ namespace svtz.Tanks.Tank
 
             // позволяем менять направление, если находимся в узле сетки,
             // или если есть коллизии
-            if (!_targetPosition.HasValue || _collisions.Any())
+            if (!_targetPosition.HasValue || IsInCollision())
             {
                 // если игрок жмёт в какую-либо сторону - пытаемся ехать туда
                 if (requestedDirection.HasValue)
