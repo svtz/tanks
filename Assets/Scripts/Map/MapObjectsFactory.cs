@@ -51,13 +51,7 @@ namespace svtz.Tanks.Map
                 },
                 {
                     MapObjectKind.RegularWall,
-                    new[]
-                    {
-                        new CreationInfo(settings.RegularWallPrefab, new Vector2(0.25f, 0.25f)),
-                        new CreationInfo(settings.RegularWallPrefab, new Vector2(-0.25f, 0.25f)),
-                        new CreationInfo(settings.RegularWallPrefab, new Vector2(-0.25f, -0.25f)),
-                        new CreationInfo(settings.RegularWallPrefab, new Vector2(0.25f, -0.25f))
-                    }
+                    new[] {new CreationInfo(settings.RegularWallPrefab)}
                 },
                 {
                     MapObjectKind.Tree,

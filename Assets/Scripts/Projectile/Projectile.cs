@@ -1,4 +1,5 @@
-﻿using svtz.Tanks.Common;
+﻿using System.Collections;
+using svtz.Tanks.Common;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
@@ -17,8 +18,8 @@ namespace svtz.Tanks.Projectile
         private Rigidbody2D _rb2D;
         private ProjectilePool _pool;
         private DelayedExecutor _delayedExecutor;
-        
-        private string _teamId;
+
+        private GameObject _owner;
         private DelayedExecutor.ICancellable _autoDespawn;
         private bool _despawned;
 
@@ -31,9 +32,9 @@ namespace svtz.Tanks.Projectile
         }
 
         [ClientRpc]
-        private void RpcLaunch(Vector2 position, Quaternion rotation, string teamId)
+        private void RpcLaunch(Vector2 position, Quaternion rotation, GameObject owner)
         {
-            _teamId = teamId;
+            _owner = owner;
 
             transform.position = position;
             transform.rotation = rotation;
@@ -43,25 +44,26 @@ namespace svtz.Tanks.Projectile
             _autoDespawn = _delayedExecutor.Add(TryDespawn, TTL);
         }
 
-        public void Launch(Transform spawn, TeamId teamId)
+        public void Launch(Transform spawn, GameObject owner)
         {
             Assert.IsTrue(isServer);
-            RpcLaunch(spawn.position, spawn.rotation, teamId.Id);
+            RpcLaunch(spawn.position, spawn.rotation, owner);
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
             var hit = collision.gameObject;
-            var teamId = hit.GetComponent<TeamId>();
+            if (hit == _owner)
+                return;
 
-            if (teamId == null || teamId.Id != _teamId)
+            var target = hit.GetComponent<AbstractProjectileTarget>();
+            if (target != null)
             {
-                var health = hit.GetComponent<HealthBase>();
-                if (health != null)
+                if (isServer)
                 {
-                    health.TakeDamage(Damage);
+                    var teamId = _owner.GetComponent<TeamId>().Id;
+                    target.TakeDamage(Damage, teamId);
                 }
-
                 TryDespawn();
             }
         }
@@ -71,10 +73,21 @@ namespace svtz.Tanks.Projectile
             if (!_despawned)
             {
                 _autoDespawn.Cancel();
-                _pool.Despawn(this);
+                StartCoroutine(DoDespawn());
             }
 
             _despawned = true;
+        }
+
+        /// <summary>
+        /// Нам нужно, чтобы отработали коллизии на всех стенках.
+        /// А если мы убиваем пулю на первой же коллизии, то остальные стенки не рушатся.
+        /// </summary>
+        private IEnumerator DoDespawn()
+        {
+            _rb2D.velocity = Vector2.zero;
+            yield return new WaitForFixedUpdate();
+            _pool.Despawn(this);
         }
     }
 }

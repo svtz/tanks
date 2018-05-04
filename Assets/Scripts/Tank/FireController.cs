@@ -14,14 +14,12 @@ namespace svtz.Tanks.Tank
         public Transform ProjectileSpawn;
 #pragma warning restore 0649
 
-        private TeamId _teamId;
         private ProjectilePool _pool;
         private DelayedExecutor _delayedExecutor;
 
         [Inject]
-        private void Construct(TeamId teamId, ProjectilePool pool, DelayedExecutor delayedExecutor)
+        private void Construct(ProjectilePool pool, DelayedExecutor delayedExecutor)
         {
-            _teamId = teamId;
             _pool = pool;
             _delayedExecutor = delayedExecutor;
         }
@@ -51,7 +49,7 @@ namespace svtz.Tanks.Tank
                 if (_isFiring && _canFire)
                 {
                     var projectile = _pool.Spawn();
-                    projectile.Launch(ProjectileSpawn, _teamId);
+                    projectile.Launch(ProjectileSpawn, gameObject);
                     
                     // кулдаун
                     _canFire = false;

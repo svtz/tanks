@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 212854427743577154}
   - component: {fileID: 61482383448228664}
   - component: {fileID: 114087992924943728}
+  - component: {fileID: 114303639288014206}
   m_Layer: 0
   m_Name: Unbreakable Wall
   m_TagString: Untagged
@@ -99,6 +100,17 @@ MonoBehaviour:
     i15: 119
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
+--- !u!114 &114303639288014206
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1998760418760660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ded32a4f2514efeacfc64af065bee58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &212854427743577154
 SpriteRenderer:
   m_ObjectHideFlags: 1

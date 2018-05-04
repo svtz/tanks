@@ -405,7 +405,7 @@ MonoBehaviour:
   MapObjectsSettings:
     UnbreakableWallPrefab: {fileID: 1998760418760660, guid: 291e98b2c3b260a4e9695095b9a1ea77,
       type: 2}
-    RegularWallPrefab: {fileID: 1018151495389970, guid: 30f4e7d7d42ef1b4cba3a2781590bd71,
+    RegularWallPrefab: {fileID: 1800248512718184, guid: 30f4e7d7d42ef1b4cba3a2781590bd71,
       type: 2}
     TreePrefab: {fileID: 1289022681691262, guid: 472a9b8fc082a314b89cd13ef10cd45f,
       type: 2}

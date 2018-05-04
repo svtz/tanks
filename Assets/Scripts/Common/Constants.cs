@@ -2,6 +2,6 @@
 {
     internal static class Constants
     {
-        public static float GridSize = 0.5f;
+        public static float GridSize = 1.0f;
     }
 }
