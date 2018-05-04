@@ -14,7 +14,7 @@ TagManager:
   - 
   - 
   - Projectiles
-  - Tanks
+  - CollideOnlyProjectile
   - ProjectileTransparent
   - 
   - 
