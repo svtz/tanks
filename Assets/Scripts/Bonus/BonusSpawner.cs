@@ -11,15 +11,16 @@ namespace svtz.Tanks.Bonus
         public class Settings
         {
 #pragma warning disable 0649
-            public float RespawnSeconds;
+            public float RespawnIfNotPickedSeconds;
+            public float RespawnIfPickedSeconds;
 #pragma warning restore 0649
         }
 
         private readonly DelayedExecutor _delayedExecutor;
         private readonly Settings _settings;
         private readonly BonusPool _pool;
-        private List<Vector2> _points = new List<Vector2>();
-
+        private readonly Dictionary<Vector2, DelayedExecutor.IDelayedTask> _respawnTasks
+            = new Dictionary<Vector2, DelayedExecutor.IDelayedTask>();
 
         public BonusSpawner(DelayedExecutor delayedExecutor, Settings settings, BonusPool pool)
         {
@@ -28,11 +29,10 @@ namespace svtz.Tanks.Bonus
             _pool = pool;
         }
 
-        public void AddSpawnPoint(float x, float y)
+        public void ServerAddSpawnPoint(float x, float y)
         {
             var position = new Vector2(x, y);
-            _points.Add(position);
-            RespawnBonus(position);
+            ServerRespawnBonus(position);
         }
 
         private BonusKind GetBonusKind()
@@ -40,12 +40,20 @@ namespace svtz.Tanks.Bonus
             return BonusKind.MoveSpeedBoost;
         }
 
-        private void RespawnBonus(Vector2 position)
+        public void ServerRespawnPicked(Bonus bonus)
+        {
+            var respawnTask = _respawnTasks[bonus.transform.position];
+            respawnTask.TimeRemaining = _settings.RespawnIfPickedSeconds;
+            _pool.Despawn(bonus);
+        }
+
+        private void ServerRespawnBonus(Vector2 position)
         {
             var bonus = _pool.GetOrSpawn(position);
             bonus.ServerChangeBonusKind(GetBonusKind());
 
-            _delayedExecutor.Add(() => RespawnBonus(position), _settings.RespawnSeconds);
+            var respawnTask = _delayedExecutor.Add(() => ServerRespawnBonus(position), _settings.RespawnIfNotPickedSeconds);
+            _respawnTasks[position] = respawnTask;
         }
     }
 }

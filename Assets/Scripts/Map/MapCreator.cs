@@ -84,7 +84,7 @@ namespace svtz.Tanks.Map
                         break;
 
                     case MapObjectKind.RandomBonusSpawner:
-                        _bonusSpawner.AddSpawnPoint(-map.Width / 2 + j + 1.0f, -map.Height / 2 + i);
+                        _bonusSpawner.ServerAddSpawnPoint(-map.Width / 2 + j + 1.0f, -map.Height / 2 + i);
                         break;
                         
                     default:

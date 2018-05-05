@@ -22,13 +22,14 @@ namespace svtz.Tanks.Bonus
             _bonusKind = newValue;
         }
 
-        private BonusPool _pool;
+        private BonusSpawner _spawner;
         private Dictionary<BonusKind, IBonusImplementation> _implementations;
 
         [Inject]
-        private void Construct(BonusPool pool, List<IBonusImplementation> implementations)
+        private void Construct(BonusSpawner spawner,
+            List<IBonusImplementation> implementations)
         {
-            _pool = pool;
+            _spawner = spawner;
             _implementations = implementations.ToDictionary(b => b.BonusKind);
         }
 
@@ -38,7 +39,7 @@ namespace svtz.Tanks.Bonus
             {
                 var target = collision.gameObject;
                 _implementations[_bonusKind].Apply(target);
-                _pool.Despawn(this);
+                _spawner.ServerRespawnPicked(this);
             }
             else
             {
