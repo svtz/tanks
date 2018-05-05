@@ -33,23 +33,17 @@ namespace svtz.Tanks.Bonus.Impl
                 return;
             }
 
-            Debug.Log("Подбираем бонус");
-
             DelayedExecutor.IDelayedTask appliedBonus;
             if (_appliedBonuses.TryGetValue(player, out appliedBonus))
             {
-                Debug.Log("На игрока уже действует этот бонус. Продлеваем эффект.");
                 appliedBonus.TimeRemaining = _effects.MoveSpeedBonusDuration;
             }
             else
             {
-                Debug.Log("Накладываем новый эффект");
-
                 var oldSpeed = controller.Speed;
                 controller.Speed = _effects.MoveSpeedBonusValue;
                 appliedBonus = _delayedExecutor.Add(() =>
                     {
-                        Debug.Log("Время вышло, отменяем эффект");
                         _appliedBonuses.Remove(controller.gameObject);
                         if (controller.gameObject != null)
                         {

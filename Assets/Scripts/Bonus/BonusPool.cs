@@ -61,7 +61,7 @@ namespace svtz.Tanks.Bonus
 
             private GameObject SpawnHandler(Vector3 position, NetworkHash128 id)
             {
-                return _pool.Spawn(position).gameObject;
+                return _pool.GetOrSpawn(position).gameObject;
             }
         }
     }
