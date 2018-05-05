@@ -1,4 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Emit;
+using ModestTree.Util;
 using svtz.Tanks.BattleStats;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,35 +34,13 @@ namespace svtz.Tanks.UserInterface.States
             battleStatsUpdateSignal.Listen(RefreshStatsScreen);
         }
 
-        private void RefreshStatsScreen(BattleStatsUpdateSignal.Msg msg)
-        {
-            var stats = msg.BattleStats.Stats;
-
-            var positions = Enumerable.Range(1, stats.Count).Select(i => i.ToString()).ToArray();
-            FillColumn(PositionColumn, positions, CellPrefab);
-
-            var orderedStats = stats.Values
-                .OrderByDescending(s => s.Frags)
-                .ThenBy(s => s.Deaths)
-                .ToArray();
-
-            var names = orderedStats.Select(s => s.Name).ToArray();
-            FillColumn(NameColumn, names, FlexibleCellPrefab);
-
-            var deaths = orderedStats.Select(s => s.Deaths.ToString()).ToArray();
-            FillColumn(DeathsColumn, deaths, CellPrefab);
-
-            var frags = orderedStats.Select(s => s.Frags.ToString()).ToArray();
-            FillColumn(FragsColumn, frags, CellPrefab);
-        }
-
-        private static void FillColumn(RectTransform column, string[] values, GameObject cellPrefab)
+        private static void AddOrCreateCellsIfNeeded(RectTransform column, GameObject cellPrefab, int count)
         {
             var transform = column.transform;
 
             // удалим лишние ячейки, если они есть
             // учитываем, что есть ещё заголовочная ячейка, которую трогать не нужно
-            for (var i = values.Length; i < transform.childCount - 1; ++i)
+            for (var i = count; i < transform.childCount - 1; ++i)
             {
                 var child = transform.GetChild(i + 1);
                 Destroy(child.gameObject);
@@ -66,17 +48,48 @@ namespace svtz.Tanks.UserInterface.States
 
             // добавим недостающие ячейки, если они есть
             // учитываем, что есть ещё заголовочная ячейка, которую трогать не нужно
-            for (var i = transform.childCount - 1; i < values.Length; ++i)
+            for (var i = transform.childCount - 1; i < count; ++i)
             {
                 Instantiate(cellPrefab, transform);
             }
+        }
 
-            for (var i = 1; i <= values.Length; i++)
+        private static void SetValue(RectTransform column, int rowNum, string value)
+        {
+            var textComponent = column.transform.GetChild(rowNum).GetComponentInChildren<Text>();
+            textComponent.text = value;
+        }
+
+        private void RefreshStatsScreen(BattleStatsUpdateSignal.Msg msg)
+        {
+            var stats = msg.BattleStats.Stats;
+
+            AddOrCreateCellsIfNeeded(PositionColumn, CellPrefab, stats.Count);
+            AddOrCreateCellsIfNeeded(NameColumn, FlexibleCellPrefab, stats.Count);
+            AddOrCreateCellsIfNeeded(DeathsColumn, CellPrefab, stats.Count);
+            AddOrCreateCellsIfNeeded(FragsColumn, CellPrefab, stats.Count);
+
+            var orderedStats = stats.Values
+                .OrderByDescending(s => s.Frags)
+                .ThenBy(s => s.Deaths);
+
+            using (var enumerator = orderedStats.GetEnumerator())
             {
-                var textComponent = transform.GetChild(i).GetComponentInChildren<Text>();
-                textComponent.text = values[i -1];
+                var num = 1;
+                while (enumerator.MoveNext())
+                {
+                    var stat = enumerator.Current;
+
+                    SetValue(PositionColumn, num, num.ToString());
+                    SetValue(NameColumn, num, stat.Name);
+                    SetValue(DeathsColumn, num, stat.Deaths.ToString());
+                    SetValue(FragsColumn, num, stat.Frags.ToString());
+
+                    num++;
+                }
             }
         }
+
 
         private bool _statsVisible = false;
         protected override void Update()
