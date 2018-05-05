@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using svtz.Tanks.Common;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -27,7 +24,7 @@ namespace svtz.Tanks.Projectile
         private DelayedExecutor _delayedExecutor;
 
         private GameObject _owner;
-        private DelayedExecutor.ICancellable _autoDespawn;
+        private DelayedExecutor.IDelayedTask _autoDespawn;
         private bool _despawned;
 
         [Inject]

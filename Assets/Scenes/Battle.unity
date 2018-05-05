@@ -420,6 +420,9 @@ MonoBehaviour:
     type: 2}
   BonusPrefab: {fileID: 1716186020836280, guid: 9202f48ad2e025e44958e39cea4e93d1,
     type: 2}
+  BonusEffects:
+    MoveSpeedBonusValue: 0.2
+    MoveSpeedBonusDuration: 5
   ProjectilePoolInitialSize: 20
   BonusPoolInitialSize: 5
 --- !u!114 &1786389208

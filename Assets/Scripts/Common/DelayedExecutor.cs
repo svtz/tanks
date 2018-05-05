@@ -7,18 +7,19 @@ namespace svtz.Tanks.Common
 {
     internal sealed class DelayedExecutor : ITickable
     {
-        public interface ICancellable
+        public interface IDelayedTask
         {
+            float TimeRemaining { get; set; }
             void Cancel();
         }
 
         private readonly List<Entry> _entries = new List<Entry>();
+        private readonly List<Entry> _newEntries = new List<Entry>();
 
-        private sealed class Entry : ICancellable
+        private sealed class Entry : IDelayedTask
         {
             private readonly Action _action;
-            private readonly float _timeout;
-            private float _time;
+            private float _timeout;
 
             public bool Complete { get; private set; }
 
@@ -33,15 +34,21 @@ namespace svtz.Tanks.Common
                 if (Complete)
                     return;
 
-                _time += Time.deltaTime;
-                if (_time > _timeout)
+                _timeout -= Time.deltaTime;
+                if (_timeout <= 0)
                 {
                     Complete = true;
                     _action();
                 }
             }
 
-            void ICancellable.Cancel()
+            float IDelayedTask.TimeRemaining
+            {
+                get { return _timeout; }
+                set { _timeout = value; }
+            }
+
+            void IDelayedTask.Cancel()
             {
                 Complete = true;
             }
@@ -49,13 +56,18 @@ namespace svtz.Tanks.Common
 
         private bool _currentlyTicking = false;
 
-        public ICancellable Add(Action action, float executeAfterSeconds)
+        public IDelayedTask Add(Action action, float executeAfterSeconds)
         {
-            if (_currentlyTicking)
-                throw new InvalidOperationException("Не хотелось, но придётся добавить блокировочек.");
-
             var entry = new Entry(action, executeAfterSeconds);
-            _entries.Add(entry);
+
+            if (!_currentlyTicking)
+            {
+                _entries.Add(entry);
+            }
+            else
+            {
+                _newEntries.Add(entry);
+            }
 
             return entry;
         }
@@ -81,6 +93,9 @@ namespace svtz.Tanks.Common
             }
             finally
             {
+                _entries.AddRange(_newEntries);
+                _newEntries.Clear();
+
                 _currentlyTicking = false;
             }
         }

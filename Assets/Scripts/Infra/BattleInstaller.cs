@@ -1,4 +1,5 @@
 ﻿using svtz.Tanks.Bonus;
+using svtz.Tanks.Bonus.Impl;
 using svtz.Tanks.Camera;
 using svtz.Tanks.Common;
 using svtz.Tanks.Map;
@@ -19,6 +20,7 @@ namespace svtz.Tanks.Infra
         public BonusSpawner.Settings BonusSpawnerSettings;
         public GameObject ProjectilePrefab;
         public GameObject BonusPrefab;
+        public BonusEffects BonusEffects;
         public int ProjectilePoolInitialSize;
         public int BonusPoolInitialSize;
 #pragma warning restore 0649
@@ -62,6 +64,7 @@ namespace svtz.Tanks.Infra
                 .ExpandByOneAtATime()
                 .FromComponentInNewPrefab(BonusPrefab);
             Container.Bind<BonusPool.Client>().AsSingle().WithArguments(BonusPrefab).NonLazy();
+            BonusImplementationsInstaller.Install(Container, BonusEffects);
         }
     }
 }

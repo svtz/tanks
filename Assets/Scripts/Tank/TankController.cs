@@ -10,6 +10,7 @@ namespace svtz.Tanks.Tank
     internal sealed class TankController : NetworkBehaviour
     {
 #pragma warning disable 0649
+        [SyncVar]
         public float Speed;
 #pragma warning restore 0649
 
