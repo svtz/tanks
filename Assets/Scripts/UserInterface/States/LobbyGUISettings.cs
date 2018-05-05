@@ -19,9 +19,9 @@ namespace svtz.Tanks.UserInterface.States
             _state = state;
         }
 
-        public void OnEscape()
+        public void OnReturn()
         {
-            _state.DoOnEscape();
+            _state.OnReturn();
         }
     }
 }

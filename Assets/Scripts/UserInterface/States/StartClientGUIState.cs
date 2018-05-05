@@ -42,9 +42,9 @@ namespace svtz.Tanks.UserInterface.States
             _serverData.Clear();
         }
 
-        protected override void OnEscape()
+        public override void OnReturn()
         {
-            base.OnEscape();
+            base.OnReturn();
 
             NetworkDiscovery.CustomStopServerDiscovery();
             GoToState(GUIState.MainMenu);

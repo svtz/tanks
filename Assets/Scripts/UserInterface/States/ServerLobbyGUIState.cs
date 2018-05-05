@@ -7,9 +7,9 @@
             get { return GUIState.ServerLobby; }
         }
 
-        protected override void OnEscape()
+        public override void OnReturn()
         {
-            base.OnEscape();
+            base.OnReturn();
             GoToState(GUIState.StartServer);
         }
     }

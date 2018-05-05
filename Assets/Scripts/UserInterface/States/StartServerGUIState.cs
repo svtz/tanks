@@ -72,7 +72,7 @@ namespace svtz.Tanks.UserInterface.States
                 GoToState(GUIState.ServerLobby);
         }
 
-        protected override void OnEscape()
+        public override void OnReturn()
         {
             GoToState(GUIState.MainMenu);
         }

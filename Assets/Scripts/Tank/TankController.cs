@@ -2,6 +2,7 @@
 using svtz.Tanks.Common;
 using UnityEngine;
 using UnityEngine.Networking;
+using Zenject;
 
 namespace svtz.Tanks.Tank
 {
@@ -14,6 +15,13 @@ namespace svtz.Tanks.Tank
 
         private Rigidbody2D _rb2D;
         private TankPositionSync _sync;
+        private InputManager _input;
+
+        [Inject]
+        private void Construct(InputManager input)
+        {
+            _input = input;
+        }
 
         private Direction _currentDirection;
         private Vector2? _targetPosition;
@@ -51,21 +59,21 @@ namespace svtz.Tanks.Tank
             _inputX = 0.0f;
             _inputY = 0.0f;
 
-            var up = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
-            var down = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
+            var up = _input.Up();
+            var down = _input.Down();
             if (up && !down)
                 _inputY = 1.0f;
             else if (down && !up)
                 _inputY = -1.0f;
 
-            var right = Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow);
-            var left = Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow);
+            var right = _input.Right();
+            var left = _input.Left();
             if (right && !left)
                 _inputX = 1.0f;
             else if (left && !right)
                 _inputX = -1.0f;
 
-            _brake = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+            _brake = _input.Brake();
         }
 
         //FixedUpdate is called at a fixed interval and is independent of frame rate. Put physics code here.

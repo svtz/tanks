@@ -16,12 +16,15 @@ namespace svtz.Tanks.Tank
 
         private ProjectilePool _pool;
         private DelayedExecutor _delayedExecutor;
+        private InputManager _input;
 
         [Inject]
-        private void Construct(ProjectilePool pool, DelayedExecutor delayedExecutor)
+        private void Construct(ProjectilePool pool, DelayedExecutor delayedExecutor,
+            InputManager input)
         {
             _pool = pool;
             _delayedExecutor = delayedExecutor;
+            _input = input;
         }
 
 
@@ -36,7 +39,7 @@ namespace svtz.Tanks.Tank
             if (isLocalPlayer)
             {
                 // клиент: сообщаем на сервер положение кнопки
-                var doFire = Input.GetKey(KeyCode.Space);
+                var doFire = _input.Fire();
                 if (doFire ^ _isFiring)
                 {
                     CmdFire(doFire);

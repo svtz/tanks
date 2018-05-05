@@ -13,7 +13,7 @@
             GoToState(GUIState.MainMenu);
         }
 
-        protected override void OnEscape()
+        public override void OnReturn()
         {
             GoToState(GUIState.InGame);
         }

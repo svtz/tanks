@@ -30,6 +30,8 @@ namespace svtz.Tanks.Infra
             Container.Bind<CustomNetworkManager>().FromComponentInNewPrefab(NetworkManagerPrefab).AsSingle();
             Container.Bind<CustomNetworkDiscovery>().FromComponentInNewPrefab(NetworkDiscoveryPrefab).AsSingle();
 
+            Container.Bind<InputManager>().AsSingle();
+
             GUIInstaller.Install(Container, Menus);
             BattleStatsInstaller.Install(Container);
         }

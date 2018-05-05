@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using ModestTree.Util;
+﻿using System.Linq;
 using svtz.Tanks.BattleStats;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 namespace svtz.Tanks.UserInterface.States
@@ -91,13 +86,12 @@ namespace svtz.Tanks.UserInterface.States
             }
         }
 
-
         private bool _statsVisible = false;
         protected override void Update()
         {
             base.Update();
 
-            var showStats = Input.GetKey(KeyCode.Tab);
+            var showStats = Input.StatScreen();
             if (showStats ^ _statsVisible) // если различаются - надо синхронизировать
             {
                 StatsScreen.gameObject.SetActive(showStats);
@@ -105,7 +99,7 @@ namespace svtz.Tanks.UserInterface.States
             }
         }
 
-        protected override void OnEscape()
+        public override void OnReturn()
         {
             GoToState(GUIState.GameMenu);
         }
