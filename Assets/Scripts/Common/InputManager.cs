@@ -37,11 +37,21 @@ namespace svtz.Tanks.Common
 
         public bool TurretLeft()
         {
-            return Input.GetButtonDown("TurretLeft");
+            return Input.GetButton("TurretLeft");
         }
+
         public bool TurretRight()
         {
-            return Input.GetButtonDown("TurretRight");
+            return Input.GetButton("TurretRight");
+        }
+
+        public bool TurretUp()
+        {
+            return Input.GetButton("TurretUp");
+        }
+        public bool TurretDown()
+        {
+            return Input.GetButton("TurretDown");
         }
 
         public bool Return()

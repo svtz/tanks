@@ -104,8 +104,7 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: TurretRight
-    descriptiveName: "\u041F\u043E\u0432\u0435\u0440\u043D\u0443\u0442\u044C \u0431\u0430\u0448\u043D\u044E
-      \u0432\u043F\u0440\u0430\u0432\u043E"
+    descriptiveName: "\u0411\u0430\u0448\u043D\u044F \u0432\u043F\u0440\u0430\u0432\u043E"
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: right
@@ -121,11 +120,42 @@ InputManager:
     joyNum: 0
   - serializedVersion: 3
     m_Name: TurretLeft
-    descriptiveName: "\u041F\u043E\u0432\u0435\u0440\u043D\u0443\u0442\u044C \u0431\u0430\u0448\u043D\u044E
-      \u0432\u043B\u0435\u0432\u043E"
+    descriptiveName: "\u0411\u0430\u0448\u043D\u044F \u0432\u043B\u0435\u0432\u043E"
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: left
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.001
+    sensitivity: 1000
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: TurretUp
+    descriptiveName: "\u0411\u0430\u0448\u043D\u044F \u0432\u0432\u0435\u0440\u0445"
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: up
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.001
+    sensitivity: 1000
+    snap: 0
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: TurretDown
+    descriptiveName: "\u0411\u0430\u0448\u043D\u044F \u0432\u043D\u0438\u0437"
+    descriptiveNegativeName: 
+    negativeButton: 
+    positiveButton: down
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
