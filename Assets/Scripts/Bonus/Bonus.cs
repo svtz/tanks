@@ -34,12 +34,16 @@ namespace svtz.Tanks.Bonus
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            if (!isServer)
-                return;
-
-            var target = collision.gameObject;
-            _implementations[_bonusKind].Apply(target);
-            _pool.Despawn(this);
+            if (isServer)
+            {
+                var target = collision.gameObject;
+                _implementations[_bonusKind].Apply(target);
+                _pool.Despawn(this);
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
         }
     }
 }

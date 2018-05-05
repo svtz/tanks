@@ -33,7 +33,6 @@ namespace svtz.Tanks.Bonus
             var position = new Vector2(x, y);
             _points.Add(position);
             RespawnBonus(position);
-            _delayedExecutor.Add(() => RespawnBonus(position), _settings.RespawnSeconds);
         }
 
         private BonusKind GetBonusKind()

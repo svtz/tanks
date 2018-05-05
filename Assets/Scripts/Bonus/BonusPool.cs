@@ -56,7 +56,8 @@ namespace svtz.Tanks.Bonus
 
             private void UnspawnHandler(GameObject spawned)
             {
-                _pool.Despawn(spawned.GetComponent<Bonus>());
+                if (spawned.activeInHierarchy)
+                    _pool.Despawn(spawned.GetComponent<Bonus>());
             }
 
             private GameObject SpawnHandler(Vector3 position, NetworkHash128 id)
