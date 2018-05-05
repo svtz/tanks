@@ -414,9 +414,14 @@ MonoBehaviour:
     RespawnSeconds: 5
     TankPrefab: {fileID: 1468370762080052, guid: b7c5dc9e331d42e49b79c9acc768f362,
       type: 2}
+  BonusSpawnerSettings:
+    RespawnSeconds: 5
   ProjectilePrefab: {fileID: 1815654817061048, guid: e8a3fd7c90864644ba7a8ed6ee6d3d97,
     type: 2}
+  BonusPrefab: {fileID: 1716186020836280, guid: 9202f48ad2e025e44958e39cea4e93d1,
+    type: 2}
   ProjectilePoolInitialSize: 20
+  BonusPoolInitialSize: 5
 --- !u!114 &1786389208
 MonoBehaviour:
   m_ObjectHideFlags: 0

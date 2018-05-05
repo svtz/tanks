@@ -46,6 +46,8 @@ namespace svtz.Tanks.Map
                     return MapObjectKind.Tree;
                 case 'S':
                     return MapObjectKind.RandomPlayerSpawn;
+                case '?':
+                    return MapObjectKind.RandomBonusSpawner;
                
                 default:
                     throw new ArgumentException("Неверный формат уровня");

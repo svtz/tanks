@@ -1,6 +1,6 @@
 20 14
 XX                XX
-X                  X
+X        ?         X
  S      XXXX     S  
                     
   ***          ***  
@@ -12,4 +12,4 @@ TTTT*  XX**XX  *TTTT
                     
         XXXX        
 XS               S X
-XX                XX
+XX       ?        XX

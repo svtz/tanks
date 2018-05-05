@@ -1,4 +1,5 @@
-﻿using svtz.Tanks.Camera;
+﻿using svtz.Tanks.Bonus;
+using svtz.Tanks.Camera;
 using svtz.Tanks.Common;
 using svtz.Tanks.Map;
 using svtz.Tanks.Projectile;
@@ -15,8 +16,11 @@ namespace svtz.Tanks.Infra
         public MapCreator.Settings MapCreatorSettings;
         public MapObjectsFactory.Settings MapObjectsSettings;
         public TankSpawner.Settings SpawnControllerSettings;
+        public BonusSpawner.Settings BonusSpawnerSettings;
         public GameObject ProjectilePrefab;
+        public GameObject BonusPrefab;
         public int ProjectilePoolInitialSize;
+        public int BonusPoolInitialSize;
 #pragma warning restore 0649
 
         public override void InstallBindings()
@@ -50,6 +54,14 @@ namespace svtz.Tanks.Infra
                 .ExpandByOneAtATime()
                 .FromComponentInNewPrefab(ProjectilePrefab);
             Container.Bind<ProjectilePool.Client>().AsSingle().WithArguments(ProjectilePrefab).NonLazy();
+
+            // Бонусы
+            Container.Bind<BonusSpawner>().AsSingle().WithArguments(BonusSpawnerSettings);
+            Container.BindMemoryPool<Bonus.Bonus, BonusPool>()
+                .WithInitialSize(BonusPoolInitialSize)
+                .ExpandByOneAtATime()
+                .FromComponentInNewPrefab(BonusPrefab);
+            Container.Bind<BonusPool.Client>().AsSingle().WithArguments(BonusPrefab).NonLazy();
         }
     }
 }

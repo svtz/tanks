@@ -6,6 +6,7 @@ namespace svtz.Tanks.Map
         RegularWall,
         UnbreakableWall,
         Tree,
-        RandomPlayerSpawn
+        RandomPlayerSpawn,
+        RandomBonusSpawner
     }
 }

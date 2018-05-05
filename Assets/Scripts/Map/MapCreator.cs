@@ -1,4 +1,5 @@
 ﻿using System;
+using svtz.Tanks.Bonus;
 using svtz.Tanks.Tank;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -19,18 +20,21 @@ namespace svtz.Tanks.Map
         private readonly MapParser _mapParser;
         private readonly MapObjectsManager _mapObjectsManager;
         private readonly TankSpawner _tankSpawner;
+        private readonly BonusSpawner _bonusSpawner;
         private readonly Background _background;
 
         public MapCreator(Settings settings, 
             MapParser mapParser, 
             MapObjectsManager mapObjectsManager,
             TankSpawner tankSpawner,
+            BonusSpawner bonusSpawner,
             Background background)
         {
             _settings = settings;
             _mapParser = mapParser;
             _mapObjectsManager = mapObjectsManager;
             _tankSpawner = tankSpawner;
+            _bonusSpawner = bonusSpawner;
             _background = background;
         }
 
@@ -79,6 +83,10 @@ namespace svtz.Tanks.Map
                         _tankSpawner.AddSpawnPoint(-map.Width / 2 + j + 1.0f, -map.Height / 2 + i);
                         break;
 
+                    case MapObjectKind.RandomBonusSpawner:
+                        _bonusSpawner.AddSpawnPoint(-map.Width / 2 + j + 1.0f, -map.Height / 2 + i);
+                        break;
+                        
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
