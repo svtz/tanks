@@ -48,13 +48,12 @@ namespace svtz.Tanks.Infra
 
         public void FireOnClient(NetworkConnection client, TMessage message)
         {
-            if (client.isReady)
-                client.Send(_messageCode, message);
+            client.Send(_messageCode, message);
         }
 
         public void FireOnAllClients(TMessage message)
         {
-            foreach (var client in NetworkServer.connections.Where(c => c.isReady))
+            foreach (var client in NetworkServer.connections)
             {
                 client.Send(_messageCode, message);
             }

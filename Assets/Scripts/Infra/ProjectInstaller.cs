@@ -1,9 +1,9 @@
-﻿using svtz.Tanks.Common;
+﻿using svtz.Tanks.BattleStats;
+using svtz.Tanks.Common;
 using svtz.Tanks.Network;
 using svtz.Tanks.Tank;
 using svtz.Tanks.UserInterface;
 using UnityEngine;
-using UnityEngine.Networking;
 using Zenject;
 
 namespace svtz.Tanks.Infra
@@ -22,7 +22,9 @@ namespace svtz.Tanks.Infra
 
             Container.DeclareSignal<ConnectedToServerSignal>();
             Container.DeclareSignal<DisconnectedFromServerSignal>();
+
             Container.DeclareSignal<GameStartedSignal>();
+            Container.Bind<GameStartedSignal.ServerToClient>().AsSingle().WithArguments(MessageCodes.GameStarted).NonLazy();
 
             Container.DeclareSignal<RespawningSignal>();
             Container.Bind<RespawningSignal.ServerToClient>().AsSingle().WithArguments(MessageCodes.Respawning).NonLazy();
@@ -31,24 +33,7 @@ namespace svtz.Tanks.Infra
             Container.Bind<CustomNetworkDiscovery>().FromComponentInNewPrefab(NetworkDiscoveryPrefab).AsSingle();
 
             GUIInstaller.Install(Container, Menus);
-        }
-    }
-
-    internal sealed class PointsCounter : NetworkBehaviour
-    {
-        private GameStartedSignal _gameStartedSignal;
-
-
-        [Inject]
-        public void Construct(GameStartedSignal gameStartedSignal)
-        {
-            _gameStartedSignal = gameStartedSignal;
-            _gameStartedSignal.Listen(OnGameStarted);
-        }
-
-        private void OnGameStarted()
-        {
-            throw new System.NotImplementedException();
+            BattleStatsInstaller.Install(Container);
         }
     }
 }
