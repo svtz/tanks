@@ -22,6 +22,7 @@ namespace svtz.Tanks.BattleStats
                 {
                     writer.Write(s.Value.Id);
                     writer.Write(s.Value.Frags);
+                    writer.Write(s.Value.Deaths);
                     writer.Write(s.Value.Name);
                 }
             }
@@ -39,6 +40,7 @@ namespace svtz.Tanks.BattleStats
                     {
                         Id = playerId,
                         Frags = reader.ReadInt32(),
+                        Deaths = reader.ReadInt32(),
                         Name = reader.ReadString()
                     };
                 }

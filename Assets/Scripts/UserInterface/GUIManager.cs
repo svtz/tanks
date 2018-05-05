@@ -62,16 +62,5 @@ namespace svtz.Tanks.UserInterface
                 _lockTransitions = false;
             }
         }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-                OnEscape();
-        }
-
-        private void OnEscape()
-        {
-            _currentState.OnEscape();
-        }
     }
 }

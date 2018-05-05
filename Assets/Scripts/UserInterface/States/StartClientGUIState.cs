@@ -42,7 +42,7 @@ namespace svtz.Tanks.UserInterface.States
             _serverData.Clear();
         }
 
-        public override void OnEscape()
+        protected override void OnEscape()
         {
             base.OnEscape();
 

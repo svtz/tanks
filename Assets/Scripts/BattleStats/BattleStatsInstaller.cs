@@ -9,7 +9,7 @@ namespace svtz.Tanks.BattleStats
         {
             Container.DeclareSignal<BattleStatsUpdateSignal>();
             Container.Bind<BattleStatsUpdateSignal.ServerToClient>().AsSingle().WithArguments(MessageCodes.BattleStats).NonLazy();
-            Container.BindInterfacesAndSelfTo<BattleStatsManager>().AsSingle().NonLazy();
+            Container.Bind<BattleStatsManager>().AsSingle().NonLazy();
         }
     }
 }

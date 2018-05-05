@@ -2,14 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
-using Zenject;
 
 namespace svtz.Tanks.BattleStats
 {
-    internal sealed class BattleStatsManager : IInitializable
+    internal sealed class BattleStatsManager
     {
         private readonly BattleStatsUpdateSignal.ServerToClient _battleStatsUpdateSignalSender;
-        private readonly BattleStatsUpdateSignal _battleStatsUpdateSignal;
         private BattleStats _battleStats;
 
         private void ServerSendBattleStatsUpdate()
@@ -17,12 +15,9 @@ namespace svtz.Tanks.BattleStats
             _battleStatsUpdateSignalSender.FireOnAllClients(new BattleStatsUpdateSignal.Msg {BattleStats = _battleStats});
         }
 
-        public BattleStatsManager(
-            BattleStatsUpdateSignal.ServerToClient battleStatsUpdateSignalSender,
-            BattleStatsUpdateSignal battleStatsUpdateSignal)
+        public BattleStatsManager(BattleStatsUpdateSignal.ServerToClient battleStatsUpdateSignalSender)
         {
             _battleStatsUpdateSignalSender = battleStatsUpdateSignalSender;
-            _battleStatsUpdateSignal = battleStatsUpdateSignal;
         }
 
         public void ServerGameStarted(Dictionary<int, string> playerNames)
@@ -58,16 +53,6 @@ namespace svtz.Tanks.BattleStats
             }
 
             ServerSendBattleStatsUpdate();
-        }
-
-        private void OnClientStatsUpdated(BattleStatsUpdateSignal.Msg msg)
-        {
-            _battleStats = msg.BattleStats;
-        }
-
-        void IInitializable.Initialize()
-        {
-            _battleStatsUpdateSignal.Listen(OnClientStatsUpdated);
         }
     }
 }

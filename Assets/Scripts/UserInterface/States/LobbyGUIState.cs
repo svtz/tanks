@@ -22,7 +22,7 @@ namespace svtz.Tanks.UserInterface.States
             _settings = settings;
         }
 
-        public override void OnEscape()
+        protected override void OnEscape()
         {
             base.OnEscape();
             NetworkDiscovery.CustomStop();
@@ -94,6 +94,11 @@ namespace svtz.Tanks.UserInterface.States
 
                 yield return new WaitForSeconds(_settings.RefreshIntervalSeconds);
             }
+        }
+
+        public void DoOnEscape()
+        {
+            OnEscape();
         }
     }
 }

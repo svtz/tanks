@@ -21,7 +21,13 @@ namespace svtz.Tanks.UserInterface.States
             gameObject.SetActive(true);
         }
 
-        public virtual void OnEscape()
+        protected virtual void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+                OnEscape();
+        }
+
+        protected virtual void OnEscape()
         {
         }
 

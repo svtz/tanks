@@ -6,7 +6,5 @@
 
         void OnExitState();
         void OnEnterState();
-
-        void OnEscape();
     }
 }
