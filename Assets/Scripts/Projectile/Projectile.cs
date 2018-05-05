@@ -1,9 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using svtz.Tanks.Common;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
 using Zenject;
+using Debug = UnityEngine.Debug;
 
 namespace svtz.Tanks.Projectile
 {
@@ -13,6 +17,9 @@ namespace svtz.Tanks.Projectile
         public int Damage;
         public float TTL;
         public float Speed;
+
+        public float CastWidth;
+        public float CastDistance;
 #pragma warning restore 0649
 
         private Rigidbody2D _rb2D;
@@ -40,7 +47,7 @@ namespace svtz.Tanks.Projectile
             transform.rotation = rotation;
             _rb2D.velocity = transform.up * Speed;
 
-            _despawned = false;
+            _despawned = false; 
             _autoDespawn = _delayedExecutor.Add(TryDespawn, TTL);
         }
 
@@ -52,18 +59,62 @@ namespace svtz.Tanks.Projectile
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
-            var hit = collision.gameObject;
-            if (hit == _owner)
+            if (collision.gameObject == _owner)
                 return;
+            
+            var contact = new Vector2();
 
-            var target = hit.GetComponent<AbstractProjectileTarget>();
-            if (target != null)
+            foreach (var collisionContact in collision.contacts)
             {
-                if (isServer)
+                contact += collisionContact.point;
+            }
+            contact /= collision.contacts.Length;
+
+            Debug.DrawLine(_owner.transform.position, contact, Color.yellow, 2);
+
+            Vector2 direction = transform.up;
+            const float offset = 0.01f;
+
+            ExtDebug.DrawBoxCastBox(
+                contact,
+                new Vector2(CastWidth / 2, offset / 2),
+                transform.rotation,
+                direction,
+                CastDistance,
+                Color.magenta);
+
+            var cast = Physics2D.BoxCastAll(
+                    contact,
+                    new Vector2(CastWidth, offset),
+                    angle: transform.rotation.eulerAngles.z,
+                    direction: direction,
+                    distance: CastDistance)
+                .Select(h => h.transform)
+                .Where(h => h != transform && h != _owner.transform)
+                .Distinct();
+
+
+            var shouldDespawn = false;
+            foreach (var hit in cast)
+            {
+                var target = hit.GetComponent<AbstractProjectileTarget>();
+                if (target != null)
                 {
-                    target.TakeDamage(Damage, _owner);
+                    if (isServer)
+                    {
+                        target.TakeDamage(Damage, _owner);
+                    }
+                    shouldDespawn = true;
                 }
+            }
+
+            if (shouldDespawn)
+            {
                 TryDespawn();
+            }
+            else
+            {
+                Debug.Break();
             }
         }
 
@@ -72,21 +123,12 @@ namespace svtz.Tanks.Projectile
             if (!_despawned)
             {
                 _autoDespawn.Cancel();
-                StartCoroutine(DoDespawn());
+                _pool.Despawn(this);
             }
 
             _despawned = true;
         }
-
-        /// <summary>
-        /// Нам нужно, чтобы отработали коллизии на всех стенках.
-        /// А если мы убиваем пулю на первой же коллизии, то остальные стенки не рушатся.
-        /// </summary>
-        private IEnumerator DoDespawn()
-        {
-            _rb2D.velocity = Vector2.zero;
-            yield return new WaitForFixedUpdate();
-            _pool.Despawn(this);
-        }
     }
+
+
 }
