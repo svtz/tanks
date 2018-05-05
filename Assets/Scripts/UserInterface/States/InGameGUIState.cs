@@ -54,10 +54,10 @@ namespace svtz.Tanks.UserInterface.States
             }
         }
 
-        private static void SetValue(RectTransform column, int rowNum, string value)
+        private static void SetValue(RectTransform column, int rowNum, string value, bool highlight)
         {
-            var textComponent = column.transform.GetChild(rowNum).GetComponentInChildren<Text>();
-            textComponent.text = value;
+            var cell = column.transform.GetChild(rowNum).GetComponent<StatCellController>();
+            cell.SetText(value, highlight);
         }
 
         private void RefreshStatsScreen(BattleStatsUpdateSignal.Msg msg)
@@ -79,11 +79,12 @@ namespace svtz.Tanks.UserInterface.States
                 while (enumerator.MoveNext())
                 {
                     var stat = enumerator.Current;
+                    var highlight = stat.Id == msg.PlayerId;
 
-                    SetValue(PositionColumn, num, num.ToString());
-                    SetValue(NameColumn, num, stat.Name);
-                    SetValue(DeathsColumn, num, stat.Deaths.ToString());
-                    SetValue(FragsColumn, num, stat.Frags.ToString());
+                    SetValue(PositionColumn, num, num.ToString(), highlight);
+                    SetValue(NameColumn, num, stat.Name, highlight);
+                    SetValue(DeathsColumn, num, stat.Deaths.ToString(), highlight);
+                    SetValue(FragsColumn, num, stat.Frags.ToString(), highlight);
 
                     num++;
                 }

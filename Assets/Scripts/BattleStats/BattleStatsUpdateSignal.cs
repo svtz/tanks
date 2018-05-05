@@ -9,14 +9,16 @@ namespace svtz.Tanks.BattleStats
     {
         public sealed class Msg : MessageBase
         {
+            public int PlayerId { get; set; }
             public BattleStats BattleStats { get; set; }
 
             public override void Serialize(NetworkWriter writer)
             {
                 base.Serialize(writer);
 
-                var stats = BattleStats.Stats;
+                writer.Write(PlayerId);
 
+                var stats = BattleStats.Stats;
                 writer.Write(stats.Count);
                 foreach (var s in stats)
                 {
@@ -30,6 +32,8 @@ namespace svtz.Tanks.BattleStats
             public override void Deserialize(NetworkReader reader)
             {
                 base.Deserialize(reader);
+
+                PlayerId = reader.ReadInt32();
 
                 var length = reader.ReadInt32();
                 var result = new Dictionary<int, PlayerStats>(length);
@@ -52,6 +56,13 @@ namespace svtz.Tanks.BattleStats
             }
         }
 
-        public sealed class ServerToClient : ServerToClientSignal<BattleStatsUpdateSignal, Msg> { }
+        public sealed class ServerToClient : ServerToClientSignal<BattleStatsUpdateSignal, Msg>
+        {
+            public override void FireOnClient(NetworkConnection client, Msg message)
+            {
+                message.PlayerId = client.connectionId;
+                base.FireOnClient(client, message);
+            }
+        }
     }
 }

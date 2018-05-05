@@ -46,7 +46,7 @@ namespace svtz.Tanks.Infra
             _localSignal.Fire(msg);
         }
 
-        public void FireOnClient(NetworkConnection client, TMessage message)
+        public virtual void FireOnClient(NetworkConnection client, TMessage message)
         {
             client.Send(_messageCode, message);
         }
@@ -55,7 +55,7 @@ namespace svtz.Tanks.Infra
         {
             foreach (var client in NetworkServer.connections)
             {
-                client.Send(_messageCode, message);
+                FireOnClient(client, message);
             }
         }
     }
