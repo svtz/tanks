@@ -18,9 +18,11 @@ namespace svtz.Tanks.Tank
         private InputManager _input;
 
         [Inject]
-        private void Construct(InputManager input)
+        private void Construct(InputManager input, TankPositionSync sync, Rigidbody2D rb2D)
         {
             _input = input;
+            _rb2D = rb2D;
+            _sync = sync;
         }
 
         private Direction _currentDirection;
@@ -31,9 +33,6 @@ namespace svtz.Tanks.Tank
         // Use this for initialization
         private void Start()
         {
-            _rb2D = GetComponent<Rigidbody2D>();
-            _sync = GetComponent<TankPositionSync>();
-
             if (Speed > Constants.GridSize)
                 throw new NotSupportedException("Слишком большая скорость");
 

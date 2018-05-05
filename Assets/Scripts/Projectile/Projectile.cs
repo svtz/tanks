@@ -59,6 +59,9 @@ namespace svtz.Tanks.Projectile
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
+            if (!isServer)
+                return;
+
             if (collision.gameObject == _owner)
                 return;
             
@@ -100,10 +103,7 @@ namespace svtz.Tanks.Projectile
                 var target = hit.GetComponent<AbstractProjectileTarget>();
                 if (target != null)
                 {
-                    if (isServer)
-                    {
-                        target.TakeDamage(Damage, _owner);
-                    }
+                    target.TakeDamage(Damage, _owner);
                     shouldDespawn = true;
                 }
             }

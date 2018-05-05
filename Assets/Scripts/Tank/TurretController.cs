@@ -14,11 +14,13 @@ namespace svtz.Tanks.Tank
 #pragma warning restore 0649
 
         private InputManager _inputManager;
+        private TankPositionSync _tankPositionSync;
 
         [Inject]
-        private void Construct(InputManager inputManager)
+        private void Construct(InputManager inputManager, TankPositionSync tankPositionSync)
         {
             _inputManager = inputManager;
+            _tankPositionSync = tankPositionSync;
         }
 
         private static readonly Dictionary<int, float?> _anglesWordSpace = new Dictionary<int, float?>
@@ -55,6 +57,9 @@ namespace svtz.Tanks.Tank
 
         private void Update()
         {
+            if (!_tankPositionSync.isLocalPlayer)
+                return;
+
             var desiredAngle = GetDesiredAngle();
             if (!desiredAngle.HasValue)
                 return;
@@ -62,9 +67,14 @@ namespace svtz.Tanks.Tank
             if (!ValidAngle(desiredAngle.Value))
                 return;
 
-            var targetAngle = desiredAngle.Value;
+            RotateTo(desiredAngle.Value);
+            _tankPositionSync.CmdSyncTurretRotation(desiredAngle.Value);
+        }
+
+        public void RotateTo(float desiredAngle)
+        {
             var currentAngle = transform.rotation.eulerAngles.z;
-            transform.RotateAround(RotationPoint.position, Vector3.forward, targetAngle-currentAngle);
+            transform.RotateAround(RotationPoint.position, Vector3.forward, desiredAngle - currentAngle);
         }
     }
 }

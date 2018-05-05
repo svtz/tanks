@@ -33,9 +33,6 @@ namespace svtz.Tanks.Projectile
 
             private void UnspawnHandler(GameObject spawned)
             {
-                // по-хорошему, снар€д на клиенте деспавнитс€ и без нашей помощи.
-                // но иногда что-то идЄт не по плану, например:
-                // стенка уничтожаетс€ раньше, чем  Ћ»≈Ќ“— »… снар€д прочухает, что врезалс€ в неЄ
                 spawned.GetComponent<Projectile>().TryDespawn();
             }
 

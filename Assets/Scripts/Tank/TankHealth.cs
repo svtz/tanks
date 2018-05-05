@@ -8,11 +8,10 @@ namespace svtz.Tanks.Tank
     internal sealed class TankHealth : NetworkBehaviour
     {
 #pragma warning disable 0649
-        public RectTransform HealthBar;
         public int MaxHealth;
 #pragma warning restore 0649
 
-        [SyncVar(hook = "OnChangeHealthAtClient")]
+        [SyncVar]
         private int _currentHealth;
 
         private void Start()
@@ -45,13 +44,6 @@ namespace svtz.Tanks.Tank
         {
             _statsManager.ServerRegisterFrag(gameObject, damager);
             _tankSpawner.DestroyAndRespawn(connectionToClient, gameObject);
-        }
-
-        private void OnChangeHealthAtClient(int health)
-        {
-            HealthBar.sizeDelta = new Vector2(
-                health,
-                HealthBar.sizeDelta.y);
         }
     }
 }

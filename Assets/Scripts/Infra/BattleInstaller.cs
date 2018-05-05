@@ -40,6 +40,7 @@ namespace svtz.Tanks.Infra
             // Компоненты объектов
             Container.Bind<TeamId>().FromComponentInParents(); // inParents - для башни танка
             Container.Bind<NetworkIdentity>().FromComponentInParents(); // inParents - для башни танка
+            Container.Bind<TankPositionSync>().FromComponentInParents(); // inParents - для башни танка
             Container.Bind<SpriteRenderer>().FromComponentSibling();
             Container.Bind<Rigidbody2D>().FromComponentSibling();
 
