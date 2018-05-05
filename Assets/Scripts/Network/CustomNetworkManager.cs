@@ -3,6 +3,7 @@ using svtz.Tanks.BattleStats;
 using svtz.Tanks.Common;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace svtz.Tanks.Network
@@ -13,35 +14,35 @@ namespace svtz.Tanks.Network
         private TeamManager _teamManager;
         private ConnectedToServerSignal _connectedToServerSignal;
         private DisconnectedFromServerSignal _disconnectedFromServerSignal;
-        private GameStartedSignal.ServerToClient _gameStartedSignal;
+        private GameStartedSignal _gameStartedSignal;
+        private BattleStatsManager _battleStatsManager;
 
         [Inject]
         public void Construct(TeamManager teamManager,
             CustomNetworkDiscovery networkDiscovery,
             ConnectedToServerSignal connectedToServerSignal,
             DisconnectedFromServerSignal disconnectedFromServerSignal,
-            GameStartedSignal.ServerToClient gameStartedSignal)
+            GameStartedSignal gameStartedSignal,
+            BattleStatsManager battleStatsManager)
         {
             _teamManager = teamManager;
             _connectedToServerSignal = connectedToServerSignal;
             _disconnectedFromServerSignal = disconnectedFromServerSignal;
             _networkDiscovery = networkDiscovery;
             _gameStartedSignal = gameStartedSignal;
+            _battleStatsManager = battleStatsManager;
         }
 
         public override void OnLobbyServerPlayersReady()
         {
             _networkDiscovery.StopBroadcast();
 
-            var namesByNetId = lobbySlots.OfType<CustomLobbyPlayer>().ToDictionary(p => p.netId, p => p.PlayerName);
-            var namesByConId = NetworkServer.connections
-                .ToDictionary(
-                    con => con.connectionId,
-                    con => namesByNetId[con.clientOwnedObjects.Single()]);
+            var names = lobbySlots.OfType<CustomLobbyPlayer>()
+                .ToDictionary(p => p.connectionToClient.connectionId, p => p.PlayerName);
 
             base.OnLobbyServerPlayersReady();
 
-            _gameStartedSignal.FireOnAllClients(new GameStartedSignal.Msg { PlayerNames = namesByConId });
+            _battleStatsManager.ServerGameStarted(names);
         }
 
         public override GameObject OnLobbyServerCreateGamePlayer(NetworkConnection conn, short playerControllerId)
@@ -63,6 +64,13 @@ namespace svtz.Tanks.Network
             base.OnStartClient(lobbyClient);
 
             _connectedToServerSignal.Fire(lobbyClient);
+        }
+
+        public override void OnLobbyClientSceneChanged(NetworkConnection conn)
+        {
+            base.OnLobbyClientSceneChanged(conn);
+            if (SceneManager.GetSceneAt(0).name == playScene)
+                _gameStartedSignal.Fire();
         }
 
         public override void OnClientDisconnect(NetworkConnection conn)

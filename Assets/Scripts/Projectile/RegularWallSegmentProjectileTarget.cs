@@ -1,4 +1,5 @@
 ﻿using svtz.Tanks.Map;
+using UnityEngine;
 
 namespace svtz.Tanks.Projectile
 {
@@ -13,7 +14,7 @@ namespace svtz.Tanks.Projectile
             _wallHealth = GetComponentInParent<WallHealth>();
         }
 
-        public override void TakeDamage(int amount, string teamId)
+        public override void TakeDamage(int amount, GameObject damager)
         {
             _wallHealth.DestroySegment(gameObject);
         }

@@ -17,12 +17,12 @@ namespace svtz.Tanks.BattleStats
 
                 var stats = BattleStats.Stats;
 
-                writer.Write(stats.Length);
+                writer.Write(stats.Count);
                 foreach (var s in stats)
                 {
-                    writer.Write(s.Id);
-                    writer.Write(s.Frags);
-                    writer.Write(s.Name);
+                    writer.Write(s.Value.Id);
+                    writer.Write(s.Value.Frags);
+                    writer.Write(s.Value.Name);
                 }
             }
 
@@ -31,12 +31,13 @@ namespace svtz.Tanks.BattleStats
                 base.Deserialize(reader);
 
                 var length = reader.ReadInt32();
-                var result = new PlayerStats[length];
+                var result = new Dictionary<int, PlayerStats>(length);
                 for (var idx = 0; idx < length; ++idx)
                 {
-                    result[idx] = new PlayerStats
+                    var playerId = reader.ReadInt32();
+                    result[playerId] = new PlayerStats
                     {
-                        Id = reader.ReadInt32(),
+                        Id = playerId,
                         Frags = reader.ReadInt32(),
                         Name = reader.ReadString()
                     };

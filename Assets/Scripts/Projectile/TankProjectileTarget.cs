@@ -1,5 +1,6 @@
 ﻿using svtz.Tanks.Common;
 using svtz.Tanks.Tank;
+using UnityEngine;
 using Zenject;
 
 namespace svtz.Tanks.Projectile
@@ -22,11 +23,12 @@ namespace svtz.Tanks.Projectile
             _health = GetComponentInParent<TankHealth>();
         }
 
-        public override void TakeDamage(int amount, string teamId)
+        public override void TakeDamage(int amount, GameObject damager)
         {
-            if (_teamId.Id != teamId)
+            var damagerTeamId = damager.GetComponent<TeamId>().Id;
+            if (_teamId.Id != damagerTeamId)
             {
-                _health.TakeDamage(amount);
+                _health.TakeDamage(amount, damager);
             }
         }
     }

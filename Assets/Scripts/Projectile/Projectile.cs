@@ -61,8 +61,7 @@ namespace svtz.Tanks.Projectile
             {
                 if (isServer)
                 {
-                    var teamId = _owner.GetComponent<TeamId>().Id;
-                    target.TakeDamage(Damage, teamId);
+                    target.TakeDamage(Damage, _owner);
                 }
                 TryDespawn();
             }

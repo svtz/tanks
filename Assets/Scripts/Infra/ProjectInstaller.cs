@@ -22,9 +22,7 @@ namespace svtz.Tanks.Infra
 
             Container.DeclareSignal<ConnectedToServerSignal>();
             Container.DeclareSignal<DisconnectedFromServerSignal>();
-
             Container.DeclareSignal<GameStartedSignal>();
-            Container.Bind<GameStartedSignal.ServerToClient>().AsSingle().WithArguments(MessageCodes.GameStarted).NonLazy();
 
             Container.DeclareSignal<RespawningSignal>();
             Container.Bind<RespawningSignal.ServerToClient>().AsSingle().WithArguments(MessageCodes.Respawning).NonLazy();

@@ -31,7 +31,7 @@ namespace svtz.Tanks.UserInterface
         void IInitializable.Initialize()
         {
             _guiStates = _guiImplementations.ToDictionary(s => s.Key);
-            _gameStartedSignal.Listen(m => GoToState(GUIState.InGame));
+            _gameStartedSignal.Listen(() => GoToState(GUIState.InGame));
             _disconnectedFromServerSignal.Listen(() => GoToState(GUIState.MainMenu));
             GoToState(GUIState.MainMenu);
         }

@@ -1,8 +1,10 @@
-﻿namespace svtz.Tanks.Projectile
+﻿using UnityEngine;
+
+namespace svtz.Tanks.Projectile
 {
     internal sealed class UnbreakableProjectileTarget : AbstractProjectileTarget
     {
-        public override void TakeDamage(int amount, string teamId)
+        public override void TakeDamage(int amount, GameObject damager)
         {
         }
     }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using svtz.Tanks.BattleStats;
+using UnityEngine;
 using UnityEngine.Networking;
 using Zenject;
 
@@ -19,7 +20,7 @@ namespace svtz.Tanks.Tank
             _currentHealth = MaxHealth;
         }
 
-        public void TakeDamage(int amount)
+        public void TakeDamage(int amount, GameObject damager)
         {
             if (!isServer)
                 return;
@@ -27,19 +28,22 @@ namespace svtz.Tanks.Tank
             _currentHealth -= amount;
             if (_currentHealth <= 0)
             {
-                OnZeroHealthAtServer();
+                OnZeroHealthAtServer(damager);
             }
         }
         private TankSpawner _tankSpawner;
+        private BattleStatsManager _statsManager;
 
         [Inject]
-        private void Construct(TankSpawner tankSpawner)
+        private void Construct(TankSpawner tankSpawner, BattleStatsManager statsManager)
         {
             _tankSpawner = tankSpawner;
+            _statsManager = statsManager;
         }
 
-        private void OnZeroHealthAtServer()
+        private void OnZeroHealthAtServer(GameObject damager)
         {
+            _statsManager.ServerRegisterFrag(gameObject, damager);
             _tankSpawner.DestroyAndRespawn(connectionToClient, gameObject);
         }
 

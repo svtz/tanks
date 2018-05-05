@@ -6,7 +6,7 @@ namespace svtz.Tanks.Projectile
     {
         /// <summary> Нанести урон! </summary>
         /// <param name="amount">Количество</param>
-        /// <param name="teamId">Команда, которая наносит урон</param>
-        public abstract void TakeDamage(int amount, string teamId);
+        /// <param name="damager">Объект, от которого исходит урон</param>
+        public abstract void TakeDamage(int amount, GameObject damager);
     }
 }

@@ -1,7 +1,9 @@
-﻿namespace svtz.Tanks.BattleStats
+﻿using System.Collections.Generic;
+
+namespace svtz.Tanks.BattleStats
 {
     public class BattleStats
     {
-        public PlayerStats[] Stats { get; set; }
+        public Dictionary<int, PlayerStats> Stats { get; set; }
     }
 }
