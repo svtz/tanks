@@ -16,7 +16,7 @@ namespace svtz.Tanks.Projectile
         public float Speed;
 
         public float CastWidth;
-        public float CastDistance;
+        public float[] CastDistances;
 #pragma warning restore 0649
 
         private Rigidbody2D _rb2D;
@@ -54,63 +54,70 @@ namespace svtz.Tanks.Projectile
             RpcLaunch(spawn.position, spawn.rotation, owner);
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+        private bool IsEqualOrChildOfOwner(GameObject obj)
+        {
+            if (obj == _owner)
+                return true;
+
+            if (obj.transform.parent == null)
+                return false;
+
+            return IsEqualOrChildOfOwner(obj.transform.parent.gameObject);
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
         {
             if (!isServer)
                 return;
 
-            if (collision.gameObject == _owner)
+            if (IsEqualOrChildOfOwner(other.gameObject))
                 return;
-            
-            var contact = new Vector2();
-
-            foreach (var collisionContact in collision.contacts)
-            {
-                contact += collisionContact.point;
-            }
-            contact /= collision.contacts.Length;
-
-            Debug.DrawLine(_owner.transform.position, contact, Color.yellow, 2);
 
             Vector2 direction = transform.up;
-            const float offset = 0.01f;
+            var perpendicular = Vector2.Perpendicular(direction);
 
-            ExtDebug.DrawBoxCastBox(
-                contact,
-                new Vector2(CastWidth / 2, offset / 2),
-                transform.rotation,
-                direction,
-                CastDistance,
-                Color.magenta);
-
-            var cast = Physics2D.BoxCastAll(
-                    contact,
-                    new Vector2(CastWidth, offset),
-                    angle: transform.rotation.eulerAngles.z,
-                    direction: direction,
-                    distance: CastDistance)
-                .Select(h => h.transform)
-                .Where(h => h != transform && h != _owner.transform)
-                .Distinct();
-
+            Debug.DrawLine(_owner.transform.position, transform.position, Color.yellow, 2);
 
             var shouldDespawn = false;
-            foreach (var hit in cast)
+            foreach (var castDistance in CastDistances)
             {
-                var target = hit.GetComponent<AbstractProjectileTarget>();
-                if (target != null)
+                var castStart =
+                    (Vector2)transform.position
+                    + direction * castDistance
+                    + perpendicular * CastWidth / 2;
+
+                var castEnd =
+                    (Vector2)transform.position
+                    + direction * castDistance
+                    - perpendicular * CastWidth / 2;
+
+                Debug.DrawLine(castStart, castEnd, Color.magenta, 2);
+
+                var cast = Physics2D.LinecastAll(castStart, castEnd)
+                    .Select(h => h.transform)
+                    .Where(h => h != transform && h != _owner.transform)
+                    .Distinct();
+
+                foreach (var hit in cast)
                 {
-                    target.TakeDamage(Damage, _owner);
-                    shouldDespawn = true;
+                    var target = hit.GetComponent<AbstractProjectileTarget>();
+                    if (target != null)
+                    {
+                        target.TakeDamage(Damage, _owner);
+                        shouldDespawn = true;
+                    }
+                }
+
+                if (shouldDespawn)
+                {
+                    TryDespawn();
+                    break;
                 }
             }
 
-            if (shouldDespawn)
+            if (!shouldDespawn)
             {
-                TryDespawn();
-            }
-            else
-            {
+                Debug.LogError("Вроде во что-то врезались, а во что - не понятно: " + other.gameObject.name);
                 Debug.Break();
             }
         }
