@@ -6,6 +6,14 @@ TextureImporter:
     21300002: bricks_01
     21300004: bricks_03
     21300006: bricks_04
+    21300008: bricks_02
+    21300010: bricks_01
+    21300012: bricks_03
+    21300014: bricks_04
+    21300016: bricks_02
+    21300018: bricks_01
+    21300020: bricks_03
+    21300022: bricks_04
   externalObjects: {}
   serializedVersion: 5
   mipmaps:
@@ -33,7 +41,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: -1
+    filterMode: 0
     aniso: -1
     mipBias: -1
     wrapU: 1
@@ -47,10 +55,10 @@ TextureImporter:
   spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 8
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
-  alphaUsage: 1
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 0
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
@@ -62,10 +70,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 2
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 32
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -73,10 +81,10 @@ TextureImporter:
     androidETC2FallbackOverride: 0
   - serializedVersion: 2
     buildTarget: Standalone
-    maxTextureSize: 2048
+    maxTextureSize: 32
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -90,9 +98,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 32
-        width: 32
-        height: 32
+        y: 4
+        width: 4
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -100,7 +108,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9e0a9af33bc669143b6e703bce3ffcdf
+      spriteID: 90e55aad70443d945b08bd0257cb145b
       vertices: []
       indices: 
       edges: []
@@ -109,10 +117,10 @@ TextureImporter:
       name: bricks_01
       rect:
         serializedVersion: 2
-        x: 32
-        y: 32
-        width: 32
-        height: 32
+        x: 4
+        y: 4
+        width: 4
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -120,7 +128,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 78a60b3abc809fd48b20f525614fcd8c
+      spriteID: 3b1ed776f2621bd49a0e688a37b76671
       vertices: []
       indices: 
       edges: []
@@ -131,8 +139,8 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 32
-        height: 32
+        width: 4
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,7 +148,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e8c6e1c2a6d3ff84cbb2a8b85fa7647e
+      spriteID: 233f95ea1541b464d8fd9deb1361dc69
       vertices: []
       indices: 
       edges: []
@@ -149,10 +157,10 @@ TextureImporter:
       name: bricks_04
       rect:
         serializedVersion: 2
-        x: 32
+        x: 4
         y: 0
-        width: 32
-        height: 32
+        width: 4
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -160,7 +168,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2d4d6e1db751cb845baea77e1eab852c
+      spriteID: 355e118819b2f3044bd7177b7b2cb8f0
       vertices: []
       indices: 
       edges: []

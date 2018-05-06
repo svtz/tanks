@@ -1,4 +1,4 @@
-using System;
+п»їusing System;
 using System.Linq;
 using UnityEngine;
 
@@ -25,7 +25,7 @@ namespace svtz.Tanks.Map
             else
             {
                 data.Color = Color.white;
-                Debug.LogError("Не удалось определить цвет фона карты");
+                Debug.LogError("РќРµ СѓРґР°Р»РѕСЃСЊ РѕРїСЂРµРґРµР»РёС‚СЊ С†РІРµС‚ С„РѕРЅР° РєР°СЂС‚С‹");
             }
             data.Map = new MapObjectKind[data.Height][];
 
@@ -60,7 +60,7 @@ namespace svtz.Tanks.Map
                     return MapObjectKind.RandomBonusSpawner;
                
                 default:
-                    throw new ArgumentException("Неверный формат уровня");
+                    throw new ArgumentException(string.Format("РќРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ СѓСЂРѕРІРЅСЏ ({0},{1})", lineIdx, colIdx));
             }
         }
     }
