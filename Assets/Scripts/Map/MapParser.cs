@@ -17,6 +17,16 @@ namespace svtz.Tanks.Map
             var firstLine = lines[0].Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
             data.Width = int.Parse(firstLine[0]);
             data.Height = int.Parse(firstLine[1]);
+            Color color;
+            if (firstLine.Length > 2 && ColorUtility.TryParseHtmlString(firstLine[2], out color))
+            {
+                data.Color = color;
+            }
+            else
+            {
+                data.Color = Color.white;
+                Debug.LogError("Не удалось определить цвет фона карты");
+            }
             data.Map = new MapObjectKind[data.Height][];
 
             for (var lineIdx = 1; lineIdx <= data.Height; lineIdx++)

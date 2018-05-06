@@ -48,7 +48,7 @@ namespace svtz.Tanks.Map
         private void InstantiateMapObjects(MapInfo map)
         {
             // устанавливаем размеры фона
-            _background.SetSize(map.Width, map.Height);
+            _background.SetSize(map.Width, map.Height, map.Color);
 
             // строим периметр
             for (var i = -map.Width / 2 - 1; i <= map.Width / 2; i++)

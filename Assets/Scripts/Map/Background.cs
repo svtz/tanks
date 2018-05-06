@@ -9,6 +9,8 @@ namespace svtz.Tanks.Map
         private int _width;
         [SyncVar]
         private int _height;
+        [SyncVar]
+        private Color _color;
 
         private bool _initialized;
 
@@ -21,14 +23,17 @@ namespace svtz.Tanks.Map
 
         private void InitBackground()
         {
-            GetComponent<SpriteRenderer>().size = new Vector2(_width, _height);
+            var render = GetComponent<SpriteRenderer>();
+            render.size = new Vector2(_width, _height);
+            render.color = _color;
             Destroy(this);
         }
 
-        public void SetSize(int width, int height)
+        public void SetSize(int width, int height, Color color)
         {
             _width = width;
             _height = height;
+            _color = color;
 
             _initialized = true;
         }

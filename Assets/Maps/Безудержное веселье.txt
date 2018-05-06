@@ -1,4 +1,4 @@
-20 14
+20 14 #3C3C3C
 XX                XX
 X        ?         X
  S      XXXX     S  
