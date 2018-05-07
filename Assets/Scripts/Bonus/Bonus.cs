@@ -33,17 +33,13 @@ namespace svtz.Tanks.Bonus
             _implementations = implementations.ToDictionary(b => b.BonusKind);
         }
 
-        private void OnCollisionEnter2D(Collision2D collision)
+        private void OnTriggerEnter2D(Collider2D other)
         {
             if (isServer)
             {
-                var target = collision.gameObject;
+                var target = other.gameObject;
                 _implementations[_bonusKind].Apply(target);
                 _spawner.ServerRespawnPicked(this);
-            }
-            else
-            {
-                gameObject.SetActive(false);
             }
         }
     }
