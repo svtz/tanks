@@ -1,0 +1,41 @@
+40 40 #ADB25D #9F8D6D
+                                       T
+                  S                    T
+  S               XX                   T
+  XX              **              S   TT
+  **              **      S       XX  TT
+  **                      XX      **  TT
+                          **      **  TT
+          S               **          TT
+T         XX                         TTT
+TT        **                         TTT
+TT        **                       X TTT
+TT                 ?                 TTT
+TTT                XX             *  TTT
+TTT                **                TTT
+TTTT               **            X   TTT
+TTTT                       X  X     TTTT
+TTTTT                               TTTT
+TTTTTT                   X         TTTTT
+T  TTT                             TTTTT
+T? TTT          X X      *         TTTTT
+TTTTT         *    ? X X          TTT  T
+TTTTT                             TTT? T
+TTTTT         X                   TTTTTT
+TTTT                               TTTTT
+TTTT     X  X                       TTTT
+TTT   X            **               TTTT
+TTT                **                TTT
+TTT  *             XX                TTT
+TTT                                   TT
+TTT X              ?        **        TT
+TTT                         **        TT
+TTT                         XX         T
+TT          **              S           
+TT  **      **                          
+TT  **      XX                      **  
+TT  XX              **              **  
+TT          S       **              XX  
+T   S               XX              S   
+T                   S                   
+T                                       
