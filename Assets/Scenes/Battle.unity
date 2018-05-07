@@ -403,6 +403,7 @@ MonoBehaviour:
   MapCreatorSettings:
     AvailableMaps:
     - {fileID: 4900000, guid: 56951fee52142ef4ea17d7eeef5909be, type: 3}
+    - {fileID: 4900000, guid: 96f92ac7986143a2a7a4056305bc83cc, type: 3}
   MapObjectsSettings:
     UnbreakableWallPrefab: {fileID: 1998760418760660, guid: 291e98b2c3b260a4e9695095b9a1ea77,
       type: 2}
