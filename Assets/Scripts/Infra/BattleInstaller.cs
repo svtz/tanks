@@ -34,6 +34,7 @@ namespace svtz.Tanks.Infra
             Container.Bind<MapCreator>().AsSingle().WithArguments(MapCreatorSettings);
             Container.Bind<Background>().FromComponentInHierarchy().AsSingle();
 
+
             // Сервис отложенного исполнения
             Container.BindInterfacesAndSelfTo<DelayedExecutor>().AsSingle();
 

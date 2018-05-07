@@ -7,7 +7,8 @@ namespace svtz.Tanks.Map
         public string Name { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
-        public Color Color { get; set; }
+        public Color BackgroundColor { get; set; }
+        public Color CrawlerBeltColor { get; set; }
         public MapObjectKind[][] Map { get; set; }
     }
 }

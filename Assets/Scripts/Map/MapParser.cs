@@ -20,13 +20,13 @@ namespace svtz.Tanks.Map
             Color color;
             if (firstLine.Length > 2 && ColorUtility.TryParseHtmlString(firstLine[2], out color))
             {
-                data.Color = color;
+                data.BackgroundColor = color;
             }
-            else
+            if (firstLine.Length > 3 && ColorUtility.TryParseHtmlString(firstLine[3], out color))
             {
-                data.Color = Color.white;
-                Debug.LogError("Не удалось определить цвет фона карты");
+                data.CrawlerBeltColor = color;
             }
+
             data.Map = new MapObjectKind[data.Height][];
 
             for (var lineIdx = 1; lineIdx <= data.Height; lineIdx++)

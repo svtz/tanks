@@ -1,41 +1,32 @@
-﻿using UnityEngine;
-using UnityEngine.Networking;
+﻿using System;
+using UnityEngine;
+using Zenject;
 
 namespace svtz.Tanks.Map
 {
-    internal sealed class Background : NetworkBehaviour
+    internal sealed class Background : MonoBehaviour
     {
-        [SyncVar]
-        private int _width;
-        [SyncVar]
-        private int _height;
-        [SyncVar]
-        private Color _color;
+        private IMapSettings _mapSettings;
+        private SpriteRenderer _spriteRenderer;
 
-        private bool _initialized;
-
-        private void Start()
+        [Inject]
+        private void Construct(IMapSettings mapSettings, SpriteRenderer spriteRenderer)
         {
-            if (isServer && !_initialized)
-                Debug.LogError("размер фона не был установлен!");
-            InitBackground();
+            _mapSettings = mapSettings;
+            _spriteRenderer = spriteRenderer;
+            _mapSettings.Updated += Reinit;
+            Reinit(null, null);
         }
 
-        private void InitBackground()
+        private void Reinit(object sender, EventArgs args)
         {
-            var render = GetComponent<SpriteRenderer>();
-            render.size = new Vector2(_width, _height);
-            render.color = _color;
-            Destroy(this);
+            _spriteRenderer.size = new Vector2(_mapSettings.BackgroundWidth, _mapSettings.BackgroundHeight);
+            _spriteRenderer.color = _mapSettings.BackgroundColor;
         }
 
-        public void SetSize(int width, int height, Color color)
+        private void OnDestroy()
         {
-            _width = width;
-            _height = height;
-            _color = color;
-
-            _initialized = true;
+            _mapSettings.Updated -= Reinit;
         }
     }
 }

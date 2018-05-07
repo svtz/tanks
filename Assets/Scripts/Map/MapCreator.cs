@@ -1,5 +1,6 @@
 ﻿using System;
 using svtz.Tanks.Bonus;
+using svtz.Tanks.Common;
 using svtz.Tanks.Tank;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -21,21 +22,21 @@ namespace svtz.Tanks.Map
         private readonly MapObjectsManager _mapObjectsManager;
         private readonly TankSpawner _tankSpawner;
         private readonly BonusSpawner _bonusSpawner;
-        private readonly Background _background;
+        private readonly MapSettingsManager _mapSettingsManager;
 
         public MapCreator(Settings settings, 
             MapParser mapParser, 
             MapObjectsManager mapObjectsManager,
             TankSpawner tankSpawner,
             BonusSpawner bonusSpawner,
-            Background background)
+            MapSettingsManager mapSettingsManager)
         {
             _settings = settings;
             _mapParser = mapParser;
             _mapObjectsManager = mapObjectsManager;
             _tankSpawner = tankSpawner;
             _bonusSpawner = bonusSpawner;
-            _background = background;
+            _mapSettingsManager = mapSettingsManager;
         }
 
         public void Create()
@@ -47,8 +48,8 @@ namespace svtz.Tanks.Map
 
         private void InstantiateMapObjects(MapInfo map)
         {
-            // устанавливаем размеры фона
-            _background.SetSize(map.Width, map.Height, map.Color);
+            // устанавливаем параметры карты
+            _mapSettingsManager.ServerUpdate(map);
 
             // строим периметр
             for (var i = -map.Width / 2 - 1; i <= map.Width / 2; i++)

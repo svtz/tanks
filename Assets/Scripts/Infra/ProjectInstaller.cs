@@ -1,5 +1,6 @@
 ﻿using svtz.Tanks.BattleStats;
 using svtz.Tanks.Common;
+using svtz.Tanks.Map;
 using svtz.Tanks.Network;
 using svtz.Tanks.Tank;
 using svtz.Tanks.UserInterface;
@@ -18,8 +19,10 @@ namespace svtz.Tanks.Infra
 
         public override void InstallBindings()
         {
+            // Менеджер команд
             Container.BindInterfacesAndSelfTo<TeamManager>().AsSingle();
 
+            // всякие сигналы, как локальные, так и серверные
             Container.DeclareSignal<ConnectedToServerSignal>();
             Container.DeclareSignal<DisconnectedFromServerSignal>();
             Container.DeclareSignal<GameStartedSignal>();
@@ -27,10 +30,17 @@ namespace svtz.Tanks.Infra
             Container.DeclareSignal<RespawningSignal>();
             Container.Bind<RespawningSignal.ServerToClient>().AsSingle().WithArguments(MessageCodes.Respawning).NonLazy();
 
+            // сеть-мультиплеер
             Container.Bind<CustomNetworkManager>().FromComponentInNewPrefab(NetworkManagerPrefab).AsSingle();
             Container.Bind<CustomNetworkDiscovery>().FromComponentInNewPrefab(NetworkDiscoveryPrefab).AsSingle();
 
+            // ввод
             Container.Bind<InputManager>().AsSingle();
+
+            // принадлежности карты, которые важно получить до начала боя
+            Container.DeclareSignal<MapSettingsUpdatedSignal>();
+            Container.Bind<MapSettingsUpdatedSignal.ServerToClient>().AsSingle().WithArguments(MessageCodes.MapSettingsUpdate).NonLazy();
+            Container.BindInterfacesAndSelfTo<MapSettingsManager>().AsSingle();
 
             GUIInstaller.Install(Container, Menus);
             BattleStatsInstaller.Install(Container);
