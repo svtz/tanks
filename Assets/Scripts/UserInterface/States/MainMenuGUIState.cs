@@ -21,6 +21,11 @@ namespace svtz.Tanks.UserInterface.States
             GoToState(GUIState.StartClient);
         }
 
+        public void ConnectDirect()
+        {
+            GoToState(GUIState.StartClientDirectIP);
+        }
+
         public void Exit()
         {
 #if UNITY_EDITOR

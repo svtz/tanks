@@ -63,6 +63,8 @@ MonoBehaviour:
     GameMenu: {fileID: 1993471037056320, guid: c515bb2a24d747e42b05a315face51bb, type: 2}
     InGameHUD: {fileID: 1829146589692128, guid: f369fb621eab5b7488424670f76ae07e,
       type: 2}
+    ConnectDirectIpMenu: {fileID: 1038874757632432, guid: 8235acf7a4151264e8cb94c8f355a221,
+      type: 2}
   NetworkManagerPrefab: {fileID: 1533877938861358, guid: fe81d39037da8b74ba7c734b5fc4b0ca,
     type: 2}
   NetworkDiscoveryPrefab: {fileID: 1311880834755664, guid: ec3c14463c2c03a4f977023d348d0fce,

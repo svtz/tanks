@@ -17,6 +17,7 @@ namespace svtz.Tanks.UserInterface
             public GameObject LobbyMenu;
             public GameObject GameMenu;
             public GameObject InGameHUD;
+            public GameObject ConnectDirectIpMenu;
 #pragma warning restore 0649
         }
 
@@ -40,6 +41,7 @@ namespace svtz.Tanks.UserInterface
             Container.BindInterfacesAndSelfTo<ServerLobbyGUIState>().FromNewComponentOnNewPrefab(_menus.LobbyMenu).AsCached();
 
             Container.BindInterfacesTo<StartClientGUIState>().FromComponentInNewPrefab(_menus.SearchGamesMenu).AsSingle();
+            Container.BindInterfacesTo<StartClientDirectIPGUIState>().FromComponentInNewPrefab(_menus.ConnectDirectIpMenu).AsSingle();
             Container.BindInterfacesTo<StartServerGUIState>().FromComponentInNewPrefab(_menus.CreateGameMenu).AsSingle();
 
             Container.BindInterfacesTo<InGameGUIState>().FromComponentInNewPrefab(_menus.InGameHUD).AsSingle();

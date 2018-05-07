@@ -5,6 +5,7 @@ namespace svtz.Tanks.UserInterface
         MainMenu,
         StartServer,
         StartClient,
+        StartClientDirectIP,
         ServerLobby,
         ClientLobby,
         InGame,
