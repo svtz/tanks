@@ -14,11 +14,6 @@ namespace svtz.Tanks.Bonus
             base.Reinitialize(position, item);
             item.transform.position = position;
             _bonuses.Add(position, item);
-        }
-
-        protected override void OnSpawned(Bonus item)
-        {
-            base.OnSpawned(item);
             if (NetworkServer.active)
                 NetworkServer.Spawn(item.gameObject);
         }
