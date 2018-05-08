@@ -25,7 +25,7 @@ namespace svtz.Tanks.Camera
         {
             if (_followObject == null)
                 return;
-
+            
             var targetPosition = _followObject.transform.position + Offset;
             var targetMove = targetPosition - transform.position;
             var currentMove = Vector3.ClampMagnitude(targetMove, MaxCameraSpeed * Time.deltaTime);

@@ -47,6 +47,7 @@ namespace svtz.Tanks.Network
 
         public bool CustomStartServer()
         {
+            _netManager.networkPort = NetworkPort;
             _netManager.StartHost();
             if (_netManager.isNetworkActive && Initialize())
             {
