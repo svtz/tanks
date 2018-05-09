@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 using UnityEngine.Networking;
 
 namespace svtz.Tanks.BattleStats
@@ -36,20 +35,16 @@ namespace svtz.Tanks.BattleStats
             ServerSendBattleStatsUpdate();
         }
 
-        public void ServerRegisterFrag(GameObject dead, GameObject killer)
+        public void ServerRegisterFrag(IPlayer dead, IPlayer killer)
         {
-            var deadIdentity = dead.gameObject.GetComponent<NetworkIdentity>();
-            if (deadIdentity != null && deadIdentity.localPlayerAuthority)
+            if (dead != null)
             {
-                var id = deadIdentity.connectionToClient.connectionId;
-                _battleStats.Stats[id].Deaths++;
+                _battleStats.Stats[dead.Id].Deaths++;
             }
 
-            var killerIdentity = killer.gameObject.GetComponent<NetworkIdentity>();
-            if (killerIdentity != null && killerIdentity.localPlayerAuthority)
+            if (killer != null)
             {
-                var id = killerIdentity.connectionToClient.connectionId;
-                _battleStats.Stats[id].Frags++;
+                _battleStats.Stats[killer.Id].Frags++;
             }
 
             ServerSendBattleStatsUpdate();

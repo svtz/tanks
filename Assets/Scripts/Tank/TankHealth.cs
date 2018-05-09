@@ -1,5 +1,4 @@
 ﻿using svtz.Tanks.BattleStats;
-using UnityEngine;
 using UnityEngine.Networking;
 using Zenject;
 
@@ -19,7 +18,7 @@ namespace svtz.Tanks.Tank
             _currentHealth = MaxHealth;
         }
 
-        public void TakeDamage(int amount, GameObject damager)
+        public void TakeDamage(int amount, IPlayer damager)
         {
             if (!isServer)
                 return;
@@ -40,9 +39,10 @@ namespace svtz.Tanks.Tank
             _statsManager = statsManager;
         }
 
-        private void OnZeroHealthAtServer(GameObject damager)
+        private void OnZeroHealthAtServer(IPlayer damager)
         {
-            _statsManager.ServerRegisterFrag(gameObject, damager);
+            var killed = gameObject.GetComponent<PlayerInfo>().Player;
+            _statsManager.ServerRegisterFrag(killed, damager);
             _tankSpawner.DestroyAndRespawn(connectionToClient, gameObject);
         }
     }

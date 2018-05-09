@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using svtz.Tanks.BattleStats;
 using svtz.Tanks.Common;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -24,6 +25,7 @@ namespace svtz.Tanks.Projectile
         private DelayedExecutor _delayedExecutor;
 
         private GameObject _owner;
+        private IPlayer _ownerPlayer;
         private DelayedExecutor.IDelayedTask _autoDespawn;
         private bool _despawned;
 
@@ -39,6 +41,7 @@ namespace svtz.Tanks.Projectile
         private void RpcLaunch(Vector2 position, Quaternion rotation, GameObject owner)
         {
             _owner = owner;
+            _ownerPlayer = owner.GetComponent<PlayerInfo>().Player;
 
             transform.position = position;
             transform.rotation = rotation;
@@ -75,8 +78,9 @@ namespace svtz.Tanks.Projectile
 
             Vector2 direction = transform.up;
             var perpendicular = Vector2.Perpendicular(direction);
-
-            Debug.DrawLine(_owner.transform.position, transform.position, Color.yellow, 2);
+            
+            if (_owner != null)
+                Debug.DrawLine(_owner.transform.position, transform.position, Color.yellow, 2);
 
             var shouldDespawn = false;
             foreach (var castDistance in CastDistances)
@@ -95,7 +99,7 @@ namespace svtz.Tanks.Projectile
 
                 var cast = Physics2D.LinecastAll(castStart, castEnd)
                     .Select(h => h.transform)
-                    .Where(h => h != transform && h != _owner.transform)
+                    .Where(h => h != transform && (_owner == null || h != _owner.transform))
                     .Distinct();
 
                 foreach (var hit in cast)
@@ -103,7 +107,7 @@ namespace svtz.Tanks.Projectile
                     var target = hit.GetComponent<AbstractProjectileTarget>();
                     if (target != null)
                     {
-                        target.TakeDamage(Damage, _owner);
+                        target.TakeDamage(Damage, _ownerPlayer);
                         shouldDespawn = true;
                     }
                 }

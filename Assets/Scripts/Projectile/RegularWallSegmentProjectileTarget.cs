@@ -1,5 +1,5 @@
-﻿using svtz.Tanks.Map;
-using UnityEngine;
+﻿using svtz.Tanks.BattleStats;
+using svtz.Tanks.Map;
 
 namespace svtz.Tanks.Projectile
 {
@@ -14,7 +14,7 @@ namespace svtz.Tanks.Projectile
             _wallHealth = GetComponentInParent<WallHealth>();
         }
 
-        public override void TakeDamage(int amount, GameObject damager)
+        public override void TakeDamage(int amount, IPlayer damager)
         {
             _wallHealth.DestroySegment(gameObject);
         }
