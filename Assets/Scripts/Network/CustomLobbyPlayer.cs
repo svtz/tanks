@@ -1,49 +1,47 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
+using Zenject;
 
-public class CustomLobbyPlayer : NetworkLobbyPlayer {
-    [SyncVar]
-    public string playerName;
-   
-    // Use this for initialization
-    void Start () {
-	    if (isLocalPlayer)
+namespace svtz.Tanks.Network
+{
+    internal sealed class CustomLobbyPlayer : NetworkLobbyPlayer {
+        [SyncVar]
+        private string _playerName;
+
+        public string PlayerName { get { return _playerName; } }
+
+        private CustomNetworkDiscovery _networkDiscovery;
+
+        [Inject]
+        public void Construct(CustomNetworkDiscovery networkDiscovery)
         {
-            CmdSetName(NetworkManager.singleton.GetComponent<CustomNetworkDiscovery>().playerName);
+            _networkDiscovery = networkDiscovery;
         }
-	}
 
-    [Command]
-    public void CmdSetName(string name)
-    {
-        playerName = name;
-    }
-
-    // Update is called once per frame
-    void Update () {
-		
-	}
-
-    public void DrawGUI()
-    {
-        GUILayout.BeginHorizontal();
-        GUILayout.Label(playerName, GUILayout.Width(100));
-        if (isLocalPlayer)
+        public void SetReady(bool value)
         {
-            if (GUILayout.Button(readyToBegin ? "ГОТОВ" : "Не готов"))
+            if (value == readyToBegin)
+                return;
+
+            readyToBegin = value;
+            if (readyToBegin)
+                SendReadyToBeginMessage();
+            else
+                SendNotReadyToBeginMessage();
+        }
+
+        // Use this for initialization
+        void Start () {
+            if (isLocalPlayer)
             {
-                readyToBegin = !readyToBegin;
-                if (readyToBegin)
-                    SendReadyToBeginMessage();
-                else
-                    SendNotReadyToBeginMessage();
+                CmdSetName(_networkDiscovery.PlayerName);
             }
-        }else
-        {
-            GUILayout.Label(readyToBegin ? "ГОТОВ" : "Не готов");
         }
-        GUILayout.EndHorizontal();
+
+        [Command]
+        public void CmdSetName(string name)
+        {
+            _playerName = name;
+        }
     }
 }

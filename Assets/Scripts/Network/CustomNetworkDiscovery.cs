@@ -1,97 +1,101 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.Networking;
+using Zenject;
 
-[RequireComponent(typeof(NetworkManager))]
+namespace svtz.Tanks.Network
+{
+    internal sealed class CustomNetworkDiscovery : NetworkDiscovery {
+        public string ServerName;
+        public string PlayerName;
+        public int NetworkPort = 7777;
+        private ServerData _serverData ;
+        private CustomNetworkManager _netManager;
+        public List<ServerData> FoundServers;
 
-public class CustomNetworkDiscovery : NetworkDiscovery {
-    public string serverName;
-    public string playerName;
-    public int networkPort = 7777;
-    private ServerData serverData ;
-    private NetworkManager manager;
-    public List<ServerData> findedServers = null;
+        private Action<ServerData> _onServerAvailable;
 
-    void Start()
-    {
-        LogFilter.currentLogLevel = 1;
-           playerName = System.Environment.MachineName;
-        serverName = System.Environment.MachineName;
-        manager = GetComponent<NetworkManager>();
-    }
-    
-
-    public override void OnReceivedBroadcast(string fromAddress, string data)
-    {
-        ServerData newServerData = ScriptableObject.CreateInstance<ServerData>();
-        newServerData.Load(data);
-        OnDiscovery(newServerData);
-        Debug.Log(data);
-    }
-
-    private void OnDiscovery(ServerData newServerData)
-    {
-        for (int index = 0; index < findedServers.Count; ++index)
+        [Inject]
+        public void Construct(CustomNetworkManager networkManager)
         {
-            if (findedServers[index].NetworkAddress == newServerData.NetworkAddress &&
-                findedServers[index].Port == newServerData.Port)
+            _netManager = networkManager;
+            PlayerName = Environment.UserName;
+            ServerName = "Игра " + Environment.MachineName;
+        }
+
+        public override void OnReceivedBroadcast(string fromAddress, string data)
+        {
+            var newServerData = ServerData.Parse(data);
+            OnDiscovery(newServerData);
+        }
+
+        private void OnDiscovery(ServerData newServerData)
+        {
+            for (var index = 0; index < FoundServers.Count; ++index)
             {
-                findedServers[index] = newServerData;
-                return;
+                var current = FoundServers[index];
+                if (current != null && current.SameServerAs(newServerData))
+                {
+                    FoundServers[index] = newServerData;
+                    _onServerAvailable(newServerData);
+                    return;
+                }
             }
+            FoundServers.Add(newServerData);
+            _onServerAvailable(newServerData);
         }
-        findedServers.Add(newServerData);
-    }
 
-    public bool CustomStartServer()
-    {
-        manager.StartHost();
-        if (manager.isNetworkActive && Initialize())
+        public bool CustomStartServer()
         {
-            serverData = ScriptableObject.CreateInstance<ServerData>();
-            serverData.ServerName = serverName;
-            serverData.NetworkAddress = Network.player.ipAddress;
-            serverData.Port = networkPort;
-            broadcastData = serverData.ToString();
-            return StartAsServer();
-        }
-        return false;
-    }
-    public bool CustomStartClient(ServerData serverData)
-    {
-        CustomStopServerDiscovery();
-        manager.networkAddress = serverData.NetworkAddress;
-        manager.networkPort = serverData.Port;
-        manager.StartClient();
-        return manager.isNetworkActive;
-    }
-
-    public bool CustomStartServerDiscovery()
-    {
-        if (Initialize())
-        {
-            findedServers = new List<ServerData>();
-            return StartAsClient();
-        }
-        else
+            _netManager.networkPort = NetworkPort;
+            _netManager.StartHost();
+            if (_netManager.isNetworkActive && Initialize())
+            {
+                _serverData = ServerData.Create(ServerName, UnityEngine.Network.player.ipAddress, NetworkPort);
+                broadcastData = _serverData.ToString();
+                return StartAsServer();
+            }
             return false;
-    }
+        }
 
-    public void CustomStopServerDiscovery()
-    {
-        StopBroadcast();
-    }
+        public bool CustomStartClient(ServerData serverData)
+        {
+            CustomStopServerDiscovery();
+            _netManager.networkAddress = serverData.NetworkAddress;
+            _netManager.networkPort = serverData.Port;
+            _netManager.StartClient();
+            return _netManager.isNetworkActive;
+        }
 
-    public void CustomStop()
-    {
-        if (isServer)
+        public bool CustomStartServerDiscovery(Action<ServerData> serverAvailable)
+        {
+            if (Initialize())
+            {
+                FoundServers = new List<ServerData>();
+                _onServerAvailable = serverAvailable;
+                return StartAsClient();
+            }
+            else
+                return false;
+        }
+
+        public void CustomStopServerDiscovery()
         {
             StopBroadcast();
-            manager.StopHost();
+            _onServerAvailable = null;
         }
-        else
-            manager.StopClient();
-    }
 
+        public void CustomStop()
+        {
+            if (NetworkServer.active)
+            {
+                if (isServer)
+                    StopBroadcast();
+                _netManager.StopHost();
+            }
+            else
+                _netManager.StopClient();
+        }
+
+    }
 }

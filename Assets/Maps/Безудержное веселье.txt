@@ -1,15 +1,15 @@
-20 14
+20 14 #3C3C3C
 XX                XX
-X                  X
+X        ?         X
  S      XXXX     S  
                     
   ***          ***  
-    *  XX**XX  *    
-    X  X    X  X    
-    X  X    X  X    
-    *  XX**XX  *    
+TTTT*  XX**XX  *TTTT
+TTTTX  X    X  XTTTT
+TTTTX  X    X  XTTTT
+TTTT*  XX**XX  *TTTT
   ***          ***  
                     
         XXXX        
 XS               S X
-XX                XX
+XX       ?        XX

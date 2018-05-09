@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1635616601673836}
+  m_IsPrefabParent: 1
+--- !u!1 &1635616601673836
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4140344735849088}
+  - component: {fileID: 114315038620312670}
+  - component: {fileID: 114001888210929808}
+  m_Layer: 0
+  m_Name: ProjectContext
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4140344735849088
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1635616601673836}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114001888210929808
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1635616601673836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68f1a27cc1cc187469877a4e2769c7d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Menus:
+    MainMenu: {fileID: 1329819482570896, guid: 87c1c1ea5b49ed94397a44eb87d53e04, type: 2}
+    SearchGamesMenu: {fileID: 1906079930936762, guid: 11e2ca9191240234babad5ce25897a13,
+      type: 2}
+    CreateGameMenu: {fileID: 1100934687816794, guid: 230b42fdacee00347a6a60abc4c33ecd,
+      type: 2}
+    LobbyMenu: {fileID: 1294526431238508, guid: 45590ab2bbf49b241b4a38b3e237ea89,
+      type: 2}
+    GameMenu: {fileID: 1993471037056320, guid: c515bb2a24d747e42b05a315face51bb, type: 2}
+    InGameHUD: {fileID: 1829146589692128, guid: f369fb621eab5b7488424670f76ae07e,
+      type: 2}
+    ConnectDirectIpMenu: {fileID: 1038874757632432, guid: 8235acf7a4151264e8cb94c8f355a221,
+      type: 2}
+  NetworkManagerPrefab: {fileID: 1533877938861358, guid: fe81d39037da8b74ba7c734b5fc4b0ca,
+    type: 2}
+  NetworkDiscoveryPrefab: {fileID: 1311880834755664, guid: ec3c14463c2c03a4f977023d348d0fce,
+    type: 2}
+--- !u!114 &114315038620312670
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1635616601673836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4e6589720da476459dc6dd71624b071, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _installers:
+  - {fileID: 114001888210929808}
+  _installerPrefabs: []
+  _scriptableObjectInstallers: []

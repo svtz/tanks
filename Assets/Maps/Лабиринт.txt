@@ -1,0 +1,41 @@
+40 40 #28522F #CDA45A
+    **      **      TTTTTTTTTT**        
+?   **      **      TTTTTTTTTT**      S 
+**      **      **  ********TT**  **    
+**      **      **  ********TT**  **    
+    ******XX  ****        **TT**  ****  
+    ******XX  ****        **TT**  ****  
+TTTT**TT**    **    XX            **    
+TTTT**TT**    **    XX?           **    
+TTTTTTTTXX  XXXXXXXXXXXXXXXXXX******  **
+TTTTTTTTXX  XXXXXXXXXXXXXXXXX*******  **
+TTTT****XX              XX    *XTTTT    
+TTTT****XX              XX  ? XXTTTT    
+    **TTXXXX**TT******        XXTT****  
+    **TTXXXX**TT******        XXTT****  
+  ****TTXX  **TTTTTT******  **XXTT**    
+  ****TTXX? **TTTTTT******  **XXTT**    
+      TTXX  *X**X*TTTTTT**    XXTT**  XX
+      TTXX  X****XTTTTTT**    XXTT**S XX
+  ****TTXX  TTTTTTXX**TT****  XXTT**    
+  ****TTXX  TTTTTTX***TT****  XXTT**    
+    **TTXX  ****TT***XTTTTTT  XXTT****  
+    **TTXX  ****TT**XXTTTTTT  XXTT****  
+XX  **TTXX    **TTTTTTX****X  XXTT      
+XXS **TTXX    **TTTTTT*X**X*  XXTT      
+    **TTXX**  ******TTTTTT**  XXTT****  
+    **TTXX**  ******TTTTTT**? XXTT****  
+  ****TTXX        ******TT**XXXXTT**    
+  ****TTXX        ******TT**XXXXTT**    
+    TTTTXX    XX              XX****TTTT
+    TTTTX*?   XX              XX****TTTT
+**  *******XXXXXXXXXXXXXXXXX  XXTTTTTTTT
+**  ******XXXXXXXXXXXXXXXXXX  XXTTTTTTTT
+    **            XX    **    **TT**TTTT
+    **          ? XX    **    **TT**TTTT
+  ****  **TT**        ****  XX******    
+  ****  **TT**        ****  XX******    
+    **  **TT********  **      **      **
+    **  **TT********  **      **      **
+        **TTTTTTTTTT      **      **    
+S       **TTTTTTTTTT      **      **  ? 

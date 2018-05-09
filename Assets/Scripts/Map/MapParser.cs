@@ -1,12 +1,12 @@
-using System;
+ï»¿using System;
 using System.Linq;
 using UnityEngine;
 
-namespace svtz.Tanks.Assets.Scripts.Map
+namespace svtz.Tanks.Map
 {
     internal sealed class MapParser
     {
-        public static MapInfo Parse(TextAsset textAsset)
+        public MapInfo Parse(TextAsset textAsset)
         {
             var data = new MapInfo
             {
@@ -17,6 +17,16 @@ namespace svtz.Tanks.Assets.Scripts.Map
             var firstLine = lines[0].Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
             data.Width = int.Parse(firstLine[0]);
             data.Height = int.Parse(firstLine[1]);
+            Color color;
+            if (firstLine.Length > 2 && ColorUtility.TryParseHtmlString(firstLine[2], out color))
+            {
+                data.BackgroundColor = color;
+            }
+            if (firstLine.Length > 3 && ColorUtility.TryParseHtmlString(firstLine[3], out color))
+            {
+                data.CrawlerBeltColor = color;
+            }
+
             data.Map = new MapObjectKind[data.Height][];
 
             for (var lineIdx = 1; lineIdx <= data.Height; lineIdx++)
@@ -42,11 +52,15 @@ namespace svtz.Tanks.Assets.Scripts.Map
                     return MapObjectKind.RegularWall;
                 case 'X':
                     return MapObjectKind.UnbreakableWall;
+                case 'T':
+                    return MapObjectKind.Tree;
                 case 'S':
                     return MapObjectKind.RandomPlayerSpawn;
+                case '?':
+                    return MapObjectKind.RandomBonusSpawner;
                
                 default:
-                    throw new ArgumentException("Íåâåðíûé ôîðìàò óðîâíÿ");
+                    throw new ArgumentException(string.Format("ÐÐµÐ²ÐµÑ€Ð½Ñ‹Ð¹ Ñ„Ð¾Ñ€Ð¼Ð°Ñ‚ ÑƒÑ€Ð¾Ð²Ð½Ñ ({0},{1})", lineIdx, colIdx));
             }
         }
     }
