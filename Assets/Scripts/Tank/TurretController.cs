@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using svtz.Tanks.Common;
 using UnityEngine;
 using Zenject;
@@ -23,30 +22,26 @@ namespace svtz.Tanks.Tank
             _tankPositionSync = tankPositionSync;
         }
 
-        private static readonly Dictionary<int, float?> _anglesWordSpace = new Dictionary<int, float?>
-        {
-            { 0010, 0 },
-            { 1010, 45 },
-            { 1000, 90 },
-            { 1001, 135 },
-            { 0001, 180 },
-            { 0110, -45 },
-            { 0100, -90 },
-            { 0101, -135 }
-        };
-
         private float? GetDesiredAngle()
         {
-            var angleKey =
-                  (_inputManager.TurretLeft() ? 1000 : 0)
-                + (_inputManager.TurretRight() ? 100 : 0)
-                + (_inputManager.TurretUp() ? 10 : 0)
-                + (_inputManager.TurretDown() ? 1 : 0);
+            if (_inputManager.TurretLeft())
+                return 90;
+            if (_inputManager.TurrentUpLeft())
+                return 45;
+            if (_inputManager.TurretUp())
+                return 0;
+            if (_inputManager.TurrentUpRight())
+                return -45;
+            if (_inputManager.TurretRight())
+                return -90;
+            if (_inputManager.TurretDownRight())
+                return -135;
+            if (_inputManager.TurretDown())
+                return 180;
+            if (_inputManager.TurretDownLeft())
+                return 135;
 
-            float? result;
-            _anglesWordSpace.TryGetValue(angleKey, out result);
-
-            return result;
+            return null;
         }
 
         private bool ValidAngle(float angle)
