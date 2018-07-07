@@ -39,6 +39,9 @@ namespace svtz.Tanks.Map
                 data.Map[lineIdx - 1] = currentLineMap;
             }
 
+            // переворачиваем карту
+            data.Map = data.Map.Reverse().ToArray();
+
             return data;
         }
 
