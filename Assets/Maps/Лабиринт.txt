@@ -6,11 +6,11 @@
     ******XX  ****        **TT**  ****  
     ******XX  ****        **TT**  ****  
 TTTT**TT**    **    XX            **    
-TTTT**TT**    **    XX?           **    
+TTTT**TT**    **  S XX?           **    
 TTTTTTTTXX  XXXXXXXXXXXXXXXXXX******  **
 TTTTTTTTXX  XXXXXXXXXXXXXXXXX*******  **
 TTTT****XX              XX    *XTTTT    
-TTTT****XX              XX  ? XXTTTT    
+TTTT****XX            S XX  ? XXTTTT    
     **TTXXXX**TT******        XXTT****  
     **TTXXXX**TT******        XXTT****  
   ****TTXX  **TTTTTT******  **XXTT**    
@@ -28,11 +28,11 @@ XXS **TTXX    **TTTTTT*X**X*  XXTT
   ****TTXX        ******TT**XXXXTT**    
   ****TTXX        ******TT**XXXXTT**    
     TTTTXX    XX              XX****TTTT
-    TTTTX*?   XX              XX****TTTT
+    TTTTX*?   XXS             XX****TTTT
 **  *******XXXXXXXXXXXXXXXXX  XXTTTTTTTT
 **  ******XXXXXXXXXXXXXXXXXX  XXTTTTTTTT
     **            XX    **    **TT**TTTT
-    **          ? XX    **    **TT**TTTT
+    **          ? XXS   **    **TT**TTTT
   ****  **TT**        ****  XX******    
   ****  **TT**        ****  XX******    
     **  **TT********  **      **      **

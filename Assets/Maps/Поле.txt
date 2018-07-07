@@ -6,7 +6,7 @@
   **              **      S       XX  TT
   **                      XX      **  TT
                           **      **  TT
-          S               **          TT
+                          **          TT
 T         XX                         TTT
 TT        **                         TTT
 TT        **                       X TTT
@@ -31,7 +31,7 @@ TTT                                   TT
 TTT X              ?        **        TT
 TTT                         **        TT
 TTT                         XX         T
-TT          **              S           
+TT          **                          
 TT  **      **                          
 TT  **      XX                      **  
 TT  XX              **              **  

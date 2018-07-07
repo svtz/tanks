@@ -121,11 +121,11 @@ MonoBehaviour:
   m_MatchHost: 
   m_MatchPort: 443
   matchName: default
-  matchSize: 4
+  matchSize: 8
   isNetworkActive: 0
   matchMaker: {fileID: 0}
   m_ShowLobbyGUI: 0
-  m_MaxPlayers: 4
+  m_MaxPlayers: 8
   m_MaxPlayersPerConnection: 1
   m_MinPlayers: 0
   m_LobbyPlayerPrefab: {fileID: 114279994944143688, guid: e8d5f2374e536e944bff9e8518e2f61a,
