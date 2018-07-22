@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4993114767648876}
   - component: {fileID: 198526090777499976}
   - component: {fileID: 199721022387405846}
+  - component: {fileID: 114387534778686488}
   m_Layer: 0
   m_Name: BulletBurst
   m_TagString: Untagged
@@ -41,6 +42,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114387534778686488
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1262773623310150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a78acab7655420a8a1c08a649ceef80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ParticleSystem: {fileID: 198526090777499976}
 --- !u!198 &198526090777499976
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -50,10 +63,10 @@ ParticleSystem:
   serializedVersion: 5
   lengthInSec: 2
   simulationSpeed: 4
-  stopAction: 2
+  stopAction: 3
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 0

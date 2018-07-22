@@ -358,6 +358,8 @@ MonoBehaviour:
     RespawnIfPickedSeconds: 5
   ProjectilePrefab: {fileID: 1815654817061048, guid: e8a3fd7c90864644ba7a8ed6ee6d3d97,
     type: 2}
+  ProjectileBurstPrefab: {fileID: 1262773623310150, guid: f44572b2d08593042b6eb4b541c61d75,
+    type: 2}
   BonusPrefab: {fileID: 1716186020836280, guid: 9202f48ad2e025e44958e39cea4e93d1,
     type: 2}
   BonusEffects:

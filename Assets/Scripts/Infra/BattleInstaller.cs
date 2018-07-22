@@ -19,6 +19,7 @@ namespace svtz.Tanks.Infra
         public TankSpawner.Settings SpawnControllerSettings;
         public BonusSpawner.Settings BonusSpawnerSettings;
         public GameObject ProjectilePrefab;
+        public GameObject ProjectileBurstPrefab;
         public GameObject BonusPrefab;
         public BonusEffects BonusEffects;
         public int ProjectilePoolInitialSize;
@@ -57,6 +58,10 @@ namespace svtz.Tanks.Infra
                 .ExpandByOneAtATime()
                 .FromComponentInNewPrefab(ProjectilePrefab);
             Container.Bind<ProjectilePool.Client>().AsSingle().WithArguments(ProjectilePrefab).NonLazy();
+            Container.BindMemoryPool<BurstController, BurstController.Pool>()
+                .WithInitialSize(ProjectilePoolInitialSize)
+                .ExpandByOneAtATime()
+                .FromComponentInNewPrefab(ProjectileBurstPrefab);
 
             // Бонусы
             Container.Bind<BonusSpawner>().AsSingle().WithArguments(BonusSpawnerSettings);
