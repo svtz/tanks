@@ -383,6 +383,7 @@ GameObject:
   - component: {fileID: 114905819090635334}
   - component: {fileID: 114220676855654970}
   - component: {fileID: 114049318765991724}
+  - component: {fileID: 114035305108670544}
   m_Layer: 5
   m_Name: Search Games Menu
   m_TagString: Untagged
@@ -455,7 +456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 3
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -522,6 +523,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114035305108670544
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1906079930936762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f1736dc34c744f0942926db22a76591, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FirstSelectedGameObject: {fileID: 1507206030156900}
 --- !u!114 &114049318765991724
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -533,10 +546,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 118c47fb21114174a6c27297441f8777, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerNameInput: {fileID: 224627972452253128}
   ServerItemPrefab: {fileID: 224654741500768644, guid: f343ed2cc6d483c48b80cb053be0782b,
     type: 2}
   ScrollContent: {fileID: 224789113831936854}
-  PlayerNameInput: {fileID: 224627972452253128}
 --- !u!114 &114066472001903924
 MonoBehaviour:
   m_ObjectHideFlags: 1

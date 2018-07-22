@@ -1,6 +1,5 @@
 using svtz.Tanks.Common;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using Zenject;
 
 namespace svtz.Tanks.UserInterface.States
@@ -19,7 +18,6 @@ namespace svtz.Tanks.UserInterface.States
 
         public virtual void OnEnterState()
         {
-            FindObjectOfType<EventSystem>().SetSelectedGameObject(null);
             gameObject.SetActive(true);
         }
 

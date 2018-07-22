@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 114467949117477240}
   - component: {fileID: 114129316311880100}
   - component: {fileID: 95196148694456928}
+  - component: {fileID: 114302994826041256}
   m_Layer: 5
   m_Name: Direct Connect Button
   m_TagString: Untagged
@@ -42,6 +43,7 @@ GameObject:
   - component: {fileID: 114615158403178676}
   - component: {fileID: 114415539793475204}
   - component: {fileID: 95995533354025276}
+  - component: {fileID: 114346415131950786}
   m_Layer: 5
   m_Name: Exit Button
   m_TagString: Untagged
@@ -78,6 +80,7 @@ GameObject:
   - component: {fileID: 114303942921126220}
   - component: {fileID: 114146164916500608}
   - component: {fileID: 114208548014369686}
+  - component: {fileID: 114373106954099706}
   m_Layer: 5
   m_Name: Main Menu
   m_TagString: Untagged
@@ -133,6 +136,7 @@ GameObject:
   - component: {fileID: 114863248111496638}
   - component: {fileID: 114985496589617036}
   - component: {fileID: 95288391285539726}
+  - component: {fileID: 114301279417766304}
   m_Layer: 5
   m_Name: Search Game Button
   m_TagString: Untagged
@@ -152,6 +156,7 @@ GameObject:
   - component: {fileID: 114817432773446538}
   - component: {fileID: 114964023511608756}
   - component: {fileID: 95513559342330952}
+  - component: {fileID: 114002924535259912}
   m_Layer: 5
   m_Name: New Game Button
   m_TagString: Untagged
@@ -385,6 +390,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114002924535259912
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1622951077720488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e1bc15b1bf64d46ad03ad763bfae06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
 --- !u!114 &114097832067144514
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -424,7 +442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 3
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -546,6 +564,32 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
+--- !u!114 &114301279417766304
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1613506974005978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e1bc15b1bf64d46ad03ad763bfae06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
+--- !u!114 &114302994826041256
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1206380931090850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e1bc15b1bf64d46ad03ad763bfae06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
 --- !u!114 &114303942921126220
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -621,6 +665,31 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114346415131950786
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1257350475171338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e1bc15b1bf64d46ad03ad763bfae06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
+--- !u!114 &114373106954099706
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1329819482570896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f1736dc34c744f0942926db22a76591, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FirstSelectedGameObject: {fileID: 1622951077720488}
 --- !u!114 &114402330720846078
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -660,7 +729,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 3
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -1061,7 +1130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 3
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -1113,7 +1182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 3
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}

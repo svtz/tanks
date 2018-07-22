@@ -5,6 +5,7 @@ using svtz.Tanks.Network;
 using svtz.Tanks.Tank;
 using svtz.Tanks.UserInterface;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Zenject;
 
 namespace svtz.Tanks.Infra
@@ -15,6 +16,7 @@ namespace svtz.Tanks.Infra
         public GUIInstaller.GUIMenus Menus;
         public GameObject NetworkManagerPrefab;
         public GameObject NetworkDiscoveryPrefab;
+        public GameObject EventSystemPrefab;
 #pragma warning restore 0649
 
         public override void InstallBindings()
@@ -36,6 +38,7 @@ namespace svtz.Tanks.Infra
 
             // ввод
             Container.Bind<InputManager>().AsSingle();
+            Container.Bind<EventSystem>().FromComponentInNewPrefab(EventSystemPrefab).AsSingle();
 
             // принадлежности карты, которые важно получить до начала боя
             Container.DeclareSignal<MapSettingsUpdatedSignal>();

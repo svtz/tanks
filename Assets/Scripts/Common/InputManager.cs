@@ -8,10 +8,8 @@ namespace svtz.Tanks.Common
     {
         private static class Constants
         {
-            public const string MoveLeft = "Left";
-            public const string MoveRight = "Right";
-            public const string MoveUp = "Up";
-            public const string MoveDown = "Down";
+            public const string HorizontalAxis = "Horizontal";
+            public const string VerticalAxis = "Vertical";
 
             public const string Brake = "Brake";
 
@@ -26,22 +24,22 @@ namespace svtz.Tanks.Common
 
         public bool Left()
         {
-            return Button(Constants.MoveLeft);
+            return Input.GetAxis(Constants.HorizontalAxis) < 0;
         }
 
         public bool Right()
         {
-            return Button(Constants.MoveRight);
+            return Input.GetAxis(Constants.HorizontalAxis) > 0;
         }
 
         public bool Up()
         {
-            return Button(Constants.MoveUp);
+            return Input.GetAxis(Constants.VerticalAxis) > 0;
         }
 
         public bool Down()
         {
-            return Button(Constants.MoveDown);
+            return Input.GetAxis(Constants.VerticalAxis) < 0;
         }
 
 
@@ -115,6 +113,11 @@ namespace svtz.Tanks.Common
         public bool StatScreen()
         {
             return Input.GetButton("StatScreen");
+        }
+
+        public bool Tab()
+        {
+            return Input.GetKeyDown(KeyCode.Tab);
         }
 
 

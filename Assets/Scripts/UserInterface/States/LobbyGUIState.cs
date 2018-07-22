@@ -9,7 +9,7 @@ namespace svtz.Tanks.UserInterface.States
 {
     internal abstract class LobbyGUIState : NetworkMenuGUIState
     {
-        private CustomNetworkManager NetworkManager { get; set; }
+        private CustomNetworkManager _networkManager;
         private LobbyGUISettings _settings;
 
         private readonly Dictionary<CustomLobbyPlayer, RectTransform> _playerItems = 
@@ -18,7 +18,7 @@ namespace svtz.Tanks.UserInterface.States
         [Inject]
         private void Construct(CustomNetworkManager networkManager, LobbyGUISettings settings)
         {
-            NetworkManager = networkManager;
+            _networkManager = networkManager;
             _settings = settings;
         }
 
@@ -50,9 +50,9 @@ namespace svtz.Tanks.UserInterface.States
 
                 var outdatedPlayers = new HashSet<CustomLobbyPlayer>(_playerItems.Keys);
 
-                if (NetworkManager != null)
+                if (_networkManager != null)
                 {
-                    foreach (var player in NetworkManager.lobbySlots)
+                    foreach (var player in _networkManager.lobbySlots)
                     {
                         var customLobbyPlayer = player as CustomLobbyPlayer;
                         if (customLobbyPlayer == null)
@@ -70,8 +70,10 @@ namespace svtz.Tanks.UserInterface.States
                             outdatedPlayers.Remove(customLobbyPlayer);
                         }
 
+                        var button = item.GetComponent<Button>();
+                        button.interactable = customLobbyPlayer.isLocalPlayer;
+
                         var toggle = item.GetComponentInChildren<Toggle>();
-                        toggle.interactable = customLobbyPlayer.isLocalPlayer;
                         if (customLobbyPlayer.isLocalPlayer)
                         {
                             customLobbyPlayer.SetReady(toggle.isOn);

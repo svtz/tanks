@@ -69,6 +69,8 @@ MonoBehaviour:
     type: 2}
   NetworkDiscoveryPrefab: {fileID: 1311880834755664, guid: ec3c14463c2c03a4f977023d348d0fce,
     type: 2}
+  EventSystemPrefab: {fileID: 1384455042770156, guid: c37855ff4fef8d647baf1f80c2e5f72d,
+    type: 2}
 --- !u!114 &114315038620312670
 MonoBehaviour:
   m_ObjectHideFlags: 1

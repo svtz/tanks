@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 114750402563774230}
   - component: {fileID: 114361054744469086}
   - component: {fileID: 114938491513043806}
+  - component: {fileID: 114179866964344792}
   m_Layer: 5
   m_Name: Create Game Menu
   m_TagString: Untagged
@@ -93,6 +94,7 @@ GameObject:
   - component: {fileID: 114350582097516502}
   - component: {fileID: 114497312478254362}
   - component: {fileID: 95637115621628644}
+  - component: {fileID: 114005058219925998}
   m_Layer: 5
   m_Name: Back Button
   m_TagString: Untagged
@@ -329,6 +331,7 @@ GameObject:
   - component: {fileID: 114377132451621586}
   - component: {fileID: 114741486326038228}
   - component: {fileID: 95843770434763530}
+  - component: {fileID: 114454578801179852}
   m_Layer: 5
   m_Name: Create Game Button
   m_TagString: Untagged
@@ -542,6 +545,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!114 &114005058219925998
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1221970205368686}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e1bc15b1bf64d46ad03ad763bfae06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
 --- !u!114 &114009562414661854
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -782,6 +798,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114179866964344792
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1100934687816794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f1736dc34c744f0942926db22a76591, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FirstSelectedGameObject: {fileID: 1816418534090192}
 --- !u!114 &114203624797155804
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1264,6 +1292,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114454578801179852
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1666283456517478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09e1bc15b1bf64d46ad03ad763bfae06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
+  delegates: []
 --- !u!114 &114497312478254362
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1276,7 +1317,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 3
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -1375,7 +1416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 3
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}

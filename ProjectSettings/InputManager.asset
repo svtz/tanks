@@ -6,68 +6,36 @@ InputManager:
   serializedVersion: 2
   m_Axes:
   - serializedVersion: 3
-    m_Name: Right
-    descriptiveName: "\u0415\u0445\u0430\u0442\u044C \u0432\u043F\u0440\u0430\u0432\u043E"
-    descriptiveNegativeName: 
-    negativeButton: 
+    m_Name: Horizontal
+    descriptiveName: "\u0414\u0432\u0438\u0436\u0435\u043D\u0438\u0435 \u0432\u043F\u0440\u0430\u0432\u043E"
+    descriptiveNegativeName: "\u0414\u0432\u0438\u0436\u0435\u043D\u0438\u0435 \u0432\u043B\u0435\u0432\u043E"
+    negativeButton: a
     positiveButton: d
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
-    snap: 0
+    snap: 1
     invert: 0
     type: 0
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Left
-    descriptiveName: "\u0415\u0445\u0430\u0442\u044C \u0432\u043B\u0435\u0432\u043E"
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: a
-    altNegativeButton: 
-    altPositiveButton: 
-    gravity: 1000
-    dead: 0.001
-    sensitivity: 1000
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 0
-    joyNum: 0
-  - serializedVersion: 3
-    m_Name: Up
-    descriptiveName: "\u0415\u0445\u0430\u0442\u044C \u0432\u0432\u0435\u0440\u0445"
-    descriptiveNegativeName: 
-    negativeButton: 
+    m_Name: Vertical
+    descriptiveName: "\u0414\u0432\u0438\u0436\u0435\u043D\u0438\u0435 \u0432\u0432\u0435\u0440\u0445"
+    descriptiveNegativeName: "\u0414\u0432\u0438\u0436\u0435\u043D\u0438\u0435 \u0432\u043D\u0438\u0437"
+    negativeButton: s
     positiveButton: w
     altNegativeButton: 
     altPositiveButton: 
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
-    snap: 0
+    snap: 1
     invert: 0
     type: 0
-    axis: 0
-    joyNum: 0
-  - serializedVersion: 3
-    m_Name: Down
-    descriptiveName: "\u0415\u0445\u0430\u0442\u044C \u0432\u043D\u0438\u0437"
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: s
-    altNegativeButton: 
-    altPositiveButton: 
-    gravity: 1000
-    dead: 0.001
-    sensitivity: 1000
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 0
+    axis: 1
     joyNum: 0
   - serializedVersion: 3
     m_Name: Brake
@@ -246,4 +214,36 @@ InputManager:
     invert: 0
     type: 0
     axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Menu Horizontal
+    descriptiveName: "\u041C\u0435\u043D\u044E \u0432\u043F\u0440\u0430\u0432\u043E"
+    descriptiveNegativeName: "\u041C\u0435\u043D\u044E \u0432\u043B\u0435\u0432\u043E"
+    negativeButton: left
+    positiveButton: right
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.001
+    sensitivity: 1000
+    snap: 1
+    invert: 0
+    type: 0
+    axis: 0
+    joyNum: 0
+  - serializedVersion: 3
+    m_Name: Menu Vertical
+    descriptiveName: "\u041C\u0435\u043D\u044E \u0432\u0432\u0435\u0440\u0445"
+    descriptiveNegativeName: "\u041C\u0435\u043D\u044E \u0432\u043D\u0438\u0437"
+    negativeButton: down
+    positiveButton: up
+    altNegativeButton: 
+    altPositiveButton: 
+    gravity: 1000
+    dead: 0.001
+    sensitivity: 1000
+    snap: 1
+    invert: 0
+    type: 0
+    axis: 1
     joyNum: 0
