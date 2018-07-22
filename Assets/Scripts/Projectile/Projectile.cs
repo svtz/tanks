@@ -18,6 +18,8 @@ namespace svtz.Tanks.Projectile
 
         public float CastWidth;
         public float[] CastDistances;
+
+        public GameObject ParticlePrefab;
 #pragma warning restore 0649
 
         private Rigidbody2D _rb2D;
@@ -27,14 +29,19 @@ namespace svtz.Tanks.Projectile
         private GameObject _owner;
         private IPlayer _ownerPlayer;
         private DelayedExecutor.IDelayedTask _autoDespawn;
+        private IInstantiator _instantiator;
         private bool _despawned;
 
         [Inject]
-        public void Construct(Rigidbody2D rb2D, ProjectilePool pool, DelayedExecutor delayedExecutor)
+        public void Construct(Rigidbody2D rb2D,
+            ProjectilePool pool, 
+            DelayedExecutor delayedExecutor,
+            IInstantiator instantiator)
         {
             _rb2D = rb2D;
             _pool = pool;
             _delayedExecutor = delayedExecutor;
+            _instantiator = instantiator;
         }
 
         [ClientRpc]
@@ -130,6 +137,9 @@ namespace svtz.Tanks.Projectile
         {
             if (!_despawned)
             {
+                var particle = _instantiator.InstantiatePrefab(ParticlePrefab);
+                particle.transform.position = transform.position;
+
                 _autoDespawn.Cancel();
                 _pool.Despawn(this);
             }
