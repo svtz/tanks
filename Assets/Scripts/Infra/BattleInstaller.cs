@@ -51,6 +51,8 @@ namespace svtz.Tanks.Infra
             Container.Bind<TankPositionSync>().FromComponentInParents(); // inParents - для башни танка
             Container.Bind<SpriteRenderer>().FromComponentSibling();
             Container.Bind<Rigidbody2D>().FromComponentSibling();
+            Container.Bind<TurretController>().FromComponentInChildren();
+            Container.Bind<CrawlerBeltsController>().FromComponentInChildren();
 
             // Снаряды
             Container.BindMemoryPool<Projectile.Projectile, ProjectilePool>()

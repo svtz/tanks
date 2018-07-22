@@ -17,13 +17,18 @@ namespace svtz.Tanks.Tank
         private Rigidbody2D _rb2D;
         private TankPositionSync _sync;
         private InputManager _input;
+        private CrawlerBeltsController _crawlerBelts;
 
         [Inject]
-        private void Construct(InputManager input, TankPositionSync sync, Rigidbody2D rb2D)
+        private void Construct(InputManager input, 
+            TankPositionSync sync,
+            Rigidbody2D rb2D,
+            CrawlerBeltsController belts)
         {
             _input = input;
             _rb2D = rb2D;
             _sync = sync;
+            _crawlerBelts = belts;
         }
 
         private Direction _currentDirection;
@@ -50,6 +55,8 @@ namespace svtz.Tanks.Tank
         private float _inputY = 0.0f;
         private bool _brake = false;
 
+        private bool CurrentlyMoving { get { return _targetPosition != null; } }
+
         private void Update()
         {
             if (!isLocalPlayer)
@@ -74,6 +81,8 @@ namespace svtz.Tanks.Tank
                 _inputX = -1.0f;
 
             _brake = _input.Brake();
+
+            _crawlerBelts.SetAnimationState(CurrentlyMoving);
         }
 
         //FixedUpdate is called at a fixed interval and is independent of frame rate. Put physics code here.
@@ -175,7 +184,7 @@ namespace svtz.Tanks.Tank
             }
 
             _rb2D.MoveRotation(DirectionHelper.Rotations[_currentDirection]);
-            _sync.CmdSyncTankPosition(_currentDirection, transform.position);
+            _sync.CmdSyncTankPosition(_currentDirection, transform.position, CurrentlyMoving);
         }
 
         private void AlignPositionToGrid()

@@ -110,8 +110,6 @@ MonoBehaviour:
   - 0
   - 0.2
   - 0.3
-  ParticlePrefab: {fileID: 1262773623310150, guid: f44572b2d08593042b6eb4b541c61d75,
-    type: 2}
 --- !u!114 &114743141803588036
 MonoBehaviour:
   m_ObjectHideFlags: 1

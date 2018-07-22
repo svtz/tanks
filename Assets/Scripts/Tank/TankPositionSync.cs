@@ -1,28 +1,28 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Networking;
+using Zenject;
 
 namespace svtz.Tanks.Tank
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(TankController))]
     internal sealed class TankPositionSync : NetworkBehaviour
     {
-#pragma warning disable 0649
-        public Transform Turret;
-#pragma warning restore 0649
-
         private Direction _currentDirection;
         private Vector2 _remotePosition;
         private float _remoteTurretAngle;
         private Rigidbody2D _rb2D;
+        private CrawlerBeltsController _crawlerBeltsController;
         private TurretController _turretController;
         private bool _tankActual = false;
         private bool _turretActual = false;
 
-        private void Start()
+        [Inject]
+        private void Construct(Rigidbody2D rb2D, TurretController turretController, CrawlerBeltsController crawlerBelts)
         {
-            _rb2D = GetComponent<Rigidbody2D>();
-            _turretController = Turret.GetComponent<TurretController>();
+            _rb2D = rb2D;
+            _turretController = turretController;
+            _crawlerBeltsController = crawlerBelts;
         }
 
         [Command]
@@ -42,16 +42,18 @@ namespace svtz.Tanks.Tank
         }
 
         [Command]
-        public void CmdSyncTankPosition(Direction direction, Vector2 position)
+        public void CmdSyncTankPosition(Direction direction, Vector2 position, bool currentlyMoving)
         {
-            RpcSyncTankPosition(direction, position);
+            RpcSyncTankPosition(direction, position, currentlyMoving);
         }
 
         [ClientRpc]
-        private void RpcSyncTankPosition(Direction newDirection, Vector2 position)
+        private void RpcSyncTankPosition(Direction newDirection, Vector2 position, bool currentlyMoving)
         {
             if (isLocalPlayer)
                 return;
+
+            _crawlerBeltsController.SetAnimationState(currentlyMoving);
 
             _currentDirection = newDirection;
             _remotePosition = position;
