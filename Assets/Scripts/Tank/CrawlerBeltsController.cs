@@ -20,7 +20,6 @@ namespace svtz.Tanks.Tank
             {
                 GetComponent<Animator>().SetBool("Moving", enableAnimation);
                 _currentlyEnabled = enableAnimation;
-                Debug.LogWarning(enableAnimation.ToString());
             }
         }
     }

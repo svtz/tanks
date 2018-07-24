@@ -1,4 +1,6 @@
-﻿using svtz.Tanks.BattleStats;
+﻿using svtz.Tanks.Audio;
+using svtz.Tanks.BattleStats;
+using svtz.Tanks.Bonus.Impl;
 using svtz.Tanks.Common;
 using svtz.Tanks.Map;
 using svtz.Tanks.Network;
@@ -31,6 +33,12 @@ namespace svtz.Tanks.Infra
 
             Container.DeclareSignal<RespawningSignal>();
             Container.Bind<RespawningSignal.ServerToClient>().AsSingle().WithArguments(MessageCodes.Respawning).NonLazy();
+
+            Container.DeclareSignal<SoundEffectsFactory.SoundEffectSignal>();
+            Container.Bind<SoundEffectsFactory.SoundEffectSignal.ServerToClient>()
+                .AsSingle()
+                .WithArguments(MessageCodes.MoveSpeedBonusApplied)
+                .NonLazy();
 
             // сеть-мультиплеер
             Container.Bind<CustomNetworkManager>().FromComponentInNewPrefab(NetworkManagerPrefab).AsSingle();

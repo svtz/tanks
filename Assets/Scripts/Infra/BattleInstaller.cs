@@ -1,4 +1,5 @@
-﻿using svtz.Tanks.Bonus;
+﻿using svtz.Tanks.Audio;
+using svtz.Tanks.Bonus;
 using svtz.Tanks.Bonus.Impl;
 using svtz.Tanks.Camera;
 using svtz.Tanks.Common;
@@ -22,8 +23,10 @@ namespace svtz.Tanks.Infra
         public GameObject ProjectileBurstPrefab;
         public GameObject BonusPrefab;
         public BonusEffects BonusEffects;
+        public GameObject SoundEffectsFactoryPrefab;
         public int ProjectilePoolInitialSize;
         public int BonusPoolInitialSize;
+        public int SoundEffectsPoolInitialSize;
 #pragma warning restore 0649
 
         public override void InstallBindings()
@@ -34,7 +37,6 @@ namespace svtz.Tanks.Infra
             Container.Bind<MapParser>().AsSingle();
             Container.Bind<MapCreator>().AsSingle().WithArguments(MapCreatorSettings);
             Container.Bind<Background>().FromComponentInHierarchy().AsSingle();
-
 
             // Сервис отложенного исполнения
             Container.BindInterfacesAndSelfTo<DelayedExecutor>().AsSingle();
@@ -53,6 +55,13 @@ namespace svtz.Tanks.Infra
             Container.Bind<Rigidbody2D>().FromComponentSibling();
             Container.Bind<TurretController>().FromComponentInChildren();
             Container.Bind<CrawlerBeltsController>().FromComponentInChildren();
+
+            // Звуки
+            Container.BindMemoryPool<AudioSource, SoundEffectsFactory.Pool>()
+                .WithInitialSize(SoundEffectsPoolInitialSize)
+                .ExpandByOneAtATime()
+                .FromNewComponentOnNewGameObject();
+            Container.Bind<SoundEffectsFactory>().FromComponentInNewPrefab(SoundEffectsFactoryPrefab).AsSingle();
 
             // Снаряды
             Container.BindMemoryPool<Projectile.Projectile, ProjectilePool>()

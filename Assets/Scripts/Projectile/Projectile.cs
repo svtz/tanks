@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using svtz.Tanks.Audio;
 using svtz.Tanks.BattleStats;
 using svtz.Tanks.Common;
 using UnityEngine;
@@ -28,18 +29,21 @@ namespace svtz.Tanks.Projectile
         private IPlayer _ownerPlayer;
         private DelayedExecutor.IDelayedTask _autoDespawn;
         private BurstController.Pool _burstPool;
+        private SoundEffectsFactory _soundEffectsFactory;
         private bool _despawned;
 
         [Inject]
         public void Construct(Rigidbody2D rb2D,
             ProjectilePool pool, 
             DelayedExecutor delayedExecutor,
-            BurstController.Pool burstPool)
+            BurstController.Pool burstPool,
+            SoundEffectsFactory soundEffectsFactory)
         {
             _rb2D = rb2D;
             _pool = pool;
             _delayedExecutor = delayedExecutor;
             _burstPool = burstPool;
+            _soundEffectsFactory = soundEffectsFactory;
         }
 
         [ClientRpc]
@@ -54,6 +58,16 @@ namespace svtz.Tanks.Projectile
 
             _despawned = false; 
             _autoDespawn = _delayedExecutor.Add(TryDespawn, TTL);
+
+            var ownerIdentity = owner.GetComponent<NetworkIdentity>();
+            if (ownerIdentity != null && ownerIdentity.isLocalPlayer)
+            {
+                _soundEffectsFactory.Play(position, SoundEffectKind.RegularShoot, SoundEffectSource.LocalPlayer);
+            }
+            else
+            {
+                _soundEffectsFactory.Play(position, SoundEffectKind.RegularShoot, SoundEffectSource.Environment);
+            }
         }
 
         public void Launch(Transform spawn, GameObject owner)

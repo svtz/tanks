@@ -365,8 +365,11 @@ MonoBehaviour:
   BonusEffects:
     MoveSpeedBonusValue: 0.2
     MoveSpeedBonusDuration: 5
+  SoundEffectsFactoryPrefab: {fileID: 1391769588091268, guid: ddb7a77ea6cd61746ab6f7f544706b49,
+    type: 2}
   ProjectilePoolInitialSize: 20
   BonusPoolInitialSize: 5
+  SoundEffectsPoolInitialSize: 40
 --- !u!114 &1786389208
 MonoBehaviour:
   m_ObjectHideFlags: 0

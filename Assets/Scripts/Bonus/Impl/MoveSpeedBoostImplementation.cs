@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
+using svtz.Tanks.Audio;
 using svtz.Tanks.Common;
+using svtz.Tanks.Infra;
 using svtz.Tanks.Tank;
 using UnityEngine;
 using UnityEngine.Networking;
+using Zenject;
 
 namespace svtz.Tanks.Bonus.Impl
 {
@@ -10,13 +13,17 @@ namespace svtz.Tanks.Bonus.Impl
     {
         private readonly DelayedExecutor _delayedExecutor;
         private readonly BonusEffects _effects;
+        private readonly SoundEffectsFactory _soundEffectsFactory;
 
         public BonusKind BonusKind { get { return BonusKind.MoveSpeedBoost; } }
 
-        public MoveSpeedBoostImplementation(DelayedExecutor delayedExecutor, BonusEffects effects)
+        public MoveSpeedBoostImplementation(DelayedExecutor delayedExecutor,
+            BonusEffects effects,
+            SoundEffectsFactory soundEffectsFactory)
         {
             _delayedExecutor = delayedExecutor;
             _effects = effects;
+            _soundEffectsFactory = soundEffectsFactory;
         }
 
         private readonly Dictionary<GameObject, DelayedExecutor.IDelayedTask> _appliedBonuses
@@ -54,6 +61,11 @@ namespace svtz.Tanks.Bonus.Impl
 
                 _appliedBonuses.Add(player, appliedBonus);
             }
+
+            _soundEffectsFactory.PlayOnSingleClient(
+                controller.connectionToClient,
+                controller.transform.position,
+                SoundEffectKind.BonusPickup);
         }
     }
 }
