@@ -7,6 +7,7 @@
         UnbreakableHit,
         BonusPickup,
         PlayerDeath,
-        EnemyDeath
+        EnemyDeath,
+        PlayerSpawn
     }
 }

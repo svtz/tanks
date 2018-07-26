@@ -18,6 +18,7 @@ namespace svtz.Tanks.Audio
         public AudioClip BonusPickupClip;
         public AudioClip PlayerDeathClip;
         public AudioClip EnemyDeathClip;
+        public AudioClip PlayerSpawnClip;
 
         public AudioMixerGroup LocalPlayerMixerGroup;
         public AudioMixerGroup EnvironmentMixerGroup;
@@ -68,7 +69,8 @@ namespace svtz.Tanks.Audio
                 {SoundEffectKind.UnbreakableHit, UnbreakableHitClip},
                 {SoundEffectKind.BonusPickup, BonusPickupClip},
                 {SoundEffectKind.PlayerDeath, PlayerDeathClip},
-                {SoundEffectKind.EnemyDeath, EnemyDeathClip}
+                {SoundEffectKind.EnemyDeath, EnemyDeathClip},
+                {SoundEffectKind.PlayerSpawn, PlayerSpawnClip}
             };
             MixerGroups = new Dictionary<SoundEffectSource, AudioMixerGroup>
             {
@@ -101,7 +103,7 @@ namespace svtz.Tanks.Audio
 
         private readonly List<Effect> _currentEffects = new List<Effect>();
 
-        public void PlayImpl(Vector2 position,
+        private void PlayImpl(Vector2 position,
             SoundEffectKind soundEffectKind,
             SoundEffectSource soundEffectSource)
         {

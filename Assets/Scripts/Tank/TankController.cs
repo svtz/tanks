@@ -18,20 +18,20 @@ namespace svtz.Tanks.Tank
         private TankPositionSync _sync;
         private InputManager _input;
         private CrawlerBeltsController _crawlerBelts;
-        private MoveSoundController _moveSound;
+        private TankSoundController _tankSound;
 
         [Inject]
         private void Construct(InputManager input, 
             TankPositionSync sync,
             Rigidbody2D rb2D,
             CrawlerBeltsController belts,
-            MoveSoundController moveSound)
+            TankSoundController tankSound)
         {
             _input = input;
             _rb2D = rb2D;
             _sync = sync;
             _crawlerBelts = belts;
-            _moveSound = moveSound;
+            _tankSound = tankSound;
         }
 
         private Direction _currentDirection;
@@ -86,7 +86,7 @@ namespace svtz.Tanks.Tank
             _brake = _input.Brake();
 
             _crawlerBelts.SetAnimationState(CurrentlyMoving);
-            _moveSound.SetMoving(CurrentlyMoving);
+            _tankSound.SetMoving(CurrentlyMoving);
         }
 
         //FixedUpdate is called at a fixed interval and is independent of frame rate. Put physics code here.

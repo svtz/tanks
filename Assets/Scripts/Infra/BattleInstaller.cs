@@ -56,7 +56,7 @@ namespace svtz.Tanks.Infra
             Container.Bind<SpriteRenderer>().FromComponentSibling();
             Container.Bind<Rigidbody2D>().FromComponentSibling();
             Container.Bind<TankController>().FromComponentSibling();
-            Container.Bind<MoveSoundController>().FromComponentSibling();
+            Container.Bind<TankSoundController>().FromComponentSibling();
             Container.Bind<TurretController>().FromComponentInChildren();
             Container.Bind<CrawlerBeltsController>().FromComponentInChildren();
 

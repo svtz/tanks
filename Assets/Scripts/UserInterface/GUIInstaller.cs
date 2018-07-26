@@ -11,6 +11,8 @@ namespace svtz.Tanks.UserInterface
         public class GUIMenus
         {
 #pragma warning disable 0649
+            public GameObject GuiManagerPrefab;
+
             public GameObject MainMenu;
             public GameObject SearchGamesMenu;
             public GameObject CreateGameMenu;
@@ -49,7 +51,7 @@ namespace svtz.Tanks.UserInterface
 
             // менеджер
             Container.BindInterfacesAndSelfTo<GUIManager>()
-                .FromNewComponentOnNewGameObject()
+                .FromComponentInNewPrefab(_menus.GuiManagerPrefab)
                 .AsSingle()
                 .NonLazy();
         }

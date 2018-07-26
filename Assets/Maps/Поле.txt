@@ -36,6 +36,6 @@ TT  **      **
 TT  **      XX                      **  
 TT  XX              **              **  
 TT          S       **              XX  
-T   S               XX              S   
+T   S               XX                  
+T                                   S   
 T                   S                   
-T                                       

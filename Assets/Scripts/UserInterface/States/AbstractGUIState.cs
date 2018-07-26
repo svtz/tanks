@@ -1,5 +1,6 @@
 using svtz.Tanks.Common;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Zenject;
 
 namespace svtz.Tanks.UserInterface.States
@@ -32,7 +33,7 @@ namespace svtz.Tanks.UserInterface.States
         }
 
         [Inject]
-        public void Construct(GUIManager guiManager, InputManager input)
+        public void Construct(GUIManager guiManager, InputManager input, EventSystem eventSystem)
         {
             _guiManager = guiManager;
             Input = input;

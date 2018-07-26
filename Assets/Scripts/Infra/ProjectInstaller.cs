@@ -1,6 +1,5 @@
 ﻿using svtz.Tanks.Audio;
 using svtz.Tanks.BattleStats;
-using svtz.Tanks.Bonus.Impl;
 using svtz.Tanks.Common;
 using svtz.Tanks.Map;
 using svtz.Tanks.Network;
