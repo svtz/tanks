@@ -9,7 +9,7 @@ using Zenject;
 
 namespace svtz.Tanks.Audio
 {
-    internal sealed class SoundEffectsFactory : NetworkBehaviour
+    internal sealed class SoundEffectsFactory : MonoBehaviour
     {
 #pragma warning disable 0649
         public AudioClip RegularShootClip;

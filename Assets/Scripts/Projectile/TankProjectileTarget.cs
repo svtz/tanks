@@ -8,15 +8,17 @@ namespace svtz.Tanks.Projectile
 {
     internal sealed class TankProjectileTarget : AbstractProjectileTarget
     {
+        private TankExplosionController.Pool _explosions;
         private SoundEffectsFactory _soundEffects;
         private TankHealth _health;
         private TeamId _teamId;
 
         [Inject]
-        private void Construct(TeamId teamId, SoundEffectsFactory soundEffects)
+        private void Construct(TeamId teamId, SoundEffectsFactory soundEffects, TankExplosionController.Pool explosions)
         {
             _teamId = teamId;
             _soundEffects = soundEffects;
+            _explosions = explosions;
         }
 
         private void Start()
@@ -34,6 +36,11 @@ namespace svtz.Tanks.Projectile
                 _soundEffects.PlayOnAllWithException(_teamId.connectionToClient, transform.position, SoundEffectKind.EnemyDeath);
                 _soundEffects.PlayOnSingleClient(_teamId.connectionToClient, transform.position, SoundEffectKind.PlayerDeath);
             }
+        }
+
+        private void OnDestroy()
+        {
+            _explosions.Spawn(transform.position);
         }
     }
 }

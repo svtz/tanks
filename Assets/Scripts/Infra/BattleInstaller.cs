@@ -21,12 +21,14 @@ namespace svtz.Tanks.Infra
         public BonusSpawner.Settings BonusSpawnerSettings;
         public GameObject ProjectilePrefab;
         public GameObject ProjectileBurstPrefab;
+        public GameObject TankExplosionPrefab;
         public GameObject BonusPrefab;
         public BonusEffects BonusEffects;
         public GameObject SoundEffectsFactoryPrefab;
         public int ProjectilePoolInitialSize;
         public int BonusPoolInitialSize;
         public int SoundEffectsPoolInitialSize;
+        public int TankExplosionPoolInitialSize;
 #pragma warning restore 0649
 
         public override void InstallBindings()
@@ -53,6 +55,8 @@ namespace svtz.Tanks.Infra
             Container.Bind<TankPositionSync>().FromComponentInParents(); // inParents - для башни танка
             Container.Bind<SpriteRenderer>().FromComponentSibling();
             Container.Bind<Rigidbody2D>().FromComponentSibling();
+            Container.Bind<TankController>().FromComponentSibling();
+            Container.Bind<MoveSoundController>().FromComponentSibling();
             Container.Bind<TurretController>().FromComponentInChildren();
             Container.Bind<CrawlerBeltsController>().FromComponentInChildren();
 
@@ -61,7 +65,7 @@ namespace svtz.Tanks.Infra
                 .WithInitialSize(SoundEffectsPoolInitialSize)
                 .ExpandByOneAtATime()
                 .FromNewComponentOnNewGameObject();
-            Container.Bind<SoundEffectsFactory>().FromComponentInNewPrefab(SoundEffectsFactoryPrefab).AsSingle();
+            Container.Bind<SoundEffectsFactory>().FromComponentInNewPrefab(SoundEffectsFactoryPrefab).AsSingle().NonLazy();
 
             // Снаряды
             Container.BindMemoryPool<Projectile.Projectile, ProjectilePool>()
@@ -69,10 +73,16 @@ namespace svtz.Tanks.Infra
                 .ExpandByOneAtATime()
                 .FromComponentInNewPrefab(ProjectilePrefab);
             Container.Bind<ProjectilePool.Client>().AsSingle().WithArguments(ProjectilePrefab).NonLazy();
-            Container.BindMemoryPool<BurstController, BurstController.Pool>()
+
+            // Эффекты
+            Container.BindMemoryPool<ProjectileBurstController, ProjectileBurstController.Pool>()
                 .WithInitialSize(ProjectilePoolInitialSize)
                 .ExpandByOneAtATime()
                 .FromComponentInNewPrefab(ProjectileBurstPrefab);
+            Container.BindMemoryPool<TankExplosionController, TankExplosionController.Pool>()
+                .WithInitialSize(TankExplosionPoolInitialSize)
+                .ExpandByOneAtATime()
+                .FromComponentInNewPrefab(TankExplosionPrefab);
 
             // Бонусы
             Container.Bind<BonusSpawner>().AsSingle().WithArguments(BonusSpawnerSettings);

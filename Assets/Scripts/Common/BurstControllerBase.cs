@@ -1,9 +1,10 @@
 using UnityEngine;
 using Zenject;
 
-namespace svtz.Tanks.Projectile
+namespace svtz.Tanks.Common
 {
-    public sealed class BurstController : MonoBehaviour
+    public abstract class BurstControllerBase<TBurst> : MonoBehaviour
+        where TBurst : BurstControllerBase<TBurst>
     {
 #pragma warning disable 0649
         public ParticleSystem ParticleSystem;
@@ -19,7 +20,7 @@ namespace svtz.Tanks.Projectile
 
         public void OnParticleSystemStopped()
         {
-            _pool.Despawn(this);
+            _pool.Despawn((TBurst)this);
         }
 
         private void Reset()
@@ -27,9 +28,9 @@ namespace svtz.Tanks.Projectile
             ParticleSystem.Play();
         }
 
-        public class Pool : MonoMemoryPool<Vector3, BurstController>
+        public class Pool : MonoMemoryPool<Vector3, TBurst>
         {
-            protected override void Reinitialize(Vector3 p1, BurstController item)
+            protected override void Reinitialize(Vector3 p1, TBurst item)
             {
                 base.Reinitialize(p1, item);
                 item.transform.position = p1;

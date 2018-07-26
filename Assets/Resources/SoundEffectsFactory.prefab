@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4442451053253480}
   - component: {fileID: 114919303311541098}
-  - component: {fileID: 114824082237451062}
   m_Layer: 0
   m_Name: SoundEffectsFactory
   m_TagString: Untagged
@@ -41,38 +40,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114824082237451062
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1391769588091268}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 221
-    i1: 183
-    i2: 167
-    i3: 126
-    i4: 166
-    i5: 205
-    i6: 97
-    i7: 116
-    i8: 106
-    i9: 182
-    i10: 247
-    i11: 245
-    i12: 68
-    i13: 112
-    i14: 107
-    i15: 73
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
 --- !u!114 &114919303311541098
 MonoBehaviour:
   m_ObjectHideFlags: 1

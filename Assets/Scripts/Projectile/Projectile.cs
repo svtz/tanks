@@ -28,7 +28,7 @@ namespace svtz.Tanks.Projectile
         private GameObject _owner;
         private IPlayer _ownerPlayer;
         private DelayedExecutor.IDelayedTask _autoDespawn;
-        private BurstController.Pool _burstPool;
+        private ProjectileBurstController.Pool _burstPool;
         private SoundEffectsFactory _soundEffectsFactory;
         private bool _despawned;
 
@@ -36,7 +36,7 @@ namespace svtz.Tanks.Projectile
         public void Construct(Rigidbody2D rb2D,
             ProjectilePool pool, 
             DelayedExecutor delayedExecutor,
-            BurstController.Pool burstPool,
+            ProjectileBurstController.Pool burstPool,
             SoundEffectsFactory soundEffectsFactory)
         {
             _rb2D = rb2D;

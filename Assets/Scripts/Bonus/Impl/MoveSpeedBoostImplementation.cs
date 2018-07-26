@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using svtz.Tanks.Audio;
 using svtz.Tanks.Common;
-using svtz.Tanks.Infra;
 using svtz.Tanks.Tank;
 using UnityEngine;
 using UnityEngine.Networking;
-using Zenject;
 
 namespace svtz.Tanks.Bonus.Impl
 {
@@ -26,8 +24,8 @@ namespace svtz.Tanks.Bonus.Impl
             _soundEffectsFactory = soundEffectsFactory;
         }
 
-        private readonly Dictionary<GameObject, DelayedExecutor.IDelayedTask> _appliedBonuses
-             = new Dictionary<GameObject, DelayedExecutor.IDelayedTask>();
+        private readonly Dictionary<TankController, DelayedExecutor.IDelayedTask> _appliedBonuses
+             = new Dictionary<TankController, DelayedExecutor.IDelayedTask>();
 
         public void Apply(GameObject player)
         {
@@ -41,7 +39,7 @@ namespace svtz.Tanks.Bonus.Impl
             }
 
             DelayedExecutor.IDelayedTask appliedBonus;
-            if (_appliedBonuses.TryGetValue(player, out appliedBonus))
+            if (_appliedBonuses.TryGetValue(controller, out appliedBonus))
             {
                 appliedBonus.TimeRemaining = _effects.MoveSpeedBonusDuration;
             }
@@ -51,15 +49,15 @@ namespace svtz.Tanks.Bonus.Impl
                 controller.Speed = _effects.MoveSpeedBonusValue;
                 appliedBonus = _delayedExecutor.Add(() =>
                     {
-                        _appliedBonuses.Remove(controller.gameObject);
-                        if (controller.gameObject != null)
+                        _appliedBonuses.Remove(controller);
+                        if (controller != null)
                         {
                             controller.Speed = oldSpeed;
                         }
                     },
                     _effects.MoveSpeedBonusDuration);
 
-                _appliedBonuses.Add(player, appliedBonus);
+                _appliedBonuses.Add(controller, appliedBonus);
             }
 
             _soundEffectsFactory.PlayOnSingleClient(
