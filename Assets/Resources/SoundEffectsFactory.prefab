@@ -89,6 +89,8 @@ MonoBehaviour:
     type: 3}
   UnbreakableHitClip: {fileID: 8300000, guid: b0769599a9f2f7749b24611d77c0d0ee, type: 3}
   BonusPickupClip: {fileID: 8300000, guid: b7ec5e0fa590f3f4a863a26a35cb4436, type: 3}
+  PlayerDeathClip: {fileID: 8300000, guid: eca7bf39dc306b84781f1a51102b94af, type: 3}
+  EnemyDeathClip: {fileID: 8300000, guid: 199721c82ed98814791c74c3f8cd0d16, type: 3}
   LocalPlayerMixerGroup: {fileID: 243977747460947740, guid: 8b474bd06b7e9144d9571f0246b94c6a,
     type: 2}
   EnvironmentMixerGroup: {fileID: 243490837263272324, guid: 8b474bd06b7e9144d9571f0246b94c6a,

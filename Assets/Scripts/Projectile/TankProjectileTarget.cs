@@ -1,20 +1,22 @@
-﻿using svtz.Tanks.BattleStats;
+﻿using svtz.Tanks.Audio;
+using svtz.Tanks.BattleStats;
 using svtz.Tanks.Common;
 using svtz.Tanks.Tank;
-using UnityEngine;
 using Zenject;
 
 namespace svtz.Tanks.Projectile
 {
     internal sealed class TankProjectileTarget : AbstractProjectileTarget
     {
+        private SoundEffectsFactory _soundEffects;
         private TankHealth _health;
         private TeamId _teamId;
 
         [Inject]
-        private void Construct(TeamId teamId)
+        private void Construct(TeamId teamId, SoundEffectsFactory soundEffects)
         {
             _teamId = teamId;
+            _soundEffects = soundEffects;
         }
 
         private void Start()
@@ -29,6 +31,8 @@ namespace svtz.Tanks.Projectile
             if (_teamId.Id != damager.TeamId)
             {
                 _health.TakeDamage(amount, damager);
+                _soundEffects.PlayOnAllWithException(_teamId.connectionToClient, transform.position, SoundEffectKind.EnemyDeath);
+                _soundEffects.PlayOnSingleClient(_teamId.connectionToClient, transform.position, SoundEffectKind.PlayerDeath);
             }
         }
     }

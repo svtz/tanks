@@ -58,5 +58,16 @@ namespace svtz.Tanks.Infra
                 FireOnClient(client, message);
             }
         }
+
+        public void FireOnAllWithException(NetworkConnection toExcept, TMessage message)
+        {
+            foreach (var client in NetworkServer.connections)
+            {
+                if (client == toExcept)
+                    continue;
+
+                FireOnClient(client, message);
+            }
+        }
     }
 }

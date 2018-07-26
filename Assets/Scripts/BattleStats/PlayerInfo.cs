@@ -16,11 +16,15 @@ namespace svtz.Tanks.BattleStats
 
         private void Start()
         {
-            Player = new PlayerImpl
+            var connection = GetComponent<NetworkIdentity>().connectionToClient;
+            if (connection != null)
             {
-                Id = GetComponent<NetworkIdentity>().connectionToClient.connectionId,
-                TeamId = GetComponent<TeamId>().Id
-            };
+                Player = new PlayerImpl
+                {
+                    Id = connection.connectionId,
+                    TeamId = GetComponent<TeamId>().Id
+                };
+            }
         }
     }
 }

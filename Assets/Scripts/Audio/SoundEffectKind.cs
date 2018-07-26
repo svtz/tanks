@@ -5,6 +5,8 @@
         RegularShoot,
         RegularWallDestroy,
         UnbreakableHit,
-        BonusPickup
+        BonusPickup,
+        PlayerDeath,
+        EnemyDeath
     }
 }

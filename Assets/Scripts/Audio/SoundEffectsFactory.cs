@@ -16,6 +16,8 @@ namespace svtz.Tanks.Audio
         public AudioClip RegularWallDestroyClip;
         public AudioClip UnbreakableHitClip;
         public AudioClip BonusPickupClip;
+        public AudioClip PlayerDeathClip;
+        public AudioClip EnemyDeathClip;
 
         public AudioMixerGroup LocalPlayerMixerGroup;
         public AudioMixerGroup EnvironmentMixerGroup;
@@ -64,7 +66,9 @@ namespace svtz.Tanks.Audio
                 {SoundEffectKind.RegularShoot, RegularShootClip},
                 {SoundEffectKind.RegularWallDestroy, RegularWallDestroyClip},
                 {SoundEffectKind.UnbreakableHit, UnbreakableHitClip},
-                {SoundEffectKind.BonusPickup, BonusPickupClip}
+                {SoundEffectKind.BonusPickup, BonusPickupClip},
+                {SoundEffectKind.PlayerDeath, PlayerDeathClip},
+                {SoundEffectKind.EnemyDeath, EnemyDeathClip}
             };
             MixerGroups = new Dictionary<SoundEffectSource, AudioMixerGroup>
             {
@@ -156,6 +160,17 @@ namespace svtz.Tanks.Audio
             SoundEffectKind soundEffectKind)
         {
             _serverToClient.FireOnAllClients(new SoundEffectSignal.Msg
+            {
+                Kind = soundEffectKind,
+                Position = position,
+                Source = SoundEffectSource.Environment
+            });
+        }
+
+        public void PlayOnAllWithException(NetworkConnection toExcept,
+            Vector2 position, SoundEffectKind soundEffectKind)
+        {
+            _serverToClient.FireOnAllWithException(toExcept, new SoundEffectSignal.Msg
             {
                 Kind = soundEffectKind,
                 Position = position,
