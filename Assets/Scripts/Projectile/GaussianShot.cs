@@ -1,4 +1,4 @@
-п»їusing System.Linq;
+using System.Linq;
 using svtz.Tanks.Audio;
 using svtz.Tanks.BattleStats;
 using svtz.Tanks.Common;
@@ -6,11 +6,10 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
 using Zenject;
-using Debug = UnityEngine.Debug;
 
 namespace svtz.Tanks.Projectile
 {
-    internal sealed class Projectile : NetworkBehaviour
+    internal sealed class GaussianShot : NetworkBehaviour
     {
 #pragma warning disable 0649
         public int Damage;
@@ -22,7 +21,7 @@ namespace svtz.Tanks.Projectile
 #pragma warning restore 0649
 
         private Rigidbody2D _rb2D;
-        private ProjectilePool _pool;
+        private GaussianShotPool _pool;
         private DelayedExecutor _delayedExecutor;
 
         private GameObject _owner;
@@ -34,7 +33,7 @@ namespace svtz.Tanks.Projectile
 
         [Inject]
         public void Construct(Rigidbody2D rb2D,
-            ProjectilePool pool, 
+            GaussianShotPool pool,
             DelayedExecutor delayedExecutor,
             ProjectileBurstController.Pool burstPool,
             SoundEffectsFactory soundEffectsFactory)
@@ -56,7 +55,7 @@ namespace svtz.Tanks.Projectile
             transform.rotation = rotation;
             _rb2D.velocity = transform.up * Speed;
 
-            _despawned = false; 
+            _despawned = false;
             _autoDespawn = _delayedExecutor.Add(TryDespawn, TTL);
 
             var ownerIdentity = owner.GetComponent<NetworkIdentity>();
@@ -97,7 +96,7 @@ namespace svtz.Tanks.Projectile
 
             Vector2 direction = transform.up;
             var perpendicular = Vector2.Perpendicular(direction);
-            
+
             if (_owner != null)
                 Debug.DrawLine(_owner.transform.position, transform.position, Color.yellow, 2);
 
@@ -140,7 +139,7 @@ namespace svtz.Tanks.Projectile
 
             if (!shouldDespawn)
             {
-                Debug.LogError("Р’СЂРѕРґРµ РІРѕ С‡С‚Рѕ-С‚Рѕ РІСЂРµР·Р°Р»РёСЃСЊ, Р° РІРѕ С‡С‚Рѕ - РЅРµ РїРѕРЅСЏС‚РЅРѕ: " + other.gameObject.name);
+                Debug.LogError("Вроде во что-то врезались, а во что - не понятно: " + other.gameObject.name);
                 Debug.Break();
             }
         }

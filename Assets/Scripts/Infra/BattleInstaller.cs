@@ -20,6 +20,7 @@ namespace svtz.Tanks.Infra
         public TankSpawner.Settings SpawnControllerSettings;
         public BonusSpawner.Settings BonusSpawnerSettings;
         public GameObject ProjectilePrefab;
+        public GameObject GaussianShotPrefab;
         public GameObject ProjectileBurstPrefab;
         public GameObject TankExplosionPrefab;
         public GameObject BonusPrefab;
@@ -73,6 +74,11 @@ namespace svtz.Tanks.Infra
                 .ExpandByOneAtATime()
                 .FromComponentInNewPrefab(ProjectilePrefab);
             Container.Bind<ProjectilePool.Client>().AsSingle().WithArguments(ProjectilePrefab).NonLazy();
+            Container.BindMemoryPool<Projectile.GaussianShot, GaussianShotPool>()
+                .WithInitialSize(ProjectilePoolInitialSize)
+                .ExpandByOneAtATime()
+                .FromComponentInNewPrefab(GaussianShotPrefab);
+            Container.Bind<GaussianShotPool.Client>().AsSingle().WithArguments(GaussianShotPrefab).NonLazy();
 
             // Эффекты
             Container.BindMemoryPool<ProjectileBurstController, ProjectileBurstController.Pool>()

@@ -15,16 +15,20 @@ namespace svtz.Tanks.Tank
 #pragma warning restore 0649
 
         private ProjectilePool _pool;
+        private GaussianShotPool _gaussianPool;
         private DelayedExecutor _delayedExecutor;
         private InputManager _input;
 
         [Inject]
-        private void Construct(ProjectilePool pool, DelayedExecutor delayedExecutor,
+        private void Construct(ProjectilePool pool, 
+            GaussianShotPool gaussianPool,
+            DelayedExecutor delayedExecutor,
             InputManager input)
         {
             _pool = pool;
             _delayedExecutor = delayedExecutor;
             _input = input;
+            _gaussianPool = gaussianPool;
         }
 
 
@@ -51,7 +55,7 @@ namespace svtz.Tanks.Tank
                 // сервер: стреляем
                 if (_isFiring && _canFire)
                 {
-                    var projectile = _pool.Spawn();
+                    var projectile = _gaussianPool.Spawn();
                     projectile.Launch(ProjectileSpawn, gameObject);
                     
                     // кулдаун

@@ -16,7 +16,7 @@ TagManager:
   - Projectiles
   - CollideOnlyProjectile
   - ProjectileTransparent
-  - 
+  - DisplacementEffects
   - 
   - 
   - 
@@ -47,11 +47,11 @@ TagManager:
   - name: Walls
     uniqueID: 3780516399
     locked: 0
-  - name: Tanks
-    uniqueID: 484551615
-    locked: 0
   - name: Projectiles
     uniqueID: 1695110533
+    locked: 0
+  - name: Tanks
+    uniqueID: 484551615
     locked: 0
   - name: Trees
     uniqueID: 1275759061
