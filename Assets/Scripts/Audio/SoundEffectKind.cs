@@ -8,6 +8,8 @@
         BonusPickup,
         PlayerDeath,
         EnemyDeath,
-        PlayerSpawn
+        PlayerSpawn,
+        GaussianCharge,
+        GaussianShot
     }
 }

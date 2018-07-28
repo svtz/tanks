@@ -10,7 +10,6 @@ namespace svtz.Tanks.Tank
     internal sealed class FireController : NetworkBehaviour
     {
 #pragma warning disable 0649
-        public float Cooldown;
         public Transform ProjectileSpawn;
 #pragma warning restore 0649
 
@@ -60,7 +59,7 @@ namespace svtz.Tanks.Tank
                     
                     // кулдаун
                     _canFire = false;
-                    _delayedExecutor.Add(() => _canFire = true, Cooldown);
+                    _delayedExecutor.Add(() => _canFire = true, projectile.Cooldown);
                 }
             }
         }

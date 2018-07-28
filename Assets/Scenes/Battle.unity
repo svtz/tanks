@@ -427,6 +427,8 @@ MonoBehaviour:
     type: 2}
   ProjectileBurstPrefab: {fileID: 1262773623310150, guid: f44572b2d08593042b6eb4b541c61d75,
     type: 2}
+  GaussianBurstPrefab: {fileID: 1612681762905210, guid: c7309e04e87971b45be90da56aae2afa,
+    type: 2}
   TankExplosionPrefab: {fileID: 1533067898258412, guid: db18fb03f745ad74a893dc76f990d7a7,
     type: 2}
   BonusPrefab: {fileID: 1716186020836280, guid: 9202f48ad2e025e44958e39cea4e93d1,

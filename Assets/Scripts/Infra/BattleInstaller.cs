@@ -22,6 +22,7 @@ namespace svtz.Tanks.Infra
         public GameObject ProjectilePrefab;
         public GameObject GaussianShotPrefab;
         public GameObject ProjectileBurstPrefab;
+        public GameObject GaussianBurstPrefab;
         public GameObject TankExplosionPrefab;
         public GameObject BonusPrefab;
         public BonusEffects BonusEffects;
@@ -85,6 +86,10 @@ namespace svtz.Tanks.Infra
                 .WithInitialSize(ProjectilePoolInitialSize)
                 .ExpandByOneAtATime()
                 .FromComponentInNewPrefab(ProjectileBurstPrefab);
+            Container.BindMemoryPool<GaussianBurstController, GaussianBurstController.Pool>()
+                .WithInitialSize(ProjectilePoolInitialSize)
+                .ExpandByOneAtATime()
+                .FromComponentInNewPrefab(GaussianBurstPrefab);
             Container.BindMemoryPool<TankExplosionController, TankExplosionController.Pool>()
                 .WithInitialSize(TankExplosionPoolInitialSize)
                 .ExpandByOneAtATime()

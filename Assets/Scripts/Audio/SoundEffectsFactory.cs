@@ -19,6 +19,8 @@ namespace svtz.Tanks.Audio
         public AudioClip PlayerDeathClip;
         public AudioClip EnemyDeathClip;
         public AudioClip PlayerSpawnClip;
+        public AudioClip GaussianChargeClip;
+        public AudioClip GaussianShotClip;
 
         public AudioMixerGroup LocalPlayerMixerGroup;
         public AudioMixerGroup EnvironmentMixerGroup;
@@ -70,7 +72,9 @@ namespace svtz.Tanks.Audio
                 {SoundEffectKind.BonusPickup, BonusPickupClip},
                 {SoundEffectKind.PlayerDeath, PlayerDeathClip},
                 {SoundEffectKind.EnemyDeath, EnemyDeathClip},
-                {SoundEffectKind.PlayerSpawn, PlayerSpawnClip}
+                {SoundEffectKind.PlayerSpawn, PlayerSpawnClip},
+                {SoundEffectKind.GaussianCharge, GaussianChargeClip},
+                {SoundEffectKind.GaussianShot, GaussianShotClip}
             };
             MixerGroups = new Dictionary<SoundEffectSource, AudioMixerGroup>
             {

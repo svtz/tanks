@@ -19,6 +19,8 @@ namespace svtz.Tanks.Projectile
 
         public float CastWidth;
         public float[] CastDistances;
+
+        public float Cooldown;
 #pragma warning restore 0649
 
         private Rigidbody2D _rb2D;
