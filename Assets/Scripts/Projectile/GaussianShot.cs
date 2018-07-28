@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using svtz.Tanks.Audio;
 using svtz.Tanks.BattleStats;
@@ -14,13 +15,13 @@ namespace svtz.Tanks.Projectile
 #pragma warning disable 0649
         public int Damage;
         public float TTL;
-        public float Speed;
+        public Vector2 BoxCastSize;
 
+        public float MaxDistance;
         public float CastWidth;
         public float[] CastDistances;
 #pragma warning restore 0649
 
-        private Rigidbody2D _rb2D;
         private GaussianShotPool _pool;
         private DelayedExecutor _delayedExecutor;
 
@@ -32,13 +33,12 @@ namespace svtz.Tanks.Projectile
         private bool _despawned;
 
         [Inject]
-        public void Construct(Rigidbody2D rb2D,
+        public void Construct(
             GaussianShotPool pool,
             DelayedExecutor delayedExecutor,
             ProjectileBurstController.Pool burstPool,
             SoundEffectsFactory soundEffectsFactory)
         {
-            _rb2D = rb2D;
             _pool = pool;
             _delayedExecutor = delayedExecutor;
             _burstPool = burstPool;
@@ -53,8 +53,8 @@ namespace svtz.Tanks.Projectile
 
             transform.position = position;
             transform.rotation = rotation;
-            _rb2D.velocity = transform.up * Speed;
 
+            _calculated = false;
             _despawned = false;
             _autoDespawn = _delayedExecutor.Add(TryDespawn, TTL);
 
@@ -86,61 +86,83 @@ namespace svtz.Tanks.Projectile
             return IsEqualOrChildOfOwner(obj.transform.parent.gameObject);
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        private bool _calculated;
+        private void FixedUpdate()
         {
-            if (!isServer)
+            if (!isServer || _calculated)
                 return;
 
-            if (IsEqualOrChildOfOwner(other.gameObject))
-                return;
-
-            Vector2 direction = transform.up;
-            var perpendicular = Vector2.Perpendicular(direction);
-
-            if (_owner != null)
-                Debug.DrawLine(_owner.transform.position, transform.position, Color.yellow, 2);
-
-            var shouldDespawn = false;
-            foreach (var castDistance in CastDistances)
+            try
             {
-                var castStart =
-                    (Vector2)transform.position
-                    + direction * castDistance
-                    + perpendicular * CastWidth / 2;
+                var shotCast = Physics2D.BoxCastAll(transform.position,
+                    BoxCastSize, 
+                    transform.rotation.eulerAngles.z,
+                    transform.up, MaxDistance)
+                    .OrderBy(hit => hit.distance);
 
-                var castEnd =
-                    (Vector2)transform.position
-                    + direction * castDistance
-                    - perpendicular * CastWidth / 2;
-
-                Debug.DrawLine(castStart, castEnd, Color.magenta, 2);
-
-                var cast = Physics2D.LinecastAll(castStart, castEnd)
-                    .Select(h => h.transform)
-                    .Where(h => h != transform && (_owner == null || h != _owner.transform))
-                    .Distinct();
-
-                foreach (var hit in cast)
+                var hitPoint = Vector2.zero;
+                var hasTarget = false;
+                foreach (var hit in shotCast)
                 {
-                    var target = hit.GetComponent<AbstractProjectileTarget>();
-                    if (target != null)
-                    {
-                        target.TakeDamage(Damage, _ownerPlayer);
-                        shouldDespawn = true;
-                    }
-                }
+                    if (_owner != null && IsEqualOrChildOfOwner(hit.transform.gameObject))
+                        continue;
 
-                if (shouldDespawn)
-                {
-                    TryDespawn();
+                    //todo пробивать насквозь
+                    var target = hit.transform.gameObject.GetComponent<AbstractProjectileTarget>();
+                    if (target == null)
+                        continue;
+
+                    hitPoint = hit.centroid;
+                    hasTarget = true;
                     break;
                 }
-            }
+                
+                if (!hasTarget)
+                    return;
 
-            if (!shouldDespawn)
+                if (_owner != null)
+                    Debug.DrawLine(_owner.transform.position, hitPoint, Color.yellow, 2);
+
+
+                Vector2 direction = transform.up;
+                var perpendicular = Vector2.Perpendicular(direction);
+                foreach (var castDistance in CastDistances)
+                {
+                    var castStart =
+                        hitPoint
+                        + direction * castDistance
+                        + perpendicular * CastWidth / 2;
+
+                    var castEnd =
+                        hitPoint
+                        + direction * castDistance
+                        - perpendicular * CastWidth / 2;
+
+                    Debug.DrawLine(castStart, castEnd, Color.magenta, 2);
+
+                    var cast = Physics2D.LinecastAll(castStart, castEnd)
+                        .Select(h => h.transform)
+                        .Where(h => h != transform && (_owner == null || h != _owner.transform))
+                        .Distinct();
+
+                    var hitTheTarget = false;
+                    foreach (var hit in cast)
+                    {
+                        var target = hit.GetComponent<AbstractProjectileTarget>();
+                        if (target != null)
+                        {
+                            target.TakeDamage(Damage, _ownerPlayer);
+                            hitTheTarget = true;
+                        }
+                    }
+
+                    if (hitTheTarget)
+                        break;
+                }
+            }
+            finally
             {
-                Debug.LogError("Вроде во что-то врезались, а во что - не понятно: " + other.gameObject.name);
-                Debug.Break();
+                _calculated = true;
             }
         }
 
