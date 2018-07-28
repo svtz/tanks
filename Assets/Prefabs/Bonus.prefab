@@ -140,6 +140,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5903a682491b4fe19ab79d7e428f9de2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SpeedBoost: {fileID: 21300000, guid: 742de5218f66ae647b82319afd302365, type: 3}
+  RegularGun: {fileID: 21300000, guid: 854fd186b35ec8b4298288228d3e6748, type: 3}
+  GaussGun: {fileID: 21300000, guid: 179027344a71dba4b92eb98690a5bd47, type: 3}
+  IconRenderer: {fileID: 212136028709567454}
 --- !u!212 &212136028709567454
 SpriteRenderer:
   m_ObjectHideFlags: 1

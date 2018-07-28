@@ -70,19 +70,23 @@ namespace svtz.Tanks.Infra
             Container.Bind<SoundEffectsFactory>().FromComponentInNewPrefab(SoundEffectsFactoryPrefab).AsSingle();
 
             // Снаряды
-            Container.BindMemoryPool<Projectile.Projectile, ProjectilePool>()
+            Container.BindMemoryPool<Projectile.BulletShot, BulletShotPool>()
                 .WithInitialSize(ProjectilePoolInitialSize)
                 .ExpandByOneAtATime()
                 .FromComponentInNewPrefab(ProjectilePrefab);
-            Container.Bind<ProjectilePool.Client>().AsSingle().WithArguments(ProjectilePrefab).NonLazy();
-            Container.BindMemoryPool<Projectile.GaussianShot, GaussianShotPool>()
+            Container.Bind<BulletShotPool.Client>().AsSingle().WithArguments(ProjectilePrefab).NonLazy();
+            Container.BindMemoryPool<Projectile.GaussShot, GaussShotPool>()
                 .WithInitialSize(ProjectilePoolInitialSize)
                 .ExpandByOneAtATime()
                 .FromComponentInNewPrefab(GaussianShotPrefab);
-            Container.Bind<GaussianShotPool.Client>().AsSingle().WithArguments(GaussianShotPrefab).NonLazy();
+            Container.Bind<GaussShotPool.Client>().AsSingle().WithArguments(GaussianShotPrefab).NonLazy();
+
+            // пушки
+            Container.Bind<BulletGun>().AsTransient();
+            Container.Bind<GaussGun>().AsTransient();
 
             // Эффекты
-            Container.BindMemoryPool<ProjectileBurstController, ProjectileBurstController.Pool>()
+            Container.BindMemoryPool<BulletBurstController, BulletBurstController.Pool>()
                 .WithInitialSize(ProjectilePoolInitialSize)
                 .ExpandByOneAtATime()
                 .FromComponentInNewPrefab(ProjectileBurstPrefab);

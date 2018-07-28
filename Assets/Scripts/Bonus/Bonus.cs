@@ -9,12 +9,36 @@ namespace svtz.Tanks.Bonus
 {
     internal sealed class Bonus : NetworkBehaviour
     {
+#pragma warning disable 0649
+        public Sprite SpeedBoost;
+        public Sprite RegularGun;
+        public Sprite GaussGun;
+
+        public SpriteRenderer IconRenderer;
+#pragma warning restore 0649
+
+
+        private Dictionary<BonusKind, Sprite> _bonusSprites;
+
+        private void Start()
+        {
+            _bonusSprites = new Dictionary<BonusKind, Sprite>
+            {
+                { BonusKind.MoveSpeedBoost, SpeedBoost},
+                { BonusKind.BulletGun, RegularGun},
+                { BonusKind.GaussGun, GaussGun},
+            };
+
+            OnClientBonusKindChanged(_bonusKind);
+        }
+
         [SyncVar(hook = "OnClientBonusKindChanged")]
         private BonusKind _bonusKind;
 
         private void OnClientBonusKindChanged(BonusKind newValue)
         {
-            //todo менять картинку
+            if (_bonusSprites != null)
+                IconRenderer.sprite = _bonusSprites[newValue];
         }
 
         public void ServerChangeBonusKind(BonusKind newValue)

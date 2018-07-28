@@ -17,6 +17,14 @@ namespace svtz.Tanks.Bonus.Impl
                 .To<MoveSpeedBoostImplementation>()
                 .AsSingle()
                 .WithArguments(_effects);
+
+            Container.Bind<IBonusImplementation>()
+                .To<BulletGunBonusImplementation>()
+                .AsSingle();
+
+            Container.Bind<IBonusImplementation>()
+                .To<GaussGunBonusImplementation>()
+                .AsSingle();
         }
     }
 }

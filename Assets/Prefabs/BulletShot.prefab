@@ -27,7 +27,7 @@ GameObject:
   - component: {fileID: 114743141803588036}
   - component: {fileID: 114864805426269328}
   m_Layer: 8
-  m_Name: StandardProjectile
+  m_Name: BulletShot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,13 +104,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 10
   TTL: 2
-  Speed: 15
   CastWidth: 1.25
   CastDistances:
   - 0
   - 0.2
   - 0.3
   Cooldown: 0.25
+  Speed: 15
 --- !u!114 &114743141803588036
 MonoBehaviour:
   m_ObjectHideFlags: 1

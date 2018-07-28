@@ -22,11 +22,15 @@ namespace svtz.Tanks.Bonus
         private readonly Dictionary<Vector2, DelayedExecutor.IDelayedTask> _respawnTasks
             = new Dictionary<Vector2, DelayedExecutor.IDelayedTask>();
 
+        private BonusKind[] _bonusKinds;
+
         public BonusSpawner(DelayedExecutor delayedExecutor, Settings settings, BonusPool pool)
         {
             _delayedExecutor = delayedExecutor;
             _settings = settings;
             _pool = pool;
+
+            _bonusKinds = (BonusKind[])Enum.GetValues(typeof(BonusKind));
         }
 
         public void ServerAddSpawnPoint(float x, float y)
@@ -37,7 +41,7 @@ namespace svtz.Tanks.Bonus
 
         private BonusKind GetBonusKind()
         {
-            return BonusKind.MoveSpeedBoost;
+            return _bonusKinds[UnityEngine.Random.Range(0, _bonusKinds.Length)];
         }
 
         public void ServerRespawnPicked(Bonus bonus)

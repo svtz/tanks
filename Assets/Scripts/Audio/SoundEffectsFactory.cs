@@ -74,8 +74,8 @@ namespace svtz.Tanks.Audio
                 {SoundEffectKind.PlayerDeath, PlayerDeathClip},
                 {SoundEffectKind.EnemyDeath, EnemyDeathClip},
                 {SoundEffectKind.PlayerSpawn, PlayerSpawnClip},
-                {SoundEffectKind.GaussianCharge, GaussianChargeClip},
-                {SoundEffectKind.GaussianShot, GaussianShotClip}
+                {SoundEffectKind.GaussCharge, GaussianChargeClip},
+                {SoundEffectKind.GaussShot, GaussianShotClip}
             };
             MixerGroups = new Dictionary<SoundEffectSource, AudioMixerGroup>
             {

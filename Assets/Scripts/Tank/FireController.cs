@@ -13,25 +13,25 @@ namespace svtz.Tanks.Tank
         public Transform ProjectileSpawn;
 #pragma warning restore 0649
 
-        private ProjectilePool _pool;
-        private GaussianShotPool _gaussianPool;
-        private DelayedExecutor _delayedExecutor;
         private InputManager _input;
 
-        [Inject]
-        private void Construct(ProjectilePool pool, 
-            GaussianShotPool gaussianPool,
-            DelayedExecutor delayedExecutor,
-            InputManager input)
+        private IGun _gun;
+
+        public void SetGun(IGun gun)
         {
-            _pool = pool;
-            _delayedExecutor = delayedExecutor;
-            _input = input;
-            _gaussianPool = gaussianPool;
+            Debug.Assert(gun != null);
+            _gun = gun;
         }
 
-
-        private bool _canFire = true;
+        [Inject]
+        private void Construct(
+            GaussShotPool gaussPool,
+            InputManager input,
+            BulletGun defaultGun)
+        {
+            _input = input;
+            _gun = defaultGun;
+        }
 
         [SyncVar]
         private bool _isFiring = false;
@@ -52,14 +52,9 @@ namespace svtz.Tanks.Tank
             if (isServer)
             {
                 // сервер: стреляем
-                if (_isFiring && _canFire)
+                if (_isFiring && _gun.CanFire)
                 {
-                    var projectile = _gaussianPool.Spawn();
-                    projectile.Launch(ProjectileSpawn, gameObject);
-                    
-                    // кулдаун
-                    _canFire = false;
-                    _delayedExecutor.Add(() => _canFire = true, projectile.Cooldown);
+                    _gun.Fire(ProjectileSpawn, gameObject);
                 }
             }
         }

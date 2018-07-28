@@ -9,7 +9,7 @@
         PlayerDeath,
         EnemyDeath,
         PlayerSpawn,
-        GaussianCharge,
-        GaussianShot
+        GaussCharge,
+        GaussShot
     }
 }

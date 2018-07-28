@@ -1,21 +1,20 @@
 ﻿using svtz.Tanks.BattleStats;
-using svtz.Tanks.Common;
 
 namespace svtz.Tanks.Projectile
 {
     internal sealed class ProjectileProjectileTarget : AbstractProjectileTarget
     {
-        private Projectile _projectile;
+        private BulletShot _bulletShot;
 
 
         private void Start()
         {
-            _projectile = GetComponent<Projectile>();
+            _bulletShot = GetComponent<BulletShot>();
         }
 
         public override void TakeDamage(int amount, IPlayer damager)
         {
-            _projectile.TryDespawn();
+            _bulletShot.TryDespawn();
         }
     }
 }
