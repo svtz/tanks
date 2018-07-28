@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4243714730882842}
   - component: {fileID: 198639584520348780}
   - component: {fileID: 199733620863397230}
-  - component: {fileID: 114306795697339842}
+  - component: {fileID: 114970148389540336}
   m_Layer: 0
   m_Name: GaussianBurst
   m_TagString: Untagged
@@ -42,7 +42,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114306795697339842
+--- !u!114 &114970148389540336
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -50,7 +50,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1612681762905210}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a78acab7655420a8a1c08a649ceef80, type: 3}
+  m_Script: {fileID: 11500000, guid: b83c9cc4f5d74d2a991f92413180174a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ParticleSystem: {fileID: 198639584520348780}
@@ -243,8 +243,8 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 0.96657693, b: 0, a: 1}
-        key1: {r: 1, g: 0, b: 0, a: 1}
+        key0: {r: 0.7264151, g: 0.7264151, b: 0.7264151, a: 1}
+        key1: {r: 0.24528301, g: 0.24528301, b: 0.24528301, a: 1}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}

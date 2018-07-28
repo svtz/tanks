@@ -67,7 +67,7 @@ namespace svtz.Tanks.Infra
                 .WithInitialSize(SoundEffectsPoolInitialSize)
                 .ExpandByOneAtATime()
                 .FromNewComponentOnNewGameObject();
-            Container.Bind<SoundEffectsFactory>().FromComponentInNewPrefab(SoundEffectsFactoryPrefab).AsSingle().NonLazy();
+            Container.Bind<SoundEffectsFactory>().FromComponentInNewPrefab(SoundEffectsFactoryPrefab).AsSingle();
 
             // Снаряды
             Container.BindMemoryPool<Projectile.Projectile, ProjectilePool>()

@@ -67,6 +67,7 @@ namespace svtz.Tanks.Projectile
             
             LineRenderer.positionCount = 0;
             _currentDelay = 0;
+            _autoDespawn = null;
 
             var ownerIdentity = owner.GetComponent<NetworkIdentity>();
             if (ownerIdentity != null && ownerIdentity.isLocalPlayer)
@@ -113,6 +114,8 @@ namespace svtz.Tanks.Projectile
             }
 
             _currentDelay += Time.deltaTime;
+            if (_currentDelay > ShotDelay && _autoDespawn == null)
+                _autoDespawn = _delayedExecutor.Add(TryDespawn, TTL);
         }
 
         private bool _calculated;
@@ -120,8 +123,6 @@ namespace svtz.Tanks.Projectile
         {
             if (!isServer || _currentDelay < ShotDelay || _calculated)
                 return;
-
-            _autoDespawn = _delayedExecutor.Add(TryDespawn, TTL);
 
             try
             {
@@ -189,14 +190,8 @@ namespace svtz.Tanks.Projectile
             LineRenderer.SetPosition(1, to);
             _burstPool.Spawn(to);
 
-            if (_isLocalPlayer)
-            {
-                _soundEffectsFactory.Play(to, SoundEffectKind.GaussianShot, SoundEffectSource.LocalPlayer);
-            }
-            else
-            {
-                _soundEffectsFactory.Play(to, SoundEffectKind.GaussianShot, SoundEffectSource.Environment);
-            }
+            _soundEffectsFactory.Play(to, SoundEffectKind.GaussianShot,
+                _isLocalPlayer ? SoundEffectSource.LocalPlayer : SoundEffectSource.Environment);
         }
 
         public void TryDespawn()

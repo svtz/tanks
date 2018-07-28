@@ -61,6 +61,7 @@ namespace svtz.Tanks.Audio
         private Pool _pool;
         private DelayedExecutor _delayedExecutor;
         private SoundEffectSignal.ServerToClient _serverToClient;
+        private SoundEffectSignal _soundEffectsSignal;
 
         private void Start()
         {
@@ -92,7 +93,18 @@ namespace svtz.Tanks.Audio
             _pool = pool;
             _delayedExecutor = delayedExecutor;
             _serverToClient = serverToClient;
-            soundEffectSignal.Listen(obj => Play(obj.Position, obj.Kind, obj.Source));
+            _soundEffectsSignal = soundEffectSignal;
+            soundEffectSignal.Listen(Listener);
+        }
+
+        private void OnDestroy()
+        {
+            _soundEffectsSignal.Unlisten(Listener);
+        }
+
+        private void Listener(SoundEffectSignal.Msg obj)
+        {
+            Play(obj.Position, obj.Kind, obj.Source);
         }
 
         private float _currentTime = 0;

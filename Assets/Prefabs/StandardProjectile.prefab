@@ -110,6 +110,7 @@ MonoBehaviour:
   - 0
   - 0.2
   - 0.3
+  Cooldown: 0.25
 --- !u!114 &114743141803588036
 MonoBehaviour:
   m_ObjectHideFlags: 1

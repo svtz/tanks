@@ -59,6 +59,8 @@ MonoBehaviour:
   PlayerDeathClip: {fileID: 8300000, guid: eca7bf39dc306b84781f1a51102b94af, type: 3}
   EnemyDeathClip: {fileID: 8300000, guid: 199721c82ed98814791c74c3f8cd0d16, type: 3}
   PlayerSpawnClip: {fileID: 8300000, guid: a5f6f15fe8c1cbc48967b571aa1bd7c1, type: 3}
+  GaussianChargeClip: {fileID: 8300000, guid: 0dfe54b734d2270459c35ae05ffa3546, type: 3}
+  GaussianShotClip: {fileID: 8300000, guid: a01c2da9999bdff4ab9e15e021f2a44e, type: 3}
   LocalPlayerMixerGroup: {fileID: 243977747460947740, guid: 8b474bd06b7e9144d9571f0246b94c6a,
     type: 2}
   EnvironmentMixerGroup: {fileID: 243490837263272324, guid: 8b474bd06b7e9144d9571f0246b94c6a,

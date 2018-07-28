@@ -24,8 +24,6 @@ GameObject:
   - component: {fileID: 114806286166177308}
   - component: {fileID: 114043132003170310}
   - component: {fileID: 120677865269794440}
-  - component: {fileID: 122018585602970704}
-  - component: {fileID: 111407197591507276}
   m_Layer: 8
   m_Name: GaussianShot
   m_TagString: Untagged
@@ -46,21 +44,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!111 &111407197591507276
-Animation:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1661327001687658}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 868778b44f2e9474aa2b83d91e64a646, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: 868778b44f2e9474aa2b83d91e64a646, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!114 &114043132003170310
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -82,8 +65,8 @@ MonoBehaviour:
   - 0.2
   - 0.3
   LineRenderer: {fileID: 120677865269794440}
-  Cooldown: 0
-  ShotDelay: 0.25
+  Cooldown: 2
+  ShotDelay: 0.3
 --- !u!114 &114470295242132060
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -230,14 +213,3 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
---- !u!122 &122018585602970704
-Halo:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1661327001687658}
-  m_Enabled: 0
-  m_Color:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_Size: 0
