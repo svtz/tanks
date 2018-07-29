@@ -22,7 +22,7 @@ namespace svtz.Tanks.Bonus
         private readonly Dictionary<Vector2, DelayedExecutor.IDelayedTask> _respawnTasks
             = new Dictionary<Vector2, DelayedExecutor.IDelayedTask>();
 
-        private BonusKind[] _bonusKinds;
+        private readonly BonusKind[] _bonusKinds;
 
         public BonusSpawner(DelayedExecutor delayedExecutor, Settings settings, BonusPool pool)
         {

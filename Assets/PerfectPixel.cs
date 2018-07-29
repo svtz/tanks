@@ -12,12 +12,14 @@ namespace svtz.Tanks
 
         private int _currentHeight;
         private UnityEngine.Camera _camera;
+        private UnityEngine.Camera _displacementEffectsCamera;
 
         public float ActualPPU { get; private set; }
 
         private void Start()
         {
             _camera = GetComponent<UnityEngine.Camera>();
+            _displacementEffectsCamera = transform.GetChild(0).gameObject.GetComponent<UnityEngine.Camera>();
         }
 
         private void Update()
@@ -32,6 +34,7 @@ namespace svtz.Tanks
             var idealSize = ViewRange * PPU;
             ActualPPU = Mathf.Floor(_currentHeight / idealSize) * PPU;
             _camera.orthographicSize = _currentHeight / ActualPPU / 2;
+            _displacementEffectsCamera.orthographicSize = _camera.orthographicSize;
         }
     }
 }

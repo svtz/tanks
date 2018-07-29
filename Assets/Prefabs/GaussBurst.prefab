@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 199733620863397230}
   - component: {fileID: 114970148389540336}
   m_Layer: 0
-  m_Name: GaussianBurst
+  m_Name: GaussBurst
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -23,7 +23,7 @@ namespace svtz.Tanks.Common
             _pool.Despawn((TBurst)this);
         }
 
-        private void Reset()
+        protected virtual void Reset()
         {
             ParticleSystem.Play();
         }
