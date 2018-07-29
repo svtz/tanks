@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace svtz.Tanks.Camera
 {
+    [RequireComponent(typeof(PerfectPixel))]
     internal sealed class CameraController : MonoBehaviour
     {
 #pragma warning disable 0649
@@ -10,6 +12,12 @@ namespace svtz.Tanks.Camera
 #pragma warning restore 0649
 
         private GameObject _followObject;
+        private PerfectPixel _perfectPixel;
+
+        private void Start()
+        {
+            _perfectPixel = GetComponent<PerfectPixel>();
+        }
 
         public void BindTo(GameObject obj)
         {
@@ -29,7 +37,16 @@ namespace svtz.Tanks.Camera
             var targetPosition = _followObject.transform.position + Offset;
             var targetMove = targetPosition - transform.position;
             var currentMove = Vector3.ClampMagnitude(targetMove, MaxCameraSpeed * Time.deltaTime);
-            transform.position = transform.position + currentMove;
+            transform.position = RoundToPPU(transform.position + currentMove);
+        }
+
+        private Vector3 RoundToPPU(Vector3 position)
+        {
+            var upp = 1 / _perfectPixel.ActualPPU;
+            return new Vector3(
+                Mathf.Round(position.x / upp) * upp,
+                Mathf.Round(position.y / upp) * upp,
+                position.z);
         }
     }
 }
