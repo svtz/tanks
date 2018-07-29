@@ -13,7 +13,10 @@ namespace svtz.Tanks.Tank
         private void Construct(DelayedExecutor delayedExecutor)
         {
             _delayedExecutor = delayedExecutor;
+        }
 
+        private void Start()
+        {
             var stateInfo = GetComponentInChildren<Animator>().GetCurrentAnimatorStateInfo(0);
             _animationLenght = stateInfo.length;
         }
