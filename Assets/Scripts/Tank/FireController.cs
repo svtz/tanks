@@ -13,6 +13,13 @@ namespace svtz.Tanks.Tank
         public Transform ProjectileSpawn;
 #pragma warning restore 0649
 
+        private int _boostLevel = 0;
+        public void Empower()
+        {
+            _boostLevel++;
+            _gun.Reload();
+        }
+
         private InputManager _input;
 
         private IGun _gun;
@@ -54,7 +61,7 @@ namespace svtz.Tanks.Tank
                 // сервер: стреляем
                 if (_isFiring && _gun.CanFire)
                 {
-                    _gun.Fire(ProjectileSpawn, gameObject);
+                    _gun.Fire(ProjectileSpawn, gameObject, _boostLevel);
                 }
             }
         }

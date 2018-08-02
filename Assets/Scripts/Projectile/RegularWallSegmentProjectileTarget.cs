@@ -23,10 +23,12 @@ namespace svtz.Tanks.Projectile
             _wallHealth = GetComponentInParent<WallHealth>();
         }
 
-        public override void TakeDamage(int amount, IPlayer damager)
+        public override void TakeDamage(float penetration, IPlayer damager)
         {
             _soundEffectsFactory.PlayOnAllClients(transform.parent.position, SoundEffectKind.RegularWallDestroy);
-            _wallHealth.DestroySegment(gameObject);
+
+            if (penetration >= Durability)
+                _wallHealth.DestroySegment(gameObject);
         }
     }
 }

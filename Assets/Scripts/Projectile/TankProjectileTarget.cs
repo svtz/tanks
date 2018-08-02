@@ -28,11 +28,11 @@ namespace svtz.Tanks.Projectile
             _health = GetComponentInParent<TankHealth>();
         }
 
-        public override void TakeDamage(int amount, IPlayer damager)
+        public override void TakeDamage(float penetration, IPlayer damager)
         {
-            if (_teamId.Id != damager.TeamId)
+            if (_teamId.Id != damager.TeamId && penetration >= Durability)
             {
-                _health.TakeDamage(amount, damager);
+                _health.TakeDamage(damager);
                 _soundEffects.PlayOnAllWithException(_teamId.connectionToClient, transform.position, SoundEffectKind.EnemyDeath);
                 _soundEffects.PlayOnSingleClient(_teamId.connectionToClient, transform.position, SoundEffectKind.PlayerDeath);
             }

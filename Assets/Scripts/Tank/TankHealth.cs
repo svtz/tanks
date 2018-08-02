@@ -10,7 +10,6 @@ namespace svtz.Tanks.Tank
         public int MaxHealth;
 #pragma warning restore 0649
 
-        [SyncVar]
         private int _currentHealth;
 
         private void Start()
@@ -18,12 +17,12 @@ namespace svtz.Tanks.Tank
             _currentHealth = MaxHealth;
         }
 
-        public void TakeDamage(int amount, IPlayer damager)
+        public void TakeDamage(IPlayer damager)
         {
             if (!isServer)
                 return;
 
-            _currentHealth -= amount;
+            _currentHealth -= 1;
             if (_currentHealth <= 0)
             {
                 OnZeroHealthAtServer(damager);

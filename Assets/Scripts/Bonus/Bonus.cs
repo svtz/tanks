@@ -13,6 +13,7 @@ namespace svtz.Tanks.Bonus
         public Sprite SpeedBoost;
         public Sprite RegularGun;
         public Sprite GaussGun;
+        public Sprite GunBoost;
 
         public SpriteRenderer IconRenderer;
 #pragma warning restore 0649
@@ -24,9 +25,10 @@ namespace svtz.Tanks.Bonus
         {
             _bonusSprites = new Dictionary<BonusKind, Sprite>
             {
-                { BonusKind.MoveSpeedBoost, SpeedBoost},
-                { BonusKind.BulletGun, RegularGun},
-                { BonusKind.GaussGun, GaussGun},
+                { BonusKind.MoveSpeedBoost, SpeedBoost },
+                { BonusKind.BulletGun, RegularGun },
+                { BonusKind.GaussGun, GaussGun },
+                { BonusKind.GunBoost, GunBoost },
             };
 
             OnClientBonusKindChanged(_bonusKind);

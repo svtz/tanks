@@ -25,6 +25,10 @@ namespace svtz.Tanks.Bonus.Impl
             Container.Bind<IBonusImplementation>()
                 .To<GaussGunBonusImplementation>()
                 .AsSingle();
+
+            Container.Bind<IBonusImplementation>()
+                .To<GunBoostImplementation>()
+                .AsSingle();
         }
     }
 }

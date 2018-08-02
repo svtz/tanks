@@ -54,7 +54,7 @@ namespace svtz.Tanks.Map
                 case '*':
                     return MapObjectKind.RegularWall;
                 case 'X':
-                    return MapObjectKind.UnbreakableWall;
+                    return MapObjectKind.ArmoredWall;
                 case 'T':
                     return MapObjectKind.Tree;
                 case 'S':

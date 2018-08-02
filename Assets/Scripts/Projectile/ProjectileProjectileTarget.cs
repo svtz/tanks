@@ -6,15 +6,15 @@ namespace svtz.Tanks.Projectile
     {
         private BulletShot _bulletShot;
 
-
         private void Start()
         {
             _bulletShot = GetComponent<BulletShot>();
         }
 
-        public override void TakeDamage(int amount, IPlayer damager)
+        public override void TakeDamage(float penetration, IPlayer damager)
         {
-            _bulletShot.TryDespawn();
+            if (penetration >= Durability)
+                _bulletShot.TryDespawn();
         }
     }
 }

@@ -14,9 +14,13 @@ namespace svtz.Tanks.Projectile
             _soundEffectsFactory = soundEffectsFactory;
         }
 
-        public override void TakeDamage(int amount, IPlayer damager)
+        public override void TakeDamage(float penetration, IPlayer damager)
         {
             _soundEffectsFactory.PlayOnAllClients(transform.position, SoundEffectKind.UnbreakableHit);
+            if (penetration >= Durability)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

@@ -55,7 +55,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c918d35f36814ca88ad2e3478a27f465, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 10
   TTL: 0.1
   CastWidth: 1.25
   CastDistances:
@@ -63,10 +62,15 @@ MonoBehaviour:
   - 0.2
   - 0.3
   Cooldown: 2
+  BoostedCooldown: 1
+  Penetration: 10
+  OverchargedPenetration: 20
+  ProjectileTarget: {fileID: 0}
   BoxCastSize: {x: 0.25, y: 0.5}
   MaxDistance: 57
   LineRenderer: {fileID: 120677865269794440}
   ShotDelay: 0.3
+  BoostedShotDelay: 0.1
 --- !u!114 &114470295242132060
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -110,6 +114,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ff0b94df202493693095c1efdc8c325, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Durability: 0
 --- !u!114 &114924952068512982
 MonoBehaviour:
   m_ObjectHideFlags: 1

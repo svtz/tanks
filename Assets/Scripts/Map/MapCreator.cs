@@ -75,6 +75,7 @@ namespace svtz.Tanks.Map
                         break;
 
                     case MapObjectKind.UnbreakableWall:
+                    case MapObjectKind.ArmoredWall:
                     case MapObjectKind.RegularWall:
                     case MapObjectKind.Tree:
                         _mapObjectsManager.Add(-map.Width / 2 + j + 0.5f, -map.Height / 2 + i + 0.5f, cellKind);

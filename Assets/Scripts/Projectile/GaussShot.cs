@@ -18,6 +18,7 @@ namespace svtz.Tanks.Projectile
         public LineRenderer LineRenderer;
 
         public float ShotDelay;
+        public float BoostedShotDelay;
 #pragma warning restore 0649
 
         private DelayedExecutor _delayedExecutor;
@@ -38,14 +39,17 @@ namespace svtz.Tanks.Projectile
             _pool = pool;
         }
 
-        protected override void OnRpcLaunch()
+        protected override void OnRpcLaunch(bool speedUp, bool overcharge)
         {
-            base.OnRpcLaunch();
-
             LineRenderer.positionCount = 0;
-            _currentDelay = 0;
+            _currentDelay = speedUp ? BoostedShotDelay : ShotDelay;
             _calculated = false;
             _autoDespawn = null;
+
+            LineRenderer.startColor
+                = LineRenderer.endColor = overcharge
+                    ? new Color(1.0f, 0.5f, 0.75f, 1.0f)
+                    : Color.white;
         }
 
         protected override SoundEffectKind LaunchSound
@@ -67,14 +71,14 @@ namespace svtz.Tanks.Projectile
                 }
             }
 
-            _currentDelay += Time.deltaTime;
-            if (_currentDelay > ShotDelay && _autoDespawn == null)
+            _currentDelay -= Time.deltaTime;
+            if (_currentDelay <= 0 && _autoDespawn == null)
                 _autoDespawn = _delayedExecutor.Add(TryDespawn, TTL);
         }
 
         private void FixedUpdate()
         {
-            if (!isServer || _currentDelay < ShotDelay || _calculated)
+            if (!isServer || _currentDelay > 0 || _calculated)
                 return;
 
             try

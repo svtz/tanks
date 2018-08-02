@@ -13,6 +13,7 @@ namespace svtz.Tanks.Map
         public class Settings
         {
 #pragma warning disable 0649
+            public GameObject ArmoredWallPrefab;
             public GameObject UnbreakableWallPrefab;
             public GameObject RegularWallPrefab;
             public GameObject TreePrefab;
@@ -48,6 +49,10 @@ namespace svtz.Tanks.Map
                 {
                     MapObjectKind.UnbreakableWall,
                     new[] {new CreationInfo(settings.UnbreakableWallPrefab)}
+                },
+                {
+                    MapObjectKind.ArmoredWall,
+                    new[] {new CreationInfo(settings.ArmoredWallPrefab) }
                 },
                 {
                     MapObjectKind.RegularWall,
