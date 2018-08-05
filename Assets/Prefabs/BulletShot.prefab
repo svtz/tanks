@@ -139,17 +139,19 @@ MonoBehaviour:
   - 0
   - 0.2
   - 0.3
+  - 0.4
+  - 0.5
+  - 0.6
   Cooldown: 0.25
   BoostedCooldown: 0.15
-  Penetration: 10
-  OverchargedPenetration: 20
+  LayerToExclude:
+    serializedVersion: 2
+    m_Bits: 1024
   ProjectileTarget: {fileID: 114864805426269328}
   Speed: 15
   BoostedSpeed: 25
   SpriteRenderer: {fileID: 212044739102963178}
   OverchargeParticles: {fileID: 1768261663134314}
-  Durability: 1
-  OverchargedDurability: 10
 --- !u!114 &114743141803588036
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -204,7 +206,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ff0b94df202493693095c1efdc8c325, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Durability: -1
+  ShotArmor: 0
+  PiercingArmor: 0
 --- !u!198 &198172911357044772
 ParticleSystem:
   m_ObjectHideFlags: 1

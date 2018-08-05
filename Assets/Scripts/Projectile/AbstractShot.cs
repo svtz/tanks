@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using svtz.Tanks.Audio;
@@ -20,8 +21,7 @@ namespace svtz.Tanks.Projectile
         public float Cooldown;
         public float BoostedCooldown;
 
-        public int Penetration;
-        public int OverchargedPenetration;
+        public LayerMask LayerToExclude;
 
         public AbstractProjectileTarget ProjectileTarget;
 #pragma warning restore 0649
@@ -29,8 +29,7 @@ namespace svtz.Tanks.Projectile
         protected GameObject Owner { get; private set; }
         protected SoundEffectsFactory SoundEffectsFactory { get; private set; }
         private IPlayer _ownerPlayer;
-        private bool _despawned;
-        private float _remainingPenetration;
+        private ShotModifiers _shotModifiers;
 
         [Inject]
         public void Construct(SoundEffectsFactory soundEffectsFactory)
@@ -38,9 +37,16 @@ namespace svtz.Tanks.Projectile
             SoundEffectsFactory = soundEffectsFactory;
         }
 
+        #region Launch
+
+        public void Launch(Transform spawn, GameObject owner, ShotModifiers shotModifiers)
+        {
+            Assert.IsTrue(isServer);
+            RpcLaunch(spawn.position, spawn.rotation, owner, shotModifiers);
+        }
+
         [ClientRpc]
-        private void RpcLaunch(Vector2 position, Quaternion rotation, GameObject owner,
-            bool speedUp, bool overcharge)
+        private void RpcLaunch(Vector2 position, Quaternion rotation, GameObject owner, ShotModifiers shotModifiers)
         {
             Owner = owner;
             _ownerPlayer = owner.GetComponent<PlayerInfo>().Player;
@@ -49,8 +55,8 @@ namespace svtz.Tanks.Projectile
             transform.rotation = rotation;
 
             _despawned = false;
-
-            _remainingPenetration = overcharge ? OverchargedPenetration : Penetration;
+            _shotModifiers = shotModifiers;
+            _hitTargets.Clear();
 
             var ownerIdentity = owner.GetComponent<NetworkIdentity>();
             if (ownerIdentity != null && ownerIdentity.isLocalPlayer)
@@ -62,30 +68,15 @@ namespace svtz.Tanks.Projectile
                 SoundEffectsFactory.Play(position, LaunchSound, SoundEffectSource.Environment);
             }
 
-            OnRpcLaunch(speedUp, overcharge);
-        }
-
-        private bool _speedUp;
-        public void Speedup()
-        {
-            _speedUp = true;
-        }
-
-        private bool _overcharge;
-        public void Overcharge()
-        {
-            _overcharge = true;
+            OnRpcLaunch(shotModifiers);
         }
 
         protected abstract SoundEffectKind LaunchSound { get; }
 
-        protected abstract void OnRpcLaunch(bool speedUp, bool overcharge);
+        protected abstract void OnRpcLaunch(ShotModifiers shotModifiers);
 
-        public void Launch(Transform spawn, GameObject owner)
-        {
-            Assert.IsTrue(isServer);
-            RpcLaunch(spawn.position, spawn.rotation, owner, _speedUp, _overcharge);
-        }
+        #endregion
+
 
         private bool IsEqualOrChildOfOwner(GameObject obj)
         {
@@ -105,16 +96,26 @@ namespace svtz.Tanks.Projectile
             _hitTargets.Clear();
         }
 
+        protected int GetLayerMask()
+        {
+            return Physics2D.DefaultRaycastLayers & ~LayerToExclude.value;
+        }
+
         protected bool DamageTarget(Vector2 hitCenter, GameObject hitObject)
         {
             if (Owner != null && IsEqualOrChildOfOwner(hitObject))
                 return false;
 
             if (Owner != null)
+            {
                 Debug.DrawLine(Owner.transform.position, hitCenter, Color.yellow, 2);
+            }
 
             Vector2 direction = transform.up;
             var perpendicular = Vector2.Perpendicular(direction);
+
+            var destroySelf = false;
+            var penetrationDistance = _shotModifiers.IsOvercharged() ? 2 : 1;
 
             foreach (var castDistance in CastDistances)
             {
@@ -124,14 +125,14 @@ namespace svtz.Tanks.Projectile
                 var castEnd = hitPoint - perpendicular * CastWidth / 2;
 
                 Debug.DrawLine(castStart, castEnd, Color.magenta, 2);
-
-                var splashCast = Physics2D.LinecastAll(castStart, castEnd)
+                
+                var splashCast = Physics2D.LinecastAll(castStart, castEnd, GetLayerMask())
                     .Select(h => h.transform)
                     .Where(h => h != transform && (Owner == null || h != Owner.transform))
                     .Distinct();
 
-                var penetrationLoss = 0.0f;
-                var destroySelf = false;
+                var hit = false;
+
                 foreach (var splashHit in splashCast)
                 {
                     if (!_hitTargets.Add(splashHit))
@@ -139,38 +140,56 @@ namespace svtz.Tanks.Projectile
 
                     if (ProjectileTarget != null)
                     {
-                        var anotherShot = splashHit.GetComponent<AbstractShot>();
-                        if (anotherShot != null && anotherShot._remainingPenetration >= ProjectileTarget.Durability)
+                        var another = splashHit.GetComponent<AbstractShot>();
+                        if (another != null)
                         {
-                            destroySelf = true;
-                            anotherShot._remainingPenetration -= ProjectileTarget.Durability;
+                            // если другой объект - также чей-то выстрел, то надо проверить его урон по нам.
+                            // возможно, это разрушит наш снаряд.
+                            ProjectileTarget.TakeDamage(another._shotModifiers, another._ownerPlayer);
+                            // результат не проверяем, т.к. код ниже должен сам с этим справиться
                         }
                     }
 
                     var splashTarget = splashHit.GetComponent<AbstractProjectileTarget>();
                     if (splashTarget != null)
                     {
-                        penetrationLoss = Mathf.Max(penetrationLoss, splashTarget.Durability);
-                        splashTarget.TakeDamage(_remainingPenetration, _ownerPlayer);
+                        var damageResult = splashTarget.TakeDamage(_shotModifiers, _ownerPlayer);
+                        switch (damageResult)
+                        {
+                            case TakeDamageResult.DestroyProjectile:
+                                destroySelf = true;
+                                break;
+                            case TakeDamageResult.DontDestroyProjectile:
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+
+                        hit = true;
                     }
                 }
 
-                _remainingPenetration -= penetrationLoss;
-                if (_remainingPenetration <= 0 || destroySelf)
+                if (hit)
+                    penetrationDistance--;
+
+                if (penetrationDistance <= 0 && destroySelf)
+                {
                     return true;
+                }
             }
 
-            return false;
+            return destroySelf;
         }
+
+
+        #region Despawn
+
+        private bool _despawned;
 
         public void TryDespawn()
         {
             if (!_despawned)
             {
-                _overcharge = false;
-                _speedUp = false;
-                _hitTargets.Clear();
-
                 DoDespawn();
             }
 
@@ -178,5 +197,7 @@ namespace svtz.Tanks.Projectile
         }
 
         protected abstract void DoDespawn();
+
+        #endregion
     }
 }

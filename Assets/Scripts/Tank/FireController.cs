@@ -13,10 +13,22 @@ namespace svtz.Tanks.Tank
         public Transform ProjectileSpawn;
 #pragma warning restore 0649
 
-        private int _boostLevel = 0;
+        private ShotModifiers _shotModifiers = ShotModifiers.Empty;
         public void Empower()
         {
-            _boostLevel++;
+            if (!_shotModifiers.IsCooldownReduced())
+            {
+                _shotModifiers |= ShotModifiers.ReducedCooldown;
+            }
+            else if (!_shotModifiers.IsAccelerated())
+            {
+                _shotModifiers |= ShotModifiers.AcceleratedShot;
+            }
+            else if (!_shotModifiers.IsOvercharged())
+            {
+                _shotModifiers |= ShotModifiers.OverchargedShot;
+            }
+
             _gun.Reload();
         }
 
@@ -61,7 +73,7 @@ namespace svtz.Tanks.Tank
                 // сервер: стреляем
                 if (_isFiring && _gun.CanFire)
                 {
-                    _gun.Fire(ProjectileSpawn, gameObject, _boostLevel);
+                    _gun.Fire(ProjectileSpawn, gameObject, _shotModifiers);
                 }
             }
         }

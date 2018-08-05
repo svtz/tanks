@@ -349,7 +349,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e32bc3f8138a4ac2a25807b1a489edda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Durability: 10
+  ShotArmor: 0
+  PiercingArmor: 2
 --- !u!114 &114166925494612448
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -361,7 +362,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e32bc3f8138a4ac2a25807b1a489edda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Durability: 10
+  ShotArmor: 0
+  PiercingArmor: 2
 --- !u!114 &114420712910983776
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -373,7 +375,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e32bc3f8138a4ac2a25807b1a489edda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Durability: 10
+  ShotArmor: 0
+  PiercingArmor: 2
 --- !u!114 &114589956808530438
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -385,7 +388,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e32bc3f8138a4ac2a25807b1a489edda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Durability: 10
+  ShotArmor: 0
+  PiercingArmor: 2
 --- !u!212 &212071596341944020
 SpriteRenderer:
   m_ObjectHideFlags: 1

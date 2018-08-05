@@ -29,26 +29,22 @@ namespace svtz.Tanks.Tank
                 _cooldownTask.Cancel();
         }
 
-        public void Fire(Transform start, GameObject owner, int boostLevel)
+        protected abstract ShotModifiers GetDefaultShotModifiers();
+
+        public void Fire(Transform start, GameObject owner, ShotModifiers additionalModifiers)
         {
             Debug.Assert(CanFire);
 
             var projectile = _pool.Spawn();
 
+            var finalModifiers = GetDefaultShotModifiers() | additionalModifiers;
+
             // кулдаун
             CanFire = false;
             _cooldownTask = _delayedExecutor.Add(() => CanFire = true,
-                boostLevel > 0 ? projectile.BoostedCooldown : projectile.Cooldown);
+                finalModifiers.IsCooldownReduced() ? projectile.BoostedCooldown : projectile.Cooldown);
 
-            // скорость
-            if (boostLevel > 1)
-                projectile.Speedup();
-
-            // бронебойность
-            if (boostLevel > 2)
-                projectile.Overcharge();
-
-            projectile.Launch(start, owner);
+            projectile.Launch(start, owner, finalModifiers);
         }
     }
 }

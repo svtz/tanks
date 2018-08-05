@@ -140,7 +140,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ded32a4f2514efeacfc64af065bee58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Durability: 100
+  ShotArmor: 2
+  PiercingArmor: 2
 --- !u!212 &212060720443396084
 SpriteRenderer:
   m_ObjectHideFlags: 1

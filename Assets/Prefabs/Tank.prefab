@@ -637,7 +637,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc6af667147c4e83bf64649f50bf607a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Durability: 10
+  ShotArmor: 0
+  PiercingArmor: 1
 --- !u!212 &212124483219117130
 SpriteRenderer:
   m_ObjectHideFlags: 1

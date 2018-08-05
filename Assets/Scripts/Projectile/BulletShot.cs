@@ -14,8 +14,6 @@ namespace svtz.Tanks.Projectile
         public float BoostedSpeed;
         public SpriteRenderer SpriteRenderer;
         public GameObject OverchargeParticles;
-        public int Durability;
-        public int OverchargedDurability;
 #pragma warning restore 0649
 
         private Rigidbody2D _rb2D;
@@ -36,23 +34,27 @@ namespace svtz.Tanks.Projectile
             _pool = pool;
         }
 
-        protected override void OnRpcLaunch(bool speedUp, bool overcharge)
+        protected override void OnRpcLaunch(ShotModifiers shotModifiers)
         {
-            _rb2D.velocity = transform.up * (speedUp ? BoostedSpeed : Speed);
+            _rb2D.velocity = transform.up * (shotModifiers.IsAccelerated() ? BoostedSpeed : Speed);
             _autoDespawn = _delayedExecutor.Add(TryDespawn, TTL);
 
+            var overcharge = shotModifiers.IsOvercharged();
+
             SpriteRenderer.color = overcharge
-                ? new Color(1.0f, 0.5f, 0.75f, 1.0f)
+                ? new Color(1.0f, 0.5f, 0.5f, 1.0f)
                 : Color.white;
 
             if (overcharge)
             {
+                ProjectileTarget.PiercingArmor = PiercingArmorKind.PiercingProof;
                 OverchargeParticles.GetComponent<ParticleSystem>().Play();
             }
-
-            ProjectileTarget.Durability = overcharge
-                ? OverchargedDurability
-                : Durability;
+            else
+            {
+                ProjectileTarget.PiercingArmor = PiercingArmorKind.NoArmor;
+                OverchargeParticles.GetComponent<ParticleSystem>().Stop();
+            }
         }
 
         protected override SoundEffectKind LaunchSound
@@ -67,14 +69,13 @@ namespace svtz.Tanks.Projectile
 
             if (DamageTarget(transform.position, other.gameObject))
             {
-                TryDespawn();
+                TryDespawn(); 
             }
         }
         
         protected override void DoDespawn()
         {
             _autoDespawn.Cancel();
-            OverchargeParticles.GetComponent<ParticleSystem>().Stop();
             _burstPool.Spawn(transform.position);
             _pool.Despawn(this);
         }

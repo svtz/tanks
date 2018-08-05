@@ -11,10 +11,13 @@ namespace svtz.Tanks.Projectile
             _bulletShot = GetComponent<BulletShot>();
         }
 
-        public override void TakeDamage(float penetration, IPlayer damager)
+        protected override void OnHit()
         {
-            if (penetration >= Durability)
-                _bulletShot.TryDespawn();
+        }
+
+        protected override void OnKilled(IPlayer killer)
+        {
+            _bulletShot.TryDespawn();
         }
     }
 }

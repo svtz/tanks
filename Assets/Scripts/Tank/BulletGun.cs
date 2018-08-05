@@ -9,5 +9,10 @@ namespace svtz.Tanks.Tank
             : base(pool, delayedExecutor)
         {
         }
+
+        protected override ShotModifiers GetDefaultShotModifiers()
+        {
+            return ShotModifiers.Empty;
+        }
     }
 }

@@ -39,15 +39,15 @@ namespace svtz.Tanks.Projectile
             _pool = pool;
         }
 
-        protected override void OnRpcLaunch(bool speedUp, bool overcharge)
+        protected override void OnRpcLaunch(ShotModifiers shotModifiers)
         {
             LineRenderer.positionCount = 0;
-            _currentDelay = speedUp ? BoostedShotDelay : ShotDelay;
+            _currentDelay = shotModifiers.IsAccelerated() ? BoostedShotDelay : ShotDelay;
             _calculated = false;
             _autoDespawn = null;
 
             LineRenderer.startColor
-                = LineRenderer.endColor = overcharge
+                = LineRenderer.endColor = shotModifiers.IsOvercharged()
                     ? new Color(1.0f, 0.5f, 0.75f, 1.0f)
                     : Color.white;
         }
@@ -62,6 +62,7 @@ namespace svtz.Tanks.Projectile
             if (Owner != null)
             {
                 transform.position = Owner.transform.position;
+                transform.rotation = Owner.transform.rotation;
             }
             else
             {
@@ -86,7 +87,9 @@ namespace svtz.Tanks.Projectile
                 var longRangeCast = Physics2D.BoxCastAll(transform.position,
                     BoxCastSize, 
                     transform.rotation.eulerAngles.z,
-                    transform.up, MaxDistance)
+                    transform.up,
+                    MaxDistance,
+                    GetLayerMask())
                     .OrderBy(hit => hit.distance);
 
                 foreach (var hit in longRangeCast)
@@ -94,13 +97,13 @@ namespace svtz.Tanks.Projectile
                     if (DamageTarget(hit.centroid, hit.transform.gameObject))
                     {
                         RpcShot(transform.position, hit.centroid);
-                        return;
+                        return; 
                     }
                 }
             }
             finally
             {
-                _calculated = true;
+                _calculated = true; 
             }
         }
 

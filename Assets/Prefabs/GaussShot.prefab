@@ -61,12 +61,16 @@ MonoBehaviour:
   - 0
   - 0.2
   - 0.3
+  - 0.4
+  - 0.5
+  - 0.6
   Cooldown: 2
   BoostedCooldown: 1
-  Penetration: 10
-  OverchargedPenetration: 20
+  LayerToExclude:
+    serializedVersion: 2
+    m_Bits: 1024
   ProjectileTarget: {fileID: 0}
-  BoxCastSize: {x: 0.25, y: 0.5}
+  BoxCastSize: {x: 0.25, y: 0.01}
   MaxDistance: 57
   LineRenderer: {fileID: 120677865269794440}
   ShotDelay: 0.3
@@ -114,7 +118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ff0b94df202493693095c1efdc8c325, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Durability: 0
+  ShotArmor: 0
+  PiercingArmor: 0
 --- !u!114 &114924952068512982
 MonoBehaviour:
   m_ObjectHideFlags: 1
